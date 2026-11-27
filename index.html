@@ -212,15 +212,21 @@ const $=s=>document.querySelector(s);
 const hdr=$("#hdr"), app=$("#app");
 function pct(n,d){return d?Math.round(n/d*100):0}
 
+function secPct(lid){const d=DATA[lid],s=st(lid);const ids=d.sections.map(x=>x.id);return pct(s.read.filter(x=>ids.includes(x)).length,ids.length)}
 function lecProgress(lid){
  const d=DATA[lid], s=st(lid);
- const parts=[
-  pct(s.read.length, d.sections.length),
-  pct(Object.keys(s.flash).filter(k=>s.flash[k]).length, d.flash.length),
-  s.quizAtt? s.quizBest : 0,
-  pct(Object.keys(s.recall).filter(k=>s.recall[k]).length, d.recall.length),
- ];
- return Math.round(parts.reduce((a,b)=>a+b,0)/parts.length);
+ const fl=Object.keys(s.flash).filter(k=>s.flash[k]).length, rc=Object.keys(s.recall).filter(k=>s.recall[k]).length;
+ const nw=Math.round(secPct(lid)*0.4+pct(fl,d.flash.length)*0.2+(s.quizAtt?s.quizBest:0)*0.2+pct(rc,d.recall.length)*0.2);
+ let fl0=0;
+ if(d.legacy){ /* old 4-part formula on the original items: saved progress never goes down */
+  const L=d.legacy;
+  const a=pct(s.read.filter(x=>L.sec.includes(x)).length,L.sec.length);
+  const b=pct(Object.keys(s.flash).filter(k=>s.flash[k]&&+k<L.flash).length,L.flash);
+  const c=s.quizAtt?s.quizBest:0;
+  const e=pct(Object.keys(s.recall).filter(k=>s.recall[k]&&+k<L.recall).length,L.recall);
+  fl0=Math.round((a+b+c+e)/4);
+ }
+ return Math.max(nw,fl0);
 }
 function builtLecs(subj){ const r=[]; SUBJECTS[subj].titles.forEach((t,i)=>{const lid=subj+(i+1); if(DATA[lid])r.push(lid)}); return r; }
 function subjProgress(subj){
@@ -273,7 +279,7 @@ function picker(subj){
    h+=`<button class="card subj" onclick="goLec('${lid}')">
      <h2>Lecture ${i+1}</h2><div class="lec">${t}</div>
      <div class="bar"><div style="width:${p}%"></div></div>
-     <div class="pct">${p}% complete - ${dd.slides?dd.slides+" slides · ":""}${dd.sections.length} sections · ${dd.flash.length} cards · ${dd.quiz.length} quiz Qs · ${dd.recall.length} recall Qs</div>
+     <div class="pct">${p}% complete - ${dd.slides?dd.slides+" slides · ":""}sections ${st(lid).read.filter(x=>dd.sections.some(z=>z.id===x)).length}/${dd.sections.length} · ${dd.flash.length} cards · ${dd.quiz.length} quiz Qs · ${dd.recall.length} recall Qs</div>
    </button>`;
   }else{
    h+=`<div class="card subj" style="opacity:.55;cursor:default">
@@ -506,16 +512,20 @@ function prog(sid){
  const d=DATA[sid], s=st(sid);
  const fm=Object.keys(s.flash).filter(k=>s.flash[k]).length;
  const rd=Object.keys(s.recall).filter(k=>s.recall[k]).length;
- const rows=[["Sections read", s.read.length, d.sections.length],["Cards mastered", fm, d.flash.length],["Recall answered right", rd, d.recall.length]];
+ const nread=s.read.filter(x=>d.sections.some(z=>z.id===x)).length;
+ const rows=[["Sections read", nread, d.sections.length],["Cards mastered", fm, d.flash.length],["Recall answered right", rd, d.recall.length]];
  let h=`<div class="card"><h3 style="margin-top:0">Your progress</h3>`;
  for(const [l,n,m] of rows){
   h+=`<div class="prow"><div class="lbl">${l}</div><div class="bar"><div style="width:${pct(n,m)}%"></div></div><div class="val">${n}/${m}</div></div>`;
  }
+ h+=`<div class="seclist"><h4 style="margin:14px 0 6px">Sections - tap to mark read</h4>`+d.sections.map((x,i)=>{const ok=s.read.includes(x.id);return `<div class="prow" style="align-items:center"><button class="btn ghost" style="flex:0 0 36px;padding:6px 0;margin:0" onclick="markRead('${sid}','${x.id}')">${ok?"✓":"○"}</button><div class="lbl" style="flex:1;cursor:pointer;margin-left:8px" onclick="goSec('${sid}','${x.id}')">${i+1}. ${x.title_en}</div></div>`}).join("")+`</div>`;
  h+=`<div class="prow"><div class="lbl">Quiz best</div><div class="bar"><div style="width:${s.quizBest}%"></div></div><div class="val">${s.quizBest}%</div></div>`;
  h+=`<div class="stat-grid"><div class="s"><b>${s.quizAtt}</b><span>quiz attempts</span></div><div class="s"><b>${lecProgress(sid)}%</b><span>overall</span></div></div>`;
  h+=`<button class="btn ghost" onclick="resetProg('${sid}')">Reset progress for this lecture</button></div>`;
  return h;
 }
+function goSec(sid,secid){goLec(sid,"learn");setTimeout(()=>{const e=document.querySelector('[data-sec="'+secid+'"]');if(e)e.scrollIntoView({block:"start"})},60)}
+window.goSec=goSec;
 function resetProg(sid){ if(confirm("Reset all progress for this lecture?")){S[sid]={read:[],flash:{},quizBest:0,quizAtt:0,recall:{}};save();render()} }
 window.resetProg=resetProg;
 
@@ -939,6 +949,7 @@ const TOUR=[
  {go:["elec1","quiz"],sel:".card",text:"الكويز: اختر إجابة وشوف التصحيح والشرح بالعربي فوراً. درجتك بتتسجل وأفضل نتيجة بتتحفظ لكل محاضرة لوحدها."},
  {go:["elec1","recall"],sel:".card",text:"التسميع: جاوبي من دماغك الأول، وبعدين اعرضي الإجابة النموذجية وقارن وقيّم نفسك."},
  {go:["elec1","prog"],sel:".card",text:"صفحة التقدم: نسبتك في كل جزء من المحاضرة دي، وأفضل درجة كويز، وعدد المحاولات. التقدم بيتسجل على جهازك ده بس."},
+ {go:["elec1","prog"],sel:".seclist",text:"قايمة السكاشن: كل سكشن ليه علامة ○. دوس عليها تبقى ✓ لما تخلصه، ودوس على اسم السكشن يفتحهولك. نسبة المحاضرة بتزيد سكشن بسكشن (السكاشن أهم جزء في النسبة)، والكويز والتسميع والكروت بيكمّلوها. وعلى كارت المحاضرة هتلاقي عدد الشرايح وعدد السكاشن اللي خلصتها."},
  {go:"plan",sel:".card",text:"جدول المذاكرة: خطة مقترحة جاهزة لكل المواد السبعة (حوالي 14 محاضرة في الأسبوع من السبت للخميس والجمعة مراجعة)، علامة «اليوم» بتتحرك لوحدها حسب التاريخ، وتقدري تضيفي وتمسحي وتعلّمي الجلسة لما تخلصها. والمحاضرات الموجودة في التطبيق ليها زرار (افتحي) يوديك عليها على طول."},
  {go:"plan",sel:".sess.late",text:"المحاضرات المتأخرة: لو أسبوع خلص وفي محاضرة مش متعلّم عليها «تم»، بتظهر الأسبوع اللي بعده في نفس يوم محاضرة نفس المادة، بعلامة حمرا «متأخرة» ومكتوب منين جت. علّميها «تم» وتختفي. ولو المادة مفيهاش محاضرات تانية، بتظهر في أقرب يوم باقي."},
  {go:"plan",sel:".editday",text:"زرار «تعديل اليوم»: غيّري عدد محاضرات اليوم ده وإختار أنهي محاضرات بالظبط. وفي يوم الجمعة، المراجعة بتتبني من المحاضرات اللي علّمتي عليها «تم» الأسبوع ده، وتقدري تعدّليها بإيدك."},
