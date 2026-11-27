@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ayat Study - Semester 1</title>
+<meta name="theme-color" content="#be185d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ayat Study">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<link rel="icon" href="icon-192.svg" type="image/svg+xml">
+<style>
+:root{
+ --bg:#fdf2f8; --card:#ffffff; --ink:#500724; --muted:#6b7280;
+ --blue:#ec4899; --purple:#be185d; --grad:linear-gradient(135deg,#ec4899,#f43f5e);
+ --ok:#16a34a; --bad:#dc2626; --line:#e5e7eb;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+header{background:var(--grad);color:#fff;padding:18px 16px 22px;border-radius:0 0 24px 24px;box-shadow:0 6px 24px rgba(225,29,72,.25)}
+header h1{margin:0;font-size:22px}
+.hrow{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+header p{margin:4px 0 0;opacity:.85;font-size:13px}
+.tourbtn{flex-shrink:0;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:99px;padding:6px 13px;font-size:12.5px;font-weight:700;cursor:pointer;margin-left:6px}
+.wrap{max-width:560px;margin:0 auto;padding:14px 14px 90px}
+.card{background:var(--card);border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 2px 10px rgba(80,7,36,.06)}
+.subj{cursor:pointer;display:block;width:100%;text-align:left;border:0}
+.subj h2{margin:0 0 2px;font-size:18px}
+.subj .lec{color:var(--muted);font-size:13px;margin-bottom:10px}
+.bar{height:9px;background:#fce7f3;border-radius:99px;overflow:hidden}
+.bar div{height:100%;background:var(--grad);border-radius:99px;transition:width .4s}
+.pct{font-size:12px;color:var(--muted);margin-top:6px}
+.tabs{display:flex;gap:6px;margin:14px 0;position:sticky;top:8px;z-index:5}
+.tabs button{flex:1;border:0;background:#fff;color:var(--muted);border-radius:12px;padding:9px 2px;font-size:12px;font-weight:700;box-shadow:0 2px 8px rgba(80,7,36,.08);cursor:pointer}
+.tabs button.on{background:var(--grad);color:#fff}
+.back{background:none;border:0;color:#fff;font-size:14px;font-weight:700;padding:0 0 8px;cursor:pointer;opacity:.9}
+.sec h3{margin:0;font-size:17px;color:var(--purple);flex:1}
+.sechead{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px}
+.sec-ar-title{width:100%;font-size:13px;color:var(--muted);direction:rtl;text-align:right;display:none;margin:2px 0 0}
+.show-ar .sec-ar-title{display:block}
+.langbtn{width:54px;height:30px;border-radius:99px;border:2px solid var(--purple);background:#fff;position:relative;cursor:pointer;padding:0;flex-shrink:0;transition:background .18s ease}
+.langbtn .knob{position:absolute;top:1px;left:2px;width:24px;height:24px;border-radius:50%;background:var(--grad);color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:left .18s ease;font-family:inherit}
+.langbtn.on{background:var(--purple)}
+.langbtn.on .knob{left:24px;background:#fff;color:var(--purple)}
+.sec p,.sec li{font-size:15px;line-height:1.65}
+.sec ul{padding-left:20px}
+.blk .arb{display:none;direction:rtl;text-align:right;background:#fff1f2;border-radius:10px;padding:8px 12px;margin:4px 0 10px;font-size:14.5px;line-height:1.7;border-right:3px solid var(--purple)}
+.show-ar .blk .arb{display:block}
+.blk .arb ul{padding-right:20px;padding-left:0}
+.note{background:#fef3c7;border-radius:10px;padding:10px 12px;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}.tbl th,.tbl td{border:1px solid #fbcfe8;padding:4px 5px;text-align:left}.tbl th{background:#fce7f3}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{background:#fdf2f8;color:#9d174d;border:1px solid #fbcfe8;border-radius:99px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.termdef{background:#fdf2f8;border-radius:10px;padding:10px 12px;font-size:14px;margin-top:8px;border-right:3px solid var(--purple);width:100%}
+.termdef .ar{display:block;direction:rtl;text-align:right;margin-top:4px;color:#9d174d}
+.readbtn{display:block;width:100%;margin-top:12px;border:2px solid var(--line);background:#fff;border-radius:12px;padding:11px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer}
+.readbtn.done{border-color:var(--ok);color:var(--ok);background:#f0fdf4}
+.btn{display:block;width:100%;border:0;background:var(--grad);color:#fff;border-radius:14px;padding:14px;font-size:15px;font-weight:800;margin-top:12px;cursor:pointer;box-shadow:0 4px 14px rgba(225,29,72,.3)}
+.btn.ghost{background:#fff;color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.row{display:flex;justify-content:space-between;gap:4%}
+/* figures */
+.svgfig{margin:14px 0 4px;background:#fffafc;border:1px solid var(--line);border-radius:12px;padding:8px}
+.svgfig svg{width:100%;height:auto;display:block}
+.viewer{margin:14px 0 4px;background:linear-gradient(160deg,#4c0519,#831843);border-radius:12px;overflow:hidden;position:relative}
+.viewer .vtitle{color:#fbcfe8;font-size:12px;font-weight:700;padding:8px 12px 0}
+.viewer .vhint{color:#c9a0b4;font-size:10.5px;padding:0 12px 6px}
+.viewer .vcv{position:relative;height:270px}
+.viewer canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.vpins{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.vlines{position:absolute;inset:0;width:100%;height:100%}
+.pin{z-index:2}
+.viewer .vtitle,.viewer .vhint{padding-right:96px}
+.pin{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#fbbf24;color:#500724;font:800 12px/18px system-ui,sans-serif;text-align:center;border:2px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.55);transition:transform .15s,opacity .15s,background .15s}
+.pin.back{opacity:.3}
+.pin.hot{transform:scale(1.7);background:#f472b6;opacity:1;z-index:3}
+.vleg{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px 10px;direction:ltr}
+.lchip{background:rgba(255,255,255,.1);color:#fce7f3;border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:4px 10px 4px 4px;font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;text-align:left}
+.lchip b{background:#fbbf24;color:#500724;border-radius:50%;width:20px;height:20px;line-height:20px;text-align:center;font-size:11.5px;flex-shrink:0}
+.vexp{position:absolute;top:8px;right:10px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:99px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer;z-index:2}
+#vfull{position:fixed;inset:0;z-index:95;background:linear-gradient(160deg,#4c0519,#831843);display:flex;flex-direction:column}
+#vfull .vfh{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px}
+#vfull .vft{color:#fce7f3;font-weight:800;font-size:14px;direction:ltr}
+#vfull .vfx{background:#fff;color:#9d174d;border:0;border-radius:99px;padding:11px 16px;font-weight:800;font-size:13.5px;cursor:pointer;min-height:44px}
+#vfull .vcv{position:relative;flex:1;min-height:0}
+#vfull .vfl{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;max-height:34%;overflow:auto;direction:ltr}
+#vfull .svgsc{flex:1;min-height:0;overflow:auto;background:#fffafc;margin:0 10px;border-radius:12px;padding:10px;-webkit-overflow-scrolling:touch}
+#vfull .svgin svg{width:100%;height:auto;display:block}
+#vfull .svgz{display:flex;gap:10px;justify-content:center;padding:8px}
+#vfull .svgz button{width:48px;height:44px;border-radius:99px;border:0;background:#fff;color:#9d174d;font-size:22px;font-weight:800}
+.svgfig{position:relative;cursor:pointer;padding-top:36px}
+.svgfig .vexp{background:#fce7f3;border-color:#f9a8d4;color:#9d174d}
+#vfull .vfhint{color:#c9a0b4;font-size:11px;text-align:center;padding:0 10px 12px;direction:rtl}
+.figcap{font-size:12px;color:var(--muted);margin:6px 2px 0;text-align:center;line-height:1.5}
+/* flashcards */
+.flash{min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;position:relative}
+.flash .inner{font-size:17px;font-weight:700;line-height:1.6;padding:8px;width:100%}
+.flash .backface{font-weight:500;font-size:15px}
+.flash .hint{position:absolute;bottom:10px;left:0;right:0;font-size:11px;color:var(--muted)}
+.fnav{display:flex;gap:8px;margin-top:12px}
+.fnav button{flex:1;border:0;border-radius:12px;padding:12px;font-weight:800;font-size:14px;cursor:pointer}
+.fnav .no{background:#fee2e2;color:var(--bad)}
+.fnav .yes{background:#dcfce7;color:var(--ok)}
+/* quiz */
+.q{font-size:16px;font-weight:800;line-height:1.5;margin-bottom:12px}
+.opt{display:block;width:100%;text-align:left;background:#fff7fa;border:2px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0;font-size:14.5px;cursor:pointer;line-height:1.45}
+.opt.ok{border-color:var(--ok);background:#f0fdf4}
+.opt.bad{border-color:var(--bad);background:#fef2f2}
+.opt:disabled{cursor:default}
+.fb{border-radius:12px;padding:12px;font-size:14px;margin-top:10px;line-height:1.6}
+.fb.ok{background:#f0fdf4;border:1px solid #bbf7d0}
+.fb.bad{background:#fef2f2;border:1px solid #fecaca}
+.fb .ar{display:block;direction:rtl;text-align:right;margin-top:6px;color:#57534e}
+.prog{font-size:12px;color:var(--muted);margin-bottom:8px}
+.score-big{font-size:46px;font-weight:900;text-align:center;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.center{text-align:center}
+.missed{text-align:left;font-size:13.5px;background:#fafafa;border-radius:10px;padding:10px 12px;margin:8px 0;border-right:3px solid var(--bad)}
+.model{background:#fff7fa;border-radius:12px;padding:12px;font-size:14.5px;line-height:1.6;margin-top:10px}
+.prow{display:flex;align-items:center;gap:10px;margin:10px 0}
+.prow .lbl{flex:1;font-size:14px;font-weight:600}
+.prow .bar{flex:2}
+.prow .val{width:56px;text-align:left;font-size:12px;color:var(--muted)}
+.stat-grid{display:flex;gap:10px;margin:10px 0}
+.stat-grid .s{flex:1;background:#fff7fa;border-radius:14px;padding:12px;text-align:center}
+.stat-grid .s b{display:block;font-size:20px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-grid .s span{font-size:11px;color:var(--muted)}
+.small{font-size:12px;color:var(--muted)}
+.footer-note{text-align:center;font-size:11px;color:var(--muted);margin-top:22px;line-height:1.7}
+/* translation popup */
+#pop{position:fixed;z-index:70;max-width:320px;background:#500724;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.4);display:none;font-size:14px;line-height:1.6}
+#pop .par{direction:rtl;text-align:right;font-size:15px;font-weight:700;color:#fbcfe8}
+#pop .pen{font-size:12.5px;color:#f9a8d4;margin-top:4px}
+#pop .prow2{display:flex;gap:8px;margin-top:8px}
+#pop button{flex:1;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:9px;padding:7px;font-size:12.5px;font-weight:700;cursor:pointer}
+#pop .none{color:#fca5a5}
+/* plan */
+.weekrow{display:flex;gap:5px;overflow-x:auto;margin:10px 0 4px;padding-bottom:2px}
+.weekrow button{flex:0 0 auto;border:2px solid var(--line);background:#fff;border-radius:12px;padding:8px 10px;font-size:12px;font-weight:800;color:var(--muted);cursor:pointer}
+.weekrow button.on{border-color:var(--purple);color:var(--purple);background:#fff1f2}
+.daycol{background:#fffafc;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:9px 0}
+.daycol .dh{display:flex;align-items:center;justify-content:space-between}
+.daycol .dh b{font-size:14px}
+.daycol .dh .today{font-size:10.5px;background:var(--grad);color:#fff;border-radius:99px;padding:3px 9px;font-weight:800}
+.sess{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px 10px;margin:8px 0}
+.sess .dot{width:9px;height:9px;border-radius:50%;background:var(--grad);flex-shrink:0}
+.sess .si{flex:1;font-size:13px;line-height:1.4}
+.sess .si small{display:block;color:var(--muted);font-size:11px}
+.sess.done .si{text-decoration:line-through;opacity:.55}
+.sess button{border:0;border-radius:8px;padding:6px 9px;font-size:12px;font-weight:800;cursor:pointer}
+.sess .chk{background:#dcfce7;color:var(--ok)}
+.sess.done .chk{background:#e5e7eb;color:var(--muted)}
+.sess .del{background:#fee2e2;color:var(--bad)}
+.addbox{background:#fff1f2;border:1.5px dashed #fbcfe8;border-radius:12px;padding:10px;margin:8px 0}
+.addbox select{width:100%;padding:9px;border-radius:9px;border:1.5px solid #fbcfe8;font:inherit;font-size:13.5px;margin:5px 0;background:#fff}
+/* tour */
+#tourbg{position:fixed;inset:0;background:rgba(15,10,40,.72);z-index:80;display:none}
+#tourhl{position:fixed;z-index:81;border:3px solid #fbbf24;border-radius:14px;box-shadow:0 0 0 4000px rgba(15,10,40,.55),0 0 24px #fbbf24;display:none;pointer-events:none}
+#tourcard{position:fixed;z-index:82;left:16px;right:16px;background:#fff;border-radius:16px;padding:16px;display:none;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+#tourcard .tt{direction:rtl;text-align:right;font-size:14.5px;line-height:1.7;color:var(--ink)}
+#tourcard .tn{display:flex;gap:8px;margin-top:12px}
+#tourcard .tn button{flex:1;border:0;border-radius:10px;padding:10px;font-weight:800;font-size:13.5px;cursor:pointer}
+#tourcard .next{background:var(--grad);color:#fff}
+#tourcard .skip{background:#f3f4f6;color:var(--muted)}
+#tourcard .tcount{font-size:11px;color:var(--muted);text-align:center;margin-top:8px}
+
+.nhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.nhead .btn{display:inline-block;width:auto;flex:none;white-space:nowrap;padding:8px 14px;font-size:12.5px}
+.ntier{font-weight:800;font-size:13px;margin:14px 2px 6px;color:#9d174d}
+.note{background:#fff;border-radius:12px;padding:10px 12px;margin:0 0 8px;box-shadow:0 1px 4px rgba(79,70,229,.12);border-left:5px solid #f9a8d4}
+.note.t1{border-left-color:#f59e0b;background:#fffbeb}.note.t2{border-left-color:#f43f5e}
+.note .nq{font-weight:800;color:#500724;font-size:14px;margin-bottom:4px}
+.note .na{color:#374151;font-size:13.5px;line-height:1.5}
+.note .nn{display:inline-block;background:#e11d48;color:#fff;border-radius:9px;font-size:11px;font-weight:800;padding:1px 7px;margin-right:6px}
+.note .ntag{display:inline-block;font-size:10.5px;color:#92400e;background:#fef3c7;border-radius:8px;padding:1px 7px;margin-top:6px}
+.nterm{padding:7px 2px;border-bottom:1px solid #e5e7eb;font-size:13.5px}.nterm b{color:#9d174d}.nterm .ar{display:block;direction:rtl;text-align:right;color:#57534e;font-size:12.5px}
+.sess.late{border-color:#fca5a5;background:#fef2f2}.sess .ltag{display:inline-block;background:#dc2626;color:#fff;border-radius:8px;font-size:10.5px;font-weight:800;padding:1px 7px;margin-right:6px}.sess .lnote{display:block;color:#b91c1c;font-size:11px}
+</style>
+</head>
+<body>
+<header id="hdr"></header>
+<div class="wrap" id="app"></div>
+<div id="pop"></div>
+<div id="tourbg"></div><div id="tourhl"></div>
+<div id="tourcard"><div class="tt" id="tourtext"></div><div class="tn"><button class="skip" onclick="tourEnd()">تخطي</button><button class="next" id="tournext" onclick="tourNext()">التالي</button></div><div class="tcount" id="tourcount"></div></div>
+<script>
+const LECTURES = {"elec": ["Introduction and basic electricity", "Electricity, Ohm's law and semiconductors", "The pn junction, diodes and transistors", "Display units (CRT, plasma, LCD)", "Number systems, logic gates and Boolean algebra", "Digital electronics and logic design", "Computer memory and conversions (1)", "Computer memory and conversions (2)"], "anat": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6", "Lecture 7", "Lecture 8", "Lecture 9", "Lecture 10", "Lecture 11", "Lecture 12"], "path": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6"], "physio": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6", "Lecture 7", "Lecture 8", "Lecture 9", "Lecture 10", "Lecture 11", "Lecture 12", "Lecture 13"], "physics": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6", "Lecture 7", "Lecture 8", "Lecture 9", "Lecture 10", "Lecture 11", "Lecture 12", "Lecture 13", "Lecture 14", "Lecture 15", "Lecture 16", "Lecture 17"], "fund": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6", "Lecture 7", "Lecture 8", "Lecture 9", "Lecture 10", "Lecture 11", "Lecture 12", "Lecture 13", "Lecture 14", "Lecture 15", "Lecture 16", "Lecture 17", "Lecture 18", "Lecture 19", "Lecture 20", "Lecture 21", "Lecture 22", "Lecture 23", "Lecture 24", "Lecture 25", "Lecture 26"], "care": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6", "Lecture 7", "Lecture 8", "Lecture 9", "Lecture 10", "Lecture 11", "Lecture 12", "Lecture 13", "Lecture 14"]};
+const DATA = {"elec1": {"name": "Fundamentals of Electronics", "lec": "Lecture 1 - Introduction and basic electricity", "short": "Elec", "sections": [{"id": "elec1_1", "title_en": "Course aims and the idea of electricity", "title_ar": "أهداف المادة وفكرة الكهرباء", "figs": [], "blocks": [{"en": "<p>The course (RAD 210) prepares the student to understand <b>electronics, solid state physics and digital electronics</b> as a base for modern diagnostic X-ray, nuclear medicine, CT, MRI and ultrasound units.</p>", "ar": "<p>المادة (RAD 210) بتجهّزك تفهم <b>الإلكترونيات وفيزياء الحالة الصلبة والإلكترونيات الرقمية</b> كأساس لأجهزة الأشعة التشخيصية والطب النووي والـ CT والـ MRI والسونار.</p>"}, {"en": "<p>Specific objectives:</p><ul><li>Describe analogue meters: functions, use of shunts, meters in X-ray, nuclear medicine, CT, MRI and U/S units.</li><li>Understand the DC principle.</li><li>Understand solid state physics, semiconductors, diodes and transistors.</li><li>Describe digital electronics, number systems, gates and truth tables.</li><li>Fundamentals of computer architecture.</li></ul>", "ar": "<p>الأهداف المحددة:</p><ul><li>وصف العدادات التناظرية ووظائفها واستخدام الـ shunt والعدادات في الأجهزة.</li><li>فهم مبدأ التيار المستمر DC.</li><li>فهم فيزياء الحالة الصلبة وأشباه الموصلات والدايود والترانزستور.</li><li>وصف الإلكترونيات الرقمية وأنظمة الأعداد والبوابات وجداول الحقيقة.</li><li>أساسيات بنية الكمبيوتر.</li></ul>"}, {"en": "<p><b>Electricity</b> is the ordered flow of electrons in a conductor. Think of it like water flowing in a pipe. Electrons are present and quite moveable in every conductor.</p>", "ar": "<p><b>الكهرباء</b> هي تدفّق منتظم للإلكترونات داخل موصّل. تخيّلها زي المياه في ماسورة. الإلكترونات موجودة وحرّة الحركة في أي موصّل.</p>"}], "terms": [["electricity", "The ordered flow of electrons in a conductor.", "الكهرباء: تدفق منظم للإلكترونات في موصّل."], ["electron", "Negatively charged particle that is free to move in a conductor.", "الإلكترون: جسيم سالب الشحنة حر الحركة في الموصّل."]]}, {"id": "elec1_2", "title_en": "Materials and conductivity", "title_ar": "المواد والتوصيل", "figs": [], "blocks": [{"en": "<ul><li><b>Conductors</b> permit the flow of electrons (gold, silver, copper).</li><li><b>Insulators</b> block the flow of electrons (rubber, glass, Teflon, mica).</li><li><b>Semiconductors</b> fall between the two. They are \"part-time\" conductors whose conductivity can be controlled.</li></ul>", "ar": "<ul><li><b>الموصّلات</b> بتسمح بمرور الإلكترونات (دهب، فضة، نحاس).</li><li><b>العوازل</b> بتمنع مرور الإلكترونات (مطاط، زجاج، تفلون، ميكا).</li><li><b>أشباه الموصلات</b> في النص، موصّلات \"بدوام جزئي\" وتقدر تتحكم في توصيلها.</li></ul>"}, {"en": "<p>Conduction depends on the <b>orbiting electrons</b>, not on the atomic nuclei. This is the electron theory of conduction.</p>", "ar": "<p>التوصيل بيعتمد على <b>الإلكترونات الدايرة حوالين النواة</b> مش على النوى نفسها. دي نظرية التوصيل الإلكتروني.</p>"}], "terms": [["conductor", "Material that lets electrons flow (gold, silver, copper).", "موصّل: مادة بتسمح بمرور الإلكترونات."], ["insulator", "Material that blocks electron flow (rubber, glass, Teflon, mica).", "عازل: مادة بتمنع مرور الإلكترونات."], ["semiconductor", "Material between conductor and insulator whose conductivity can be controlled.", "شبه موصّل: توصيله بين الموصّل والعازل وممكن يتحكم فيه."]]}, {"id": "elec1_3", "title_en": "Charge, current and voltage", "title_ar": "الشحنة والتيار والجهد", "figs": [], "blocks": [{"en": "<ul><li><b>Charge</b>: symbol q, unit coulomb (C). Electron charge = -1.602x10^-19 C, proton = +1.602x10^-19 C.</li><li><b>Current</b>: symbol I, unit ampere (A). It is the rate of flow of electrons: I = dq/dt. 1 A = 1 C/s. Often measured in milliamps (mA).</li><li><b>Voltage</b> (potential difference): symbol V, unit volt (V). It is the energy needed to move a unit of charge between two points. Like the potential energy of a waterfall.</li></ul>", "ar": "<ul><li><b>الشحنة</b>: رمزها q ووحدتها الكولوم (C). شحنة الإلكترون -1.602x10^-19 C والبروتون موجبة بنفس القيمة.</li><li><b>التيار</b>: رمزه I ووحدته الأمبير (A). هو معدل تدفق الإلكترونات: I = dq/dt. الأمبير = كولوم/ثانية. بيتقاس غالباً بالمللي أمبير.</li><li><b>الجهد</b> (فرق الجهد): رمزه V ووحدته الفولت. هو الطاقة المطلوبة لتحريك وحدة شحنة بين نقطتين، زي طاقة وضع الشلال.</li></ul>"}, {"en": "<p>One coulomb equals <b>6.25 x 10^18 electrons</b>. An ampere is one coulomb flowing past a point for one second (A = C/s).</p>", "ar": "<p>الكولوم الواحد = <b>6.25 x 10^18 إلكترون</b>. والأمبير هو كولوم واحد بيعدي نقطة في ثانية (A = C/s).</p>"}, {"en": "<p><b>Voltage is like water pressure</b> (the driving force, measured in volts). <b>Current is like water volume</b> flowing (measured in amps). To produce a current you need a <b>source of potential difference</b> and a <b>complete circuit</b>.</p>", "ar": "<p><b>الجهد زي ضغط المية</b> (القوة الدافعة بالفولت). <b>والتيار زي كمية المية</b> الجارية (بالأمبير). عشان يحصل تيار لازم <b>مصدر فرق جهد</b> و<b>دايرة كاملة</b>.</p>"}], "terms": [["coulomb", "Unit of electric charge; 1 C = 6.25 x 10^18 electrons.", "كولوم: وحدة الشحنة."], ["ampere", "Unit of current; 1 A = 1 C/s.", "أمبير: وحدة التيار."], ["potential difference", "Voltage: energy per unit charge between two points.", "فرق الجهد: طاقة لكل وحدة شحنة بين نقطتين."], ["EMF", "Electromotive force: the driving force that moves electrons along a conductor, also in volts.", "القوة الدافعة الكهربية: القوة اللي بتحرك الإلكترونات."]]}, {"id": "elec1_4", "title_en": "Energy, power and cell connections", "title_ar": "الطاقة والقدرة وتوصيل البطاريات", "figs": [], "blocks": [{"en": "<ul><li>Electrical energy is measured in <b>joules</b>.</li><li><b>Power</b> is energy per unit time. One joule per second = one <b>watt</b>.</li><li><b>P = V x I</b>.</li></ul>", "ar": "<ul><li>الطاقة الكهربية بتتقاس بالـ <b>جول</b>.</li><li><b>القدرة</b> هي الطاقة في الثانية. جول/ثانية = <b>واط</b>.</li><li><b>P = V x I</b>.</li></ul>"}, {"en": "<p><b>Series cells</b>: each cell gives 1.5 V, so two cells give 3 V and three give 4.5 V. <b>Parallel cells</b>: the voltage stays 1.5 V but a larger current can be drawn.</p>", "ar": "<p><b>البطاريات على التوالي</b>: كل واحدة 1.5 فولت، فاتنين = 3 فولت وتلاتة = 4.5 فولت. <b>على التوازي</b>: الجهد يفضل 1.5 فولت بس تقدر تسحب تيار أكبر.</p>"}], "terms": [["power", "Energy per unit time; P = V x I; unit watt (J/s).", "القدرة: الطاقة في الثانية؛ P = V x I."], ["watt", "Unit of power: one joule per second.", "واط: وحدة القدرة."]]}, {"id": "elec1_5", "title_en": "Resistance, resistors and circuits", "title_ar": "المقاومة والدوائر", "figs": [], "blocks": [{"en": "<p><b>Resistance</b> is the tendency of a conductor to limit electron flow, measured in <b>ohms</b> (Ω). A <b>resistor</b> is a device made specifically to reduce conductivity. In a resistor, current is directly proportional to voltage: <b>V = IR</b> (I = GV, where G = 1/R is the conductance).</p>", "ar": "<p><b>المقاومة</b> هي ميل الموصّل إنه يحدّ من مرور الإلكترونات، وبتتقاس بالأوم (Ω). و<b>المقاوم</b> جهاز معمول مخصوص عشان يقلل التوصيل. في المقاوم التيار يتناسب طردياً مع الجهد: <b>V = IR</b> (و G = 1/R هي الموصلية).</p>"}, {"en": "<p>Factors affecting resistance: the <b>shape</b> of the substance (R is proportional to length L and inversely proportional to area A), the <b>type</b> of substance, and its <b>temperature</b>.</p>", "ar": "<p>العوامل اللي بتأثر على المقاومة: <b>شكل</b> المادة (R تتناسب مع الطول L وعكسياً مع المساحة A) و<b>نوع</b> المادة و<b>درجة حرارتها</b>.</p>"}, {"en": "<ul><li><b>Series</b>: loads in a single string; the current is the same in every load. R total = R1 + R2 + ...</li><li><b>Parallel</b>: 1/R total = 1/R1 + 1/R2 + ...</li><li>Example: two 1 kΩ resistors give 2 kΩ in series and 0.5 kΩ in parallel.</li></ul>", "ar": "<ul><li><b>توالي</b>: الأحمال في خط واحد والتيار نفسه في كل حمل. R الكلية = R1 + R2 + ...</li><li><b>توازي</b>: 1/R الكلية = 1/R1 + 1/R2 + ...</li><li>مثال: مقاومتين 1 كيلو أوم = 2 كيلو أوم توالي و0.5 كيلو أوم توازي.</li></ul>"}, {"en": "<p>An <b>ohmmeter</b> does not work with a circuit connected to a power supply. Take the resistor out of the circuit and test it separately.</p>", "ar": "<p><b>الأوم ميتر</b> مبيشتغلش والدايرة متوصلة بمصدر. لازم تفصل المقاوم وتقيسه لوحده.</p>"}, {"en": "<p>Metric prefixes: pico 10^-12, nano 10^-9, micro 10^-6, milli 10^-3, kilo 10^3, mega 10^6, giga 10^9.</p>", "ar": "<p>البادئات: بيكو 10^-12، نانو 10^-9، ميكرو 10^-6، ميلي 10^-3، كيلو 10^3، ميجا 10^6، جيجا 10^9.</p>"}], "terms": [["resistance", "Tendency of a conductor to limit electron flow; unit ohm.", "المقاومة: ميل الموصّل لتقليل التدفق."], ["series circuit", "Loads connected in one string; same current through each.", "توالي: نفس التيار في كل الأحمال."], ["parallel circuit", "Loads connected across the same two points; 1/Rt = 1/R1 + 1/R2.", "توازي: الأحمال على نفس النقطتين."], ["ohmmeter", "Measures resistance; the component must be removed from powered circuit.", "أوم ميتر: بيقيس المقاومة."]]}], "flash": [{"f": "What is electricity?", "b": "The ordered flow of electrons in a conductor (like water in a pipe)."}, {"f": "Define conductors, insulators and semiconductors.", "b": "Conductors let electrons flow (gold, silver, copper); insulators block them (rubber, glass, Teflon, mica); semiconductors are in between, \"part-time\" conductors whose conductivity can be controlled."}, {"f": "Charge of an electron and a proton?", "b": "Electron: -1.602x10^-19 C. Proton: +1.602x10^-19 C."}, {"f": "Define current, its symbol and unit.", "b": "Rate of flow of electrons, I = dq/dt; unit ampere; 1 A = 1 C/s."}, {"f": "How many electrons make one coulomb?", "b": "6.25 x 10^18 electrons."}, {"f": "Voltage analogy and unit?", "b": "Like water pressure (waterfall potential energy); the volt. It is the energy required to move a unit charge between two points."}, {"f": "What two things are needed to produce a current?", "b": "A source of potential difference and a complete circuit."}, {"f": "Power formula and unit?", "b": "P = V x I; watt (one joule per second)."}, {"f": "Two 1.5 V cells in series, and in parallel?", "b": "Series: 3 V. Parallel: 1.5 V but a larger current can be drawn."}, {"f": "State the resistor relation and its constant.", "b": "V = IR (I = GV, G = 1/R is conductance)."}, {"f": "Three factors affecting resistance?", "b": "Shape (length and area), type of substance, temperature."}, {"f": "Resistors in series and in parallel?", "b": "Series: Rt = R1 + R2. Parallel: 1/Rt = 1/R1 + 1/R2 (two 1 kΩ: 2 kΩ series, 0.5 kΩ parallel)."}, {"f": "Why take a resistor out of the circuit before an ohmmeter?", "b": "An ohmmeter does not function with a circuit connected to a power supply."}], "quiz": [{"q": "Electricity is best defined as:", "o": ["Flow of protons in a gas", "Ordered flow of electrons in a conductor", "Heat inside atoms", "Random motion of neutrons"], "a": 1, "w": "الكهرباء = تدفق منتظم للإلكترونات في موصّل."}, {"q": "Which is an insulator?", "o": ["Copper", "Silver", "Glass", "Gold"], "a": 2, "w": "الزجاج عازل، والباقي موصّلات."}, {"q": "Semiconductors are called part-time conductors because:", "o": ["They never conduct", "Their conductivity can be controlled", "They only conduct at night", "They are always hot"], "a": 1, "w": "توصيلهم بيتحكم فيه."}, {"q": "The unit of electric charge is the:", "o": ["Ohm", "Watt", "Coulomb", "Volt"], "a": 2, "w": "وحدة الشحنة الكولوم."}, {"q": "1 ampere equals:", "o": ["1 coulomb per second", "1 volt per ohm only", "1 joule", "1 watt per volt squared"], "a": 0, "w": "الأمبير = كولوم/ثانية."}, {"q": "One coulomb is about:", "o": ["6.25 x 10^18 electrons", "1.6 x 10^-19 electrons", "10^6 electrons", "1000 electrons"], "a": 0, "w": "الكولوم = 6.25 x 10^18 إلكترون."}, {"q": "Voltage is compared to:", "o": ["Water volume", "Water pressure", "Pipe length", "Water colour"], "a": 1, "w": "الجهد زي ضغط المية، والتيار زي الحجم."}, {"q": "Power is calculated as:", "o": ["P = V / I", "P = V x I", "P = I / V", "P = R x V"], "a": 1, "w": "P = V x I."}, {"q": "Three 1.5 V cells in series give:", "o": ["1.5 V", "3 V", "4.5 V", "0.5 V"], "a": 2, "w": "3 x 1.5 = 4.5 فولت."}, {"q": "In a series circuit the current is:", "o": ["Different in each load", "The same in every load", "Zero", "Doubled at each load"], "a": 1, "w": "في التوالي التيار واحد."}, {"q": "Resistance of a wire increases when:", "o": ["Its length increases", "Its area increases", "It gets thicker", "It is cooled to 0 K only"], "a": 0, "w": "المقاومة بتزيد بزيادة الطول وبتقل بزيادة المساحة."}, {"q": "Two 1 kΩ resistors in parallel give:", "o": ["2 kΩ", "1 kΩ", "0.5 kΩ", "4 kΩ"], "a": 2, "w": "1/R = 1+1 = 2 يعني R = 0.5 كيلو."}, {"q": "An ohmmeter must be used:", "o": ["With power connected", "On a circuit without power, component removed", "Only on AC", "In series with a battery"], "a": 1, "w": "الأوم ميتر لازم من غير مصدر كهربا."}, {"q": "The relation V = IR means current is:", "o": ["Inversely proportional to voltage", "Directly proportional to voltage", "Independent of voltage", "Equal to resistance"], "a": 1, "w": "التيار يتناسب طردياً مع الجهد."}], "recall": [{"q": "Define electricity and give the water analogy.", "a": "Ordered flow of electrons in a conductor. Voltage is like pressure and current like water volume.", "w": "التعريف + تشبيه المية."}, {"q": "Classify materials by conductivity with examples.", "a": "Conductors (gold, silver, copper), insulators (rubber, glass, Teflon, mica), semiconductors in between.", "w": "التصنيف مع أمثلة."}, {"q": "Define charge, current and voltage with units.", "a": "q in coulomb (6.25x10^18 electrons per C); I in ampere (C/s); V in volt (energy per unit charge).", "w": "الوحدات."}, {"q": "What is needed to produce a current?", "a": "A source of potential difference and a complete circuit.", "w": "مصدر جهد + دايرة كاملة."}, {"q": "Write the power formula and explain.", "a": "P = V x I; energy per unit time; one joule per second is one watt.", "w": "القدرة."}, {"q": "Compare series and parallel cells.", "a": "Series: voltages add (1.5 V each). Parallel: voltage stays 1.5 V, current capacity higher.", "w": "مقارنة."}, {"q": "State Ohm's relation and factors affecting resistance.", "a": "V = IR; shape (length and area), type, temperature.", "w": "القانون والعوامل."}, {"q": "Combine resistors in series and parallel.", "a": "Series Rt = R1 + R2; parallel 1/Rt = 1/R1 + 1/R2.", "w": "توالي وتوازي."}, {"q": "How do you measure a resistor with an ohmmeter?", "a": "Remove it from the circuit with no power supply and measure it separately.", "w": "الأوم ميتر."}]}, "elec2": {"name": "Fundamentals of Electronics", "lec": "Lecture 2 - Electricity, Ohm's law and semiconductors", "short": "Elec", "sections": [{"id": "elec2_1", "title_en": "Electronics, charge and material classes", "title_ar": "الإلكترونيات والشحنة وأنواع المواد", "figs": [], "blocks": [{"en": "<p><b>Electronics</b> is the science of controlling electric energy, where electrons play the fundamental role. It deals with circuits that contain active components (vacuum tubes, transistors, diodes, integrated circuits) and passive components. Electricity is an invisible force that can produce <b>heat, light, sound and motion</b>.</p>", "ar": "<p><b>الإلكترونيات</b> هي علم التحكم في الطاقة الكهربية، والإلكترونات هي العنصر الأساسي. بتتعامل مع دوائر فيها مكونات نشطة (صمامات، ترانزستور، دايود، دوائر متكاملة) ومكونات سلبية. والكهرباء قوة مش مرئية بتنتج <b>حرارة وضوء وصوت وحركة</b>.</p>"}, {"en": "<p>Electricity breaks down into four things: <b>electric charge, voltage, current, resistance</b>.</p>", "ar": "<p>الكهرباء بتتقسم لأربعة: <b>الشحنة، الجهد، التيار، المقاومة</b>.</p>"}, {"en": "<p>The <b>electron</b> is the smallest amount of charge, with negative polarity, orbiting the nucleus. The <b>proton</b> is positive and sits in the nucleus with the <b>neutron</b>, which is neutral.</p>", "ar": "<p><b>الإلكترون</b> أصغر شحنة وقطبيته سالبة وبيدور حوالين النواة. <b>البروتون</b> موجب وفي النواة مع <b>النيوترون</b> المتعادل.</p>"}, {"en": "<p>The three classes by valence electrons:</p><ul><li><b>Conductors</b>: 1 valence electron; electrons move freely from atom to atom (all metals).</li><li><b>Insulators</b>: 8 valence electrons; used to prevent flow. Glass, rubber, plastic are also called <b>dielectrics</b> (they can store charge, used in capacitors).</li><li><b>Semiconductors</b>: 4 valence electrons (carbon, germanium, silicon); used in transistors.</li></ul>", "ar": "<p>التلات أنواع بحسب إلكترونات التكافؤ:</p><ul><li><b>موصّلات</b>: إلكترون تكافؤ واحد؛ الإلكترونات بتتحرك بحرية (كل المعادن).</li><li><b>عوازل</b>: 8 إلكترونات تكافؤ؛ بتمنع التيار. الزجاج والمطاط والبلاستيك اسمهم <b>dielectrics</b> (بتخزّن شحنة وبتستخدم في المكثفات).</li><li><b>أشباه الموصلات</b>: 4 إلكترونات تكافؤ (كربون، جرمانيوم، سيليكون)؛ بتستخدم في الترانزستور.</li></ul>"}], "terms": [["dielectric", "Insulating material that can store charge; used in capacitors.", "ديالكتريك: عازل بيخزن شحنة."], ["valence electron", "Electron in the outer orbit; conductors 1, semiconductors 4, insulators 8.", "إلكترون التكافؤ في المدار الخارجي."], ["electronics", "Science of controlling electric energy via electrons.", "علم التحكم في الطاقة الكهربية."]]}, {"id": "elec2_2", "title_en": "Charge, voltage, current, resistance", "title_ar": "الشحنة والجهد والتيار والمقاومة", "figs": [], "blocks": [{"en": "<ul><li>Charge symbol <b>Q</b> (quantity), unit <b>coulomb</b> = 6.25x10^18 electrons.</li><li>Potential difference symbol <b>E</b> (EMF), unit <b>volt</b>. 1 V is the work needed to move 1 C.</li><li>Current symbol <b>I</b> (intensity), unit <b>ampere</b>, <b>I = Q/T</b>. 1 ampere = 1 coulomb per second.</li><li>Resistance: opposition to current flow; unit <b>ohm</b> (Ω). A wire becoming hot is evidence of resistance. Conductors have little resistance, insulators a lot.</li></ul>", "ar": "<ul><li>الشحنة رمزها <b>Q</b> ووحدتها <b>الكولوم</b> = 6.25x10^18 إلكترون.</li><li>فرق الجهد رمزه <b>E</b> ووحدته <b>الفولت</b>. الفولت هو الشغل المطلوب لتحريك كولوم.</li><li>التيار رمزه <b>I</b> ووحدته <b>الأمبير</b>، <b>I = Q/T</b>. الأمبير = كولوم/ثانية.</li><li>المقاومة: معارضة مرور التيار؛ وحدتها <b>الأوم</b> (Ω). سخونة السلك دليل على وجود مقاومة. الموصّلات مقاومتها قليلة والعوازل كبيرة.</li></ul>"}, {"en": "<p><b>Current is charge in motion</b>: when a charge is forced to move by a potential difference, current is produced. The more electrons in motion, the greater the current.</p>", "ar": "<p><b>التيار هو شحنة متحركة</b>: لما فرق جهد يجبر الشحنة تتحرك بيحصل تيار. كل ما إلكترونات أكتر اتحركت التيار زاد.</p>"}], "terms": [["I = Q/T", "Current equals charge divided by time.", "التيار = الشحنة / الزمن."], ["resistor", "Component designed to provide resistance.", "المقاوم: مكون مصنوع لتوفير مقاومة."]]}, {"id": "elec2_3", "title_en": "Circuits and Ohm's law", "title_ar": "الدوائر وقانون أوم", "figs": [], "blocks": [{"en": "<p>A <b>circuit</b> is a path for current flow. In a <b>closed circuit</b> current flows. In an <b>open circuit</b> there is no conductive path (a break between two points) so <b>I = 0</b>.</p>", "ar": "<p><b>الدايرة</b> هي مسار لمرور التيار. في <b>الدايرة المغلقة</b> التيار بيمشي. في <b>الدايرة المفتوحة</b> مفيش مسار موصّل فـ <b>I = 0</b>.</p>"}, {"en": "<p>The battery is the <b>source</b> (it provides the potential energy). The circuit components are the <b>load resistance</b>, which determines how much current the source produces. Electrons flow from the <b>negative</b> side of the battery, through the load, back to the <b>positive</b> side.</p>", "ar": "<p>البطارية هي <b>المصدر</b> (بتوفر طاقة الوضع). ومكونات الدايرة هي <b>مقاومة الحمل</b> وهي اللي بتحدد التيار. الإلكترونات بتمشي من الطرف <b>السالب</b> للبطارية عبر الحمل ورجوع للطرف <b>الموجب</b>.</p>"}, {"en": "<p>Ohm's law: if you know any two of E, I, R you can calculate the third. Current and voltage are in linear proportion for a constant resistance.</p><ul><li><b>I = E/R</b> (current)</li><li><b>E = I x R</b> (voltage, also V = IR)</li><li><b>R = E/I</b> (resistance)</li></ul>", "ar": "<p>قانون أوم: لو عرفت اتنين من E وI وR تحسب التالت. التيار والجهد بينهم تناسب خطي لو المقاومة ثابتة.</p><ul><li><b>I = E/R</b> (التيار)</li><li><b>E = I x R</b> (الجهد، أو V = IR)</li><li><b>R = E/I</b> (المقاومة)</li></ul>"}], "terms": [["Ohm's law", "I = E/R; V = IR; R = E/I.", "قانون أوم."], ["open circuit", "Circuit with a break, so no current (I = 0).", "دايرة مفتوحة: مفيش تيار."], ["load", "The circuit components that draw current from the source.", "الحمل: مكونات الدايرة اللي بتسحب تيار."]]}, {"id": "elec2_4", "title_en": "Digital multimeter", "title_ar": "الملتيميتر الرقمي", "figs": [], "blocks": [{"en": "<p>A <b>multimeter</b> (volt-ohm meter) combines several measuring functions in one unit: <b>ammeter</b> (current), <b>voltmeter</b> (potential difference) and <b>ohmmeter</b> (resistance).</p>", "ar": "<p><b>الملتيميتر</b> جهاز واحد فيه كذا وظيفة قياس: <b>أميتر</b> (تيار) و<b>فولتميتر</b> (فرق جهد) و<b>أوم ميتر</b> (مقاومة).</p>"}, {"en": "<ul><li><b>Voltmeter</b>: connected in <b>parallel</b>; should have very <b>HIGH</b> input impedance.</li><li><b>Ammeter</b>: connected in <b>series</b> (break the circuit so all current passes through it); very <b>LOW</b> input impedance.</li><li><b>Ohmmeter</b>: with <b>no power supplied</b>. Adjust the range, starting from the highest limit if you do not know the value.</li></ul>", "ar": "<ul><li><b>الفولتميتر</b>: بيتوصل <b>توازي</b>؛ لازم يكون مقاومة دخله <b>عالية</b> جداً.</li><li><b>الأميتر</b>: بيتوصل <b>توالي</b> (تفتح الدايرة عشان كل التيار يعدي فيه)؛ مقاومة دخله <b>واطية</b> جداً.</li><li><b>الأوم ميتر</b>: <b>من غير مصدر كهربا</b>. اظبط المدى وابدأ من أعلى حد لو مش عارف القيمة.</li></ul>"}], "terms": [["ammeter", "Measures current; connected in series; very low input impedance.", "أميتر: يقيس التيار على التوالي."], ["voltmeter", "Measures potential difference; connected in parallel; very high input impedance.", "فولتميتر: على التوازي."], ["multimeter", "Instrument combining ammeter, voltmeter and ohmmeter.", "ملتيميتر."]]}, {"id": "elec2_5", "title_en": "DC and AC", "title_ar": "التيار المستمر والمتردد", "figs": [], "blocks": [{"en": "<p><b>DC</b> flows in one direction only (negative toward positive pole); battery circuits are DC with fixed polarity. <b>AC</b> periodically reverses polarity and direction. The home outlet is described as 60 cycles per second, and all audio signals are AC.</p>", "ar": "<p><b>الـ DC</b> بيمشي في اتجاه واحد (من السالب للموجب)؛ دوائر البطاريات DC وقطبيتها ثابتة. <b>الـ AC</b> بيعكس القطبية والاتجاه دوريا. مصدر البيت في المحاضرة 60 دورة في الثانية وكل إشارات الصوت AC.</p>"}, {"en": "<table class='cmp'><tr><th>DC</th><th>AC</th></tr><tr><td>Fixed polarity</td><td>Reverses polarity</td></tr><tr><td>Steady value cannot be stepped up or down by a transformer</td><td>Used for power distribution (can be transformed)</td></tr><tr><td>Easier to measure</td><td>Easier to amplify</td></tr></table><p>Heating effects are the same for both.</p>", "ar": "<table class='cmp'><tr><th>DC</th><th>AC</th></tr><tr><td>قطبية ثابتة</td><td>القطبية بتتعكس</td></tr><tr><td>القيمة الثابتة ماتتحولش بترانسفورمر</td><td>بيستخدم في توزيع القدرة (ممكن يتحول)</td></tr><tr><td>أسهل في القياس</td><td>أسهل في التكبير</td></tr></table><p>التأثير الحراري واحد في الاتنين.</p>"}, {"en": "<p>Sinusoidal AC quantities:</p><ul><li><b>Cycle</b>: one complete waveform.</li><li><b>Period</b>: time of one cycle, in seconds.</li><li><b>Frequency</b> (f): cycles per second, in hertz (Hz).</li><li><b>Amplitude</b>: maximum positive or negative value.</li><li><b>Wavelength</b>: distance a wave travels in one cycle; it gets shorter as frequency increases.</li></ul>", "ar": "<p>كميات الـ AC الجيبية:</p><ul><li><b>الدورة</b>: موجة كاملة.</li><li><b>الزمن الدوري</b>: زمن دورة واحدة بالثانية.</li><li><b>التردد</b> (f): عدد الدورات في الثانية بالهرتز.</li><li><b>السعة</b>: أقصى قيمة موجبة أو سالبة.</li><li><b>الطول الموجي</b>: المسافة اللي بتقطعها الموجة في دورة؛ بيقصر لما التردد يزيد.</li></ul>"}, {"en": "<p><b>Impedance</b> is resistance to current flow in AC circuits, also measured in ohms. <b>Grounding</b>: one side of the source is usually grounded for safety; in equipment the ground is a metal chassis used as a common return.</p>", "ar": "<p><b>الممانعة (Impedance)</b> هي مقاومة مرور التيار في دوائر الـ AC ووحدتها برضو الأوم. <b>التأريض</b>: أحد طرفي المصدر بيتأرض للأمان؛ وفي الأجهزة الأرضي هو الشاسيه المعدني كمرجع مشترك.</p>"}], "terms": [["DC", "Direct current: one direction, fixed polarity.", "تيار مستمر."], ["AC", "Alternating current: polarity and direction reverse periodically.", "تيار متردد."], ["frequency", "Cycles per second, unit hertz (Hz).", "التردد بالهرتز."], ["impedance", "Resistance to current in AC circuits, measured in ohms.", "الممانعة."], ["grounding", "Connecting one side of a source to ground for safety.", "التأريض للأمان."]]}, {"id": "elec2_6", "title_en": "Semiconductors: silicon, N-type and P-type", "title_ar": "أشباه الموصلات: سيليكون وN وP", "figs": [], "blocks": [{"en": "<p>Semiconductors are divided into <b>intrinsic</b> (pure) and <b>extrinsic</b> (doped). <b>Silicon</b> is the most common material for devices. Each Si atom has four valence electrons locked in <b>covalent bonds</b> with four neighbours, so pure silicon has no free charge carriers and acts as an <b>insulator</b>. Phosphorus (P) or boron (B) is added to change its conductivity (<b>doping</b>).</p>", "ar": "<p>أشباه الموصلات بتتقسم لـ <b>intrinsic</b> (نقي) و<b>extrinsic</b> (مشوب). <b>السيليكون</b> أشهر مادة. كل ذرة Si لها 4 إلكترونات تكافؤ في <b>روابط تساهمية</b> مع 4 جيران، فالسيليكون النقي مفيهوش حاملات شحنة حرة وبيتصرف كـ <b>عازل</b>. بيتضاف فسفور أو بورون لتغيير التوصيل (<b>التطعيم</b>).</p>"}, {"en": "<p><b>N-type</b>: pentavalent impurities (phosphorus, arsenic, antimony, bismuth) with 5 valence electrons. The 5th electron stays free to float. Carriers are negative; the impurities are <b>donors</b>.</p>", "ar": "<p><b>النوع N</b>: شوائب خماسية التكافؤ (فسفور، زرنيخ، أنتيمون، بزموت) بخمس إلكترونات تكافؤ. الإلكترون الخامس بيفضل حر. الحاملات سالبة والشوائب اسمها <b>donors</b> (مانحة).</p>"}, {"en": "<p><b>P-type</b>: trivalent impurities (boron, aluminum, indium, gallium) with 3 valence electrons. A vacant spot, a <b>hole</b>, forms in the covalent bond. Holes act as positive carriers and appear to move toward the negative terminal. The impurities are <b>acceptors</b>.</p>", "ar": "<p><b>النوع P</b>: شوائب ثلاثية التكافؤ (بورون، ألومنيوم، إنديوم، جاليوم). بيتكون مكان فاضي <b>hole</b> (فجوة) في الرابطة. الفجوات حاملات موجبة وكأنها بتتحرك ناحية الطرف السالب. والشوائب اسمها <b>acceptors</b> (قابلة).</p>"}], "terms": [["silicon", "Most common semiconductor material, 4 valence electrons.", "السيليكون."], ["doping", "Adding impurities (P or B) to silicon to change its conductivity.", "التطعيم."], ["N-type", "Doped with pentavalent donor; free electrons are carriers.", "نوع N: الحاملات إلكترونات."], ["P-type", "Doped with trivalent acceptor; holes are carriers.", "نوع P: الحاملات فجوات."], ["hole", "Vacant spot in a covalent bond acting as a positive carrier.", "الفجوة."], ["covalent bond", "Sharing of valence electrons between neighbouring atoms.", "رابطة تساهمية."]]}], "flash": [{"f": "Electrically, how are materials classified?", "b": "Conductors, insulators, semiconductors."}, {"f": "Valence electrons in conductors, insulators, semiconductors?", "b": "1, 8 and 4 respectively."}, {"f": "What are dielectrics?", "b": "Insulators (glass, rubber, plastic) that can store charge; used in capacitors."}, {"f": "Symbol and unit of charge, and one coulomb equals?", "b": "Q, coulomb; 6.25x10^18 electrons."}, {"f": "What does one volt measure?", "b": "The work needed to move 1 C of charge."}, {"f": "Current definition and formula?", "b": "I = Q/T; 1 ampere = 1 coulomb per second."}, {"f": "What is an open circuit?", "b": "A circuit with no conductive path between two points, so I = 0."}, {"f": "State Ohm's law in three forms.", "b": "I = E/R, E = IR, R = E/I."}, {"f": "Direction of electron flow?", "b": "From the negative side of the battery, through the load, back to the positive side."}, {"f": "How is a voltmeter connected, and its impedance?", "b": "In parallel; very high input impedance."}, {"f": "How is an ammeter connected, and its impedance?", "b": "In series; very low input impedance."}, {"f": "Ohmmeter rules?", "b": "No power supplied; adjust range, start from the highest limit if unknown."}, {"f": "DC versus AC?", "b": "DC: one direction, fixed polarity. AC: reverses polarity and direction periodically (used for power distribution)."}, {"f": "Relation between frequency and wavelength?", "b": "Wavelength gets shorter as frequency increases."}, {"f": "What is impedance?", "b": "Resistance to current flow in AC circuits, measured in ohms."}, {"f": "Why does pure silicon act as an insulator?", "b": "All 4 valence electrons are locked in covalent bonds, so there are no free carriers."}, {"f": "N-type: impurity, carriers, name?", "b": "Pentavalent (5 valence electrons: P, As, Sb, Bi); free electrons; donors."}, {"f": "P-type: impurity, carriers, name?", "b": "Trivalent (3 valence electrons: B, Al, In, Ga); holes; acceptors."}], "quiz": [{"q": "Which material has 4 valence electrons?", "o": ["Conductor", "Insulator", "Semiconductor", "Dielectric only"], "a": 2, "w": "أشباه الموصلات 4 إلكترونات تكافؤ."}, {"q": "Dielectric materials are used in:", "o": ["Capacitors", "Fuses", "Antennas only", "Ohmmeters"], "a": 0, "w": "بتخزن شحنة فبتستخدم في المكثفات."}, {"q": "The practical unit of potential difference is the:", "o": ["Ampere", "Volt", "Ohm", "Hertz"], "a": 1, "w": "فولت."}, {"q": "I = Q/T means 1 ampere is:", "o": ["1 volt per second", "1 coulomb per second", "1 ohm per volt", "1 joule"], "a": 1, "w": "أمبير = كولوم/ثانية."}, {"q": "In an open circuit the current is:", "o": ["Maximum", "Zero", "Equal to E", "Alternating"], "a": 1, "w": "مفيش مسار موصّل فـ I = 0."}, {"q": "If E = 12 V and R = 4 Ω, then I =", "o": ["48 A", "3 A", "8 A", "0.33 A"], "a": 1, "w": "I = E/R = 12/4 = 3 أمبير."}, {"q": "If I = 2 A and R = 5 Ω, then E =", "o": ["10 V", "2.5 V", "7 V", "0.4 V"], "a": 0, "w": "E = I x R = 10 فولت."}, {"q": "A voltmeter is connected:", "o": ["In series", "In parallel", "Without a circuit", "Only to AC"], "a": 1, "w": "الفولتميتر توازي وعالي المقاومة."}, {"q": "An ammeter should have:", "o": ["Very high impedance", "Very low impedance", "Infinite impedance", "No terminals"], "a": 1, "w": "الأميتر مقاومة دخل واطية جداً."}, {"q": "Which is true for DC?", "o": ["Reverses polarity", "Fixed polarity", "Used with transformers to step up", "Cannot flow in batteries"], "a": 1, "w": "DC قطبية ثابتة."}, {"q": "Frequency is measured in:", "o": ["Hertz", "Coulombs", "Ohms", "Watts"], "a": 0, "w": "هرتز."}, {"q": "Impedance is:", "o": ["Resistance to AC current flow", "Charge storage", "Frequency", "A type of battery"], "a": 0, "w": "الممانعة مقاومة الـ AC."}, {"q": "Pure silicon behaves as:", "o": ["A good conductor", "An insulator", "A magnet", "A battery"], "a": 1, "w": "مفيش حاملات حرة."}, {"q": "Which impurity makes N-type silicon?", "o": ["Boron", "Phosphorus", "Gallium", "Aluminum"], "a": 1, "w": "الفسفور خماسي فبيدي إلكترون حر."}, {"q": "Holes are carriers in:", "o": ["N-type", "P-type", "Both only when hot", "Neither"], "a": 1, "w": "P-type الحاملات فجوات."}, {"q": "Impurities added to make P-type are called:", "o": ["Donors", "Acceptors", "Insulators", "Dielectrics"], "a": 1, "w": "acceptors."}], "recall": [{"q": "Describe the three classes of materials with valence electrons.", "a": "Conductors 1, semiconductors 4, insulators 8 valence electrons; insulators = dielectrics store charge.", "w": "الأنواع التلاتة."}, {"q": "State Ohm's law and solve for I when E = 12 V and R = 4 Ω.", "a": "I = E/R = 3 A.", "w": "القانون + حساب."}, {"q": "How do you connect a voltmeter, an ammeter and an ohmmeter?", "a": "Voltmeter parallel (high impedance), ammeter series (low impedance), ohmmeter with no power.", "w": "طرق التوصيل."}, {"q": "Compare DC and AC.", "a": "DC one direction fixed polarity, easier to measure; AC reverses, used for power distribution, easier to amplify; same heating effect.", "w": "مقارنة."}, {"q": "Define cycle, period, frequency, amplitude, wavelength.", "a": "Cycle: one full waveform; period: time per cycle; frequency: cycles per second in Hz; amplitude: max value; wavelength: distance per cycle (shorter as f rises).", "w": "تعريفات."}, {"q": "Why is pure Si an insulator and how is it made useful?", "a": "Valence electrons are locked in covalent bonds; doping with P or B adds free carriers.", "w": "التطعيم."}, {"q": "Explain N-type and P-type semiconductors.", "a": "N: pentavalent donors give free electrons. P: trivalent acceptors create holes that appear to move to the negative terminal.", "w": "N وP."}]}, "elec3": {"name": "Fundamentals of Electronics", "lec": "Lecture 3 - The pn junction, diodes and transistors", "short": "Elec", "sections": [{"id": "elec3_1", "title_en": "The pn junction and the diode", "title_ar": "الوصلة pn والدايود", "figs": [], "blocks": [{"en": "<p>A <b>pn junction</b> is close contact of an n-type and a p-type semiconductor: a two-terminal device with an <b>anode</b> and a <b>cathode</b>. Examples: <b>diode</b> (one junction), <b>transistor</b> (two junctions), <b>thyristor</b> (three junctions).</p>", "ar": "<p><b>الوصلة pn</b> هي تلامس قريب بين شبه موصل n وشبه موصل p: جهاز بطرفين <b>anode</b> و<b>cathode</b>. أمثلة: <b>الدايود</b> (وصلة واحدة)، <b>الترانزستور</b> (وصلتين)، <b>الثايرستور</b> (تلات وصلات).</p>"}, {"en": "<p>The pn junction acts like a <b>one-way valve</b>: current flows in forward bias only. That is why it is used to build <b>solid state rectifiers</b> (pn junction diodes).</p>", "ar": "<p>الوصلة pn زي <b>صمام باتجاه واحد</b>: التيار بيمشي في الانحياز الأمامي بس. عشان كده بتتستخدم في <b>المقوّمات الصلبة</b>.</p>"}, {"en": "<p>How it works:</p><ul><li>Majority carriers cross the interface (<b>diffusion</b>) and recombine on the other side.</li><li>This leaves uncompensated space charges: the <b>depletion region</b>.</li><li>An electric field (built-in potential) builds up and acts as an <b>energy barrier</b>, reducing diffusion.</li><li>The field also causes minority carrier <b>drift</b> in the opposite direction.</li></ul>", "ar": "<p>إزاي بيشتغل:</p><ul><li>الحاملات الأغلبية بتعدي الحد (<b>انتشار</b>) وبتتحد في الناحية التانية.</li><li>ده بيسيب شحنات فراغية غير متعادلة: <b>منطقة النضوب</b>.</li><li>بيتكون مجال كهربي (جهد داخلي) كـ <b>حاجز طاقة</b> بيقلل الانتشار.</li><li>والمجال بيسبب <b>انجراف</b> للحاملات الأقلية في الاتجاه العكسي.</li></ul>"}], "terms": [["pn junction", "Junction of n-type and p-type semiconductor.", "الوصلة pn."], ["anode", "Positive terminal of a diode.", "الأنود: الطرف الموجب."], ["cathode", "Negative terminal of a diode.", "الكاثود: الطرف السالب."], ["depletion region", "Zone near the junction empty of free carriers, with uncompensated space charge.", "منطقة النضوب."], ["diffusion", "Majority carriers crossing the junction interface.", "الانتشار."]]}, {"id": "elec3_2", "title_en": "Forward and reverse bias", "title_ar": "الانحياز الأمامي والعكسي", "figs": [], "blocks": [{"en": "<p><b>Forward biased</b>: electrons from the n-side and holes from the p-side are pushed toward the center by the battery field. They combine and <b>current passes</b> through the diode (open door).</p>", "ar": "<p><b>الانحياز الأمامي</b>: إلكترونات من ناحية n وفجوات من ناحية p بتتدفع ناحية النص بمجال البطارية. بيتحدوا و<b>التيار بيعدي</b> (باب مفتوح).</p>"}, {"en": "<p><b>Reverse biased</b> (closed door): holes in the n-side are pushed one way and electrons in the p-side the other, creating an empty zone free of carriers, the <b>depletion region</b>. It acts as an <b>insulator</b> and prevents current.</p>", "ar": "<p><b>الانحياز العكسي</b> (باب مقفول): الفجوات والإلكترونات بتتدفع بعيد عن الوصلة فبتتكون منطقة فاضية من الحاملات هي <b>منطقة النضوب</b>. بتتصرف كعازل وبتمنع التيار.</p>"}], "terms": [["forward bias", "Battery pushes carriers to the junction; current flows.", "انحياز أمامي: التيار يمر."], ["reverse bias", "Carriers pulled away, depletion region widens; no current.", "انحياز عكسي: مفيش تيار."]]}, {"id": "elec3_3", "title_en": "Rectifiers and the power supply", "title_ar": "المقوّمات ومصدر القدرة", "figs": [], "blocks": [{"en": "<p><b>Half wave rectifier</b>: the diode converts AC to <b>pulsed DC</b>. It blocks current when the input is negative at the anode (output = 0). The diode drops about <b>0.6 V</b>, so output peak is 0.6 V lower than input peak. Output frequency = input frequency.</p>", "ar": "<p><b>مقوّم نصف موجة</b>: الدايود بيحول AC لـ <b>DC نابض</b>. بيمنع التيار لما الدخل سالب على الأنود (الخرج = 0). الدايود بيفقد حوالي <b>0.6 فولت</b> فقمة الخرج أقل من الدخل بـ 0.6. تردد الخرج = تردد الدخل.</p>"}, {"en": "<p><b>Full wave (bridge) rectifier</b>: the negative swings are transformed into positive swings. One pair of diodes conducts during the positive half cycle and the other pair during the negative half cycle. Output peak is <b>1.2 V</b> below input peak and the output frequency is <b>twice</b> the input frequency.</p>", "ar": "<p><b>مقوّم موجة كاملة (قنطرة)</b>: الأجزاء السالبة بتتحول لموجبة. زوج دايودات بيشتغل في نص الدورة الموجب والزوج التاني في السالب. قمة الخرج أقل من الدخل بـ <b>1.2 فولت</b> وتردد الخرج <b>ضعف</b> تردد الدخل.</p>"}, {"en": "<p>AC to DC power supply = transformer + full wave rectifier + filter capacitor:</p><ul><li><b>Transformer</b>: steps the input voltage up or down.</li><li><b>Rectifier</b>: converts AC to pulsed DC.</li><li><b>Filter capacitor</b>: smooths the pulses; it must be large enough to store the charge for a steady load current.</li></ul>", "ar": "<p>مصدر AC إلى DC = ترانسفورمر + مقوّم موجة كاملة + مكثف فلتر:</p><ul><li><b>الترانسفورمر</b>: بيرفع أو بيخفض جهد الدخل.</li><li><b>المقوّم</b>: بيحول AC لـ DC نابض.</li><li><b>مكثف الفلتر</b>: بيمهّد النبضات؛ لازم يكون كبير كفاية يخزن شحنة لتيار ثابت للحمل.</li></ul>"}, {"en": "<p>Advantages of solid state diodes:</p><ul><li>No filament: longer life, less power, less heat.</li><li>Smaller size, allows a compact x-ray unit.</li><li>Small voltage drop.</li><li>Reverse current is less than a vacuum diode, so more efficient rectifiers.</li></ul>", "ar": "<p>مميزات الدايود الصلب:</p><ul><li>مفيهوش فتيلة: عمر أطول وقدرة أقل وحرارة أقل.</li><li>حجم أصغر فبيسمح بوحدة أشعة مدمجة.</li><li>فقد جهد صغير.</li><li>التيار العكسي أقل من الصمام المفرغ فهو مقوّم أكفأ.</li></ul>"}], "terms": [["rectifier", "Device that converts AC to DC (diode).", "مقوّم: بيحول AC لـ DC."], ["bridge rectifier", "Full wave rectifier using four diodes.", "قنطرة التقويم."], ["filter capacitor", "Smooths pulsed DC into steady DC.", "مكثف التمهيد."], ["pulsed DC", "Output of a rectifier before filtering.", "DC نابض."]]}, {"id": "elec3_4", "title_en": "Transistor and thyristor", "title_ar": "الترانزستور والثايرستور", "figs": [], "blocks": [{"en": "<p>The <b>transistor</b> (invented 1947) is a three-terminal device: <b>base, collector, emitter</b>. It amplifies voltage. A small voltage or current at the base controls a larger current between collector and emitter. <b>Analogy</b>: a faucet; the control knob alters the flow of water.</p>", "ar": "<p><b>الترانزستور</b> (اتخترع 1947) جهاز بتلات أطراف: <b>base وcollector وemitter</b>. بيكبّر الجهد. جهد أو تيار صغير على الـ base بيتحكم في تيار أكبر بين الـ collector والـ emitter. <b>التشبيه</b>: حنفية، والمقبض بيغير تدفق المية.</p>"}, {"en": "<p><b>How it works (npn)</b>: with no base voltage, electrons in the emitter are blocked by the pn junction. A <b>negative</b> base voltage makes the base-emitter junction reverse biased (depletion region, no flow). A <b>positive base voltage above 0.6 V</b> forward biases it, electrons are drawn to the base, and because the base is very thin most electrons reach the collector. Increasing the base voltage increases emitter-to-collector flow.</p>", "ar": "<p><b>الشغل (npn)</b>: من غير جهد على الـ base الإلكترونات في الـ emitter بتتمنع بالوصلة. جهد <b>سالب</b> على الـ base بيخلي وصلة base-emitter انحياز عكسي (منطقة نضوب، مفيش مرور). جهد <b>موجب أعلى من 0.6 فولت</b> بيعمل انحياز أمامي والإلكترونات بتتجذب للـ base، وعشان الـ base رفيعة جداً معظم الإلكترونات بتوصل للـ collector. زيادة جهد الـ base بتزود التدفق.</p>"}, {"en": "<p><b>Thyristor</b>: silicon controlled rectifier, <b>3 junctions</b> (N-P-N-P).</p>", "ar": "<p><b>الثايرستور</b>: مقوّم سيليكوني متحكم فيه، <b>3 وصلات</b> (N-P-N-P).</p>"}], "terms": [["transistor", "Three-terminal device (base, collector, emitter) that amplifies and switches.", "ترانزستور: بيكبّر وبيفتح ويقفل."], ["base", "Control terminal of a transistor.", "القاعدة: طرف التحكم."], ["collector", "Terminal that collects electrons from the emitter.", "المجمّع."], ["emitter", "Terminal that emits electrons.", "الباعث."], ["thyristor", "Silicon controlled rectifier with 3 junctions (N-P-N-P).", "ثايرستور."]]}, {"id": "elec3_5", "title_en": "Applications and optoelectronics", "title_ar": "التطبيقات والإلكترونيات الضوئية", "figs": [], "blocks": [{"en": "<p>Applications in x-ray equipment:</p><ul><li><b>Diode</b>: rectification (high tension transformer).</li><li><b>Transistors</b>: electronic timing circuits.</li><li><b>Thyristor (triacs)</b>: switch the exposure on and off.</li><li><b>Microprocessors</b>: sophisticated measurement and control, checking that exposure factors are not outside their ratings.</li></ul>", "ar": "<p>التطبيقات في أجهزة الأشعة:</p><ul><li><b>الدايود</b>: التقويم (محول الجهد العالي).</li><li><b>الترانزستور</b>: دوائر التوقيت الإلكترونية.</li><li><b>الثايرستور (triacs)</b>: بيفتح ويقفل التعريض.</li><li><b>المعالجات الدقيقة</b>: قياس وتحكم متطور، وبتتأكد إن عوامل التعريض مش برا الحدود المسموحة.</li></ul>"}, {"en": "<p><b>LED</b> (light emitting diode): tiny light source in many colors, needs very small current so <b>always use a resistor</b> (300 Ω to 1 kΩ). Forward biased it conducts and emits light; with reverse polarity it stops. A <b>photodiode</b> is a 2-lead device that transforms <b>light energy into electric current</b> (solar cell).</p>", "ar": "<p><b>الـ LED</b>: مصدر ضوء صغير بألوان كتير، محتاج تيار صغير جداً فـ <b>لازم تستخدم مقاوم</b> (300 أوم لـ 1 كيلو). في الانحياز الأمامي بيوصّل وبيضيء وبالعكس بيقف. أما <b>الفوتوداييود</b> جهاز بطرفين بيحول <b>الطاقة الضوئية لتيار كهربي</b> (الخلية الشمسية).</p>"}], "terms": [["LED", "Light emitting diode: lights when forward biased; needs a series resistor.", "LED: دايود مضيء."], ["photodiode", "Converts light energy to electric current.", "فوتوداييود: يحول الضوء لتيار."], ["optoelectronics", "Devices that emit or respond to light (LED, photodiode).", "إلكترونيات ضوئية."]]}], "flash": [{"f": "What is a pn junction?", "b": "Close contact of an n-type and a p-type semiconductor; a two-terminal device (anode, cathode)."}, {"f": "Examples of junction devices?", "b": "Diode (1 junction), transistor (2), thyristor (3)."}, {"f": "Why is a diode a one-way valve?", "b": "Current flows only in forward bias; used for solid state rectifiers."}, {"f": "How is the depletion region formed?", "b": "Majority carriers diffuse across and recombine, leaving uncompensated space charges and a built-in field."}, {"f": "Forward bias effect?", "b": "Electrons and holes pushed to the center, combine; current passes (open door)."}, {"f": "Reverse bias effect?", "b": "Depletion region widens, acts as insulator; no current (closed door)."}, {"f": "Half wave rectifier: voltage drop and frequency?", "b": "0.6 V drop; output frequency equals input frequency."}, {"f": "Full wave rectifier: voltage drop and frequency?", "b": "1.2 V below input peak; output frequency is twice the input."}, {"f": "Parts of an AC to DC power supply?", "b": "Transformer, full wave rectifier, filter capacitor."}, {"f": "Advantages of solid state diodes?", "b": "No filament, long life, less power and heat, small size (compact x-ray unit), small voltage drop, small reverse current."}, {"f": "Transistor terminals and analogy?", "b": "Base, collector, emitter; a faucet whose knob controls the flow."}, {"f": "When does an npn transistor conduct?", "b": "When base voltage is positive above 0.6 V (base-emitter forward biased)."}, {"f": "What is a thyristor?", "b": "Silicon controlled rectifier, 3 junctions N-P-N-P; triacs switch exposure on and off."}, {"f": "LED rule?", "b": "Always use a resistor (300 Ω to 1 kΩ); conducts and lights in forward bias."}, {"f": "What does a photodiode do?", "b": "Transforms light energy into electric current (solar cell)."}], "quiz": [{"q": "A transistor has how many pn junctions?", "o": ["1", "2", "3", "4"], "a": 1, "w": "الدايود 1 والترانزستور 2 والثايرستور 3."}, {"q": "A diode conducts when it is:", "o": ["Reverse biased", "Forward biased", "Unbiased only", "Overheated"], "a": 1, "w": "الانحياز الأمامي."}, {"q": "The depletion region acts as:", "o": ["A conductor", "An insulator", "A battery", "An amplifier"], "a": 1, "w": "عازل."}, {"q": "Half wave rectifier output frequency is:", "o": ["Half the input", "Equal to the input", "Twice the input", "Zero"], "a": 1, "w": "نفس التردد."}, {"q": "Bridge rectifier output frequency is:", "o": ["Equal to input", "Half the input", "Twice the input", "Unrelated"], "a": 2, "w": "ضعف تردد الدخل."}, {"q": "Output peak of a full wave bridge is lower than input by:", "o": ["0.6 V", "1.2 V", "6 V", "0 V"], "a": 1, "w": "دايودين على المسار = 1.2 فولت."}, {"q": "The filter capacitor in a power supply:", "o": ["Steps up voltage", "Smooths the pulses", "Reverses polarity", "Blocks DC"], "a": 1, "w": "بيمهد النبضات."}, {"q": "Which is an advantage of solid state diodes?", "o": ["They contain a filament", "Larger size", "Longer life, less heat", "High voltage drop"], "a": 2, "w": "مفيش فتيلة فعمر أطول وحرارة أقل."}, {"q": "Transistor terminals are:", "o": ["Anode, cathode, gate", "Base, collector, emitter", "Source only", "Plus, minus"], "a": 1, "w": "base/collector/emitter."}, {"q": "An npn transistor starts conducting when the base is about:", "o": ["Negative", "Zero", "Positive above 0.6 V", "-0.6 V"], "a": 2, "w": "فوق 0.6 فولت."}, {"q": "A thyristor has:", "o": ["1 junction", "2 junctions", "3 junctions", "No junction"], "a": 2, "w": "تلات وصلات."}, {"q": "In x-ray equipment, triacs are used to:", "o": ["Rectify", "Switch the exposure on and off", "Display image", "Cool the tube"], "a": 1, "w": "بتفتح وتقفل التعريض."}, {"q": "An LED must be used with:", "o": ["A resistor", "A transformer", "No component", "A vacuum tube"], "a": 0, "w": "لتحديد التيار."}, {"q": "A photodiode converts:", "o": ["Light into current", "Current into light", "AC into DC", "Heat into sound"], "a": 0, "w": "ضوء لتيار."}], "recall": [{"q": "Explain how a pn junction forms a depletion region.", "a": "Diffusion of majority carriers, recombination, leaving space charges and a built-in field/barrier.", "w": "منطقة النضوب."}, {"q": "Compare forward and reverse bias.", "a": "Forward: carriers pushed to the junction, current flows. Reverse: depletion region widens, no current.", "w": "مقارنة."}, {"q": "Compare half wave and full wave rectifiers.", "a": "Half: blocks negative half, 0.6 V drop, same frequency. Full: uses both halves, 1.2 V drop, double frequency.", "w": "مقارنة المقوّمات."}, {"q": "Describe an AC to DC power supply.", "a": "Transformer, full wave rectifier, filter capacitor for steady current.", "w": "مصدر القدرة."}, {"q": "How does a transistor work (npn)?", "a": "Positive base above 0.6 V forward biases base-emitter; electrons pass to the collector through the thin base; more base voltage gives more flow.", "w": "الترانزستور."}, {"q": "List applications of semiconductor devices in x-ray equipment.", "a": "Diode: rectification; transistor: timing; thyristor/triacs: exposure switching; microprocessors: check exposure factors.", "w": "التطبيقات."}, {"q": "What are an LED and a photodiode?", "a": "LED emits light when forward biased with a resistor; photodiode converts light to current.", "w": "LED وفوتوداييود."}]}, "elec4": {"name": "Fundamentals of Electronics", "lec": "Lecture 4 - Display units (CRT, plasma, LCD)", "short": "Elec", "sections": [{"id": "elec4_1", "title_en": "Vacuum tubes and the CRT", "title_ar": "الصمامات المفرغة والـ CRT", "figs": [], "blocks": [{"en": "<p><b>Vacuum tubes</b> were among the earliest electronic components and dominated electronics until the 1950s. Today solid state devices have taken over, but tubes are still used in high power RF amplifiers, <b>cathode ray tubes</b> and some microwave devices.</p>", "ar": "<p><b>الصمامات المفرغة</b> كانت من أقدم المكونات وسادت لحد الخمسينات. دلوقتي الأجهزة الصلبة أخدت مكانها، بس لسه بتتستخدم في مكبرات RF عالية القدرة و<b>أنابيب أشعة الكاثود</b> وبعض أجهزة الميكروويف.</p>"}, {"en": "<p>The CRT was invented in <b>1896 by Ferdinand Braun</b>; first used for oscilloscopes, then television, then computers. <b>Philo Farnsworth</b> developed the CRT used for television. <b>Cathode rays</b> are high energy electrons emitted from the heated cathode (-) in a vacuum tube.</p>", "ar": "<p>الـ CRT اخترعه <b>فرديناند براون سنة 1896</b>؛ استخدم أول حاجة في الأوسيلوسكوب ثم التلفزيون ثم الكمبيوتر. و<b>فيلو فارنزورث</b> طوّر الـ CRT اللي اتستخدم في التلفزيون. <b>أشعة الكاثود</b> هي إلكترونات عالية الطاقة بتنبعث من الكاثود (-) المسخّن في أنبوب مفرغ.</p>"}, {"en": "<p>How a CRT works:</p><ul><li>A small heater heats the cathode, which emits an electron cloud.</li><li>Two anodes (+), accelerating and focusing, focus it into an electron beam.</li><li>The electron gun aims electrons at the phosphor screen, which glows (red, green, blue dots).</li><li>Black-and-white monitors have one electron gun; color monitors have <b>three (RGB)</b>.</li></ul>", "ar": "<p>إزاي الـ CRT بيشتغل:</p><ul><li>سخان صغير بيسخن الكاثود فبيطلع سحابة إلكترونات.</li><li>أنودين (+) تسريع وتركيز بيحولوها لشعاع إلكترونات.</li><li>مدفع الإلكترونات بيصوب على شاشة الفوسفور فبتتوهج (نقط أحمر وأخضر وأزرق).</li><li>الشاشات الأبيض والأسود فيها مدفع واحد والملونة <b>تلاتة (RGB)</b>.</li></ul>"}, {"en": "<p>Variations: <b>shadow mask</b> (metal screen with holes behind the phosphor, clusters of dots) and <b>aperture grill</b> (strips of lines).</p>", "ar": "<p>الأنواع: <b>shadow mask</b> (شبكة معدنية فيها فتحات ورا الفوسفور، مجموعات نقط) و<b>aperture grill</b> (خطوط رفيعة متجاورة).</p>"}, {"en": "<p>Disadvantages of CRT:</p><ul><li>Big, bulky, heavy.</li><li>Electromagnetic fields are a health hazard to living cells.</li><li>Emit a small amount of X-ray radiation (more at the back than the front).</li><li>Constant refreshing can cause headache.</li><li>Very high voltage and strong vacuum: risk of overheating or <b>implosion</b>.</li><li>A strong magnet near the tube can magnetize the shadow mask.</li></ul>", "ar": "<p>عيوب الـ CRT:</p><ul><li>كبير وتقيل وبياخد مساحة.</li><li>المجالات الكهرومغناطيسية خطر على الخلايا الحية.</li><li>بيطلع كمية صغيرة من الأشعة السينية (أكتر من الخلف عن الأمام).</li><li>التحديث المستمر ممكن يسبب صداع.</li><li>جهد عالي جداً وفراغ قوي: خطر سخونة أو <b>انفجار للداخل</b>.</li><li>مغناطيس قوي جنب الأنبوب ممكن يمغنط الـ shadow mask.</li></ul>"}, {"en": "<p>Advantages of CRT:</p><ul><li>Brightness easily increased.</li><li>Produces more colours.</li><li>Lower price than LCD or plasma.</li><li>Image quality and contrast are considered superior.</li></ul>", "ar": "<p>مميزات الـ CRT:</p><ul><li>السطوع بيتزود بسهولة.</li><li>ألوان أكتر.</li><li>أرخص من LCD والبلازما.</li><li>جودة الصورة والتباين ممتازين.</li></ul>"}], "terms": [["CRT", "Cathode ray tube: electron beam hits phosphor screen to form an image.", "أنبوب أشعة الكاثود."], ["cathode rays", "High energy electrons from the heated cathode in a vacuum tube.", "أشعة الكاثود: إلكترونات."], ["electron gun", "Weak particle accelerator aiming electrons at the phosphor screen.", "مدفع الإلكترونات."], ["phosphor", "Material that glows when struck by electrons.", "الفوسفور."], ["shadow mask", "Metal screen with holes behind the phosphor layer.", "شبكة الظل."], ["aperture grill", "Strip-line grill version of the CRT mask.", "الشبكة الخطية."]]}, {"id": "elec4_2", "title_en": "Plasma display", "title_ar": "شاشة البلازما", "figs": [], "blocks": [{"en": "<p>A plasma display lights up thousands of tiny dots with a high-energy beam of electrons. Three pixel colours (red, green, blue) are spread evenly, and mixing them in different proportions gives the full colour spectrum.</p>", "ar": "<p>شاشة البلازما بتنور آلاف النقط الصغيرة بشعاع عالي الطاقة. فيه 3 ألوان بكسل (أحمر وأخضر وأزرق) موزعة بالتساوي، وبخلطهم بنسب مختلفة بنحصل على طيف الألوان كله.</p>"}, {"en": "<p>Disadvantages of plasma:</p><ul><li>Short life span: about 20,000 to 30,000 hours.</li><li>Brightness dims with age.</li><li>More expensive than CRT.</li><li>Fragile, must be handled carefully.</li></ul>", "ar": "<p>عيوب البلازما:</p><ul><li>عمر قصير: حوالي 20 ألف لـ 30 ألف ساعة.</li><li>السطوع بيقل مع العمر.</li><li>أغلى من الـ CRT.</li><li>هشة وتتعامل بحذر.</li></ul>"}, {"en": "<p>Advantages of plasma:</p><ul><li>Wider viewing angle: <b>160°</b> (LCD 40°, rear projection 120°).</li><li>No projection throw distance limits.</li><li>Thinner than CRT; can be wall or ceiling mounted.</li><li>Clearer image, better colour and higher contrast than CRT.</li></ul>", "ar": "<p>مميزات البلازما:</p><ul><li>زاوية رؤية أوسع: <b>160°</b> (الـ LCD 40° والعرض الخلفي 120°).</li><li>مفيش حدود لمسافة الإسقاط.</li><li>أنحف من الـ CRT وممكن تتعلق على حيطة أو سقف.</li><li>صورة أوضح وألوان وتباين أحسن من الـ CRT.</li></ul>"}], "terms": [["plasma display", "Display lighting RGB phosphor dots with an electron beam; 160° viewing angle.", "شاشة بلازما."]]}, {"id": "elec4_3", "title_en": "Liquid crystal display (LCD)", "title_ar": "شاشة الكريستال السائل LCD", "figs": [], "blocks": [{"en": "<p>An LCD is a <b>multilayered sideways sandwich</b>: a fluorescent <b>backlight</b>, a first polarizing filter, a layer of thousands of liquid crystal <b>cells</b>, and a second polarizing filter. An electric field twists the crystal molecules so the light lines up with the second filter and passes through. The pixels can show over 20 million colours.</p>", "ar": "<p>الـ LCD <b>ساندويتش أفقي متعدد الطبقات</b>: إضاءة خلفية <b>backlight</b>، فلتر استقطاب أول، طبقة آلاف خلايا الكريستال السائل، وفلتر استقطاب تاني. المجال الكهربي بيلف جزيئات الكريستال فالضوء بيتماشى مع الفلتر التاني ويعدي. البكسلات تقدر تعرض أكتر من 20 مليون لون.</p>"}, {"en": "<p>LCD versus LED (Lecture 6):</p><ul><li>LCDs are not self-illuminating; they need a backlight.</li><li>An LED display is an LCD with an LED backlight (behind or around the panel). Same basic technology; the difference is only how it is illuminated.</li></ul>", "ar": "<p>LCD مقابل LED (المحاضرة 6):</p><ul><li>الـ LCD مش بينور نفسه؛ محتاج backlight.</li><li>شاشة الـ LED هي LCD بإضاءة خلفية LED (ورا أو حوالين اللوحة). نفس التقنية والفرق بس في الإضاءة.</li></ul>"}, {"en": "<p>Disadvantages of LCD:</p><ul><li>Some pixels can die (discoloured spots).</li><li>High cost.</li><li>Slow response time.</li><li>Fixed resolution.</li><li>Very limited viewing angle.</li></ul>", "ar": "<p>عيوب LCD:</p><ul><li>بعض البكسلات ممكن تموت (بقع).</li><li>تكلفة عالية.</li><li>استجابة بطيئة.</li><li>دقة ثابتة.</li><li>زاوية رؤية محدودة جداً.</li></ul>"}, {"en": "<p>Advantages of LCD:</p><ul><li>Maximum sharpness; zero geometric distortion at native resolution.</li><li>Very bright images.</li><li>Perfectly flat screen, thin, small footprint.</li><li>Little electricity and heat, light weight.</li><li>No flicker and low glare reduce eye strain.</li></ul>", "ar": "<p>مميزات LCD:</p><ul><li>أقصى وضوح؛ مفيش تشوه هندسي في الدقة الأصلية.</li><li>صور ساطعة جداً.</li><li>شاشة مسطحة تماماً ورفيعة.</li><li>استهلاك كهربا وحرارة قليلين وخفيفة.</li><li>مفيش وميض وانعكاس قليل فبيقلل إجهاد العين.</li></ul>"}], "terms": [["LCD", "Liquid crystal display: backlight, two polarizing filters and liquid crystal cells.", "شاشة كريستال سائل."], ["backlight", "Light source behind an LCD panel.", "الإضاءة الخلفية."], ["polarizing filter", "Filter that passes light of one orientation; an LCD uses two.", "فلتر استقطاب."], ["pixel", "Smallest picture element on a screen.", "بكسل."]]}], "flash": [{"f": "What are cathode rays?", "b": "High energy electrons emitted from the heated cathode of a vacuum tube."}, {"f": "When and by whom was the CRT invented?", "b": "1896, Ferdinand Braun."}, {"f": "Who developed the CRT used for television?", "b": "Philo Farnsworth."}, {"f": "How many electron guns in B/W and colour CRTs?", "b": "One in B/W; three (RGB) in colour."}, {"f": "Shadow mask versus aperture grill?", "b": "Shadow mask: perforated metal sheet, dot clusters. Aperture grill: lines packed in strips."}, {"f": "Three CRT disadvantages?", "b": "Bulky and heavy; EM fields and small X-ray emission; high voltage and vacuum implosion risk."}, {"f": "Plasma viewing angle compared with LCD?", "b": "160° versus LCD 40° (rear projection 120°)."}, {"f": "Plasma life span?", "b": "About 20,000 to 30,000 hours (13.7 years at 4 h per day)."}, {"f": "Layers of an LCD?", "b": "Backlight, polarizing filter, liquid crystal cells, second polarizing filter."}, {"f": "LCD versus LED display?", "b": "LED is an LCD with LED backlight; LCD is not self-illuminating."}, {"f": "LCD disadvantages?", "b": "Dead pixels, high cost, slow response, fixed resolution, limited viewing angle."}, {"f": "LCD advantages?", "b": "Sharp, bright, flat, thin, low power and heat, light, no flicker."}], "quiz": [{"q": "The CRT was invented in:", "o": ["1896", "1947", "1950", "1920"], "a": 0, "w": "1896 على يد براون."}, {"q": "Cathode rays are:", "o": ["Protons", "High energy electrons", "X-rays", "Neutrons"], "a": 1, "w": "إلكترونات عالية الطاقة."}, {"q": "A colour CRT has:", "o": ["One electron gun", "Two electron guns", "Three electron guns", "No gun"], "a": 2, "w": "RGB تلات مدافع."}, {"q": "Strong magnet near a CRT can:", "o": ["Brighten it", "Magnetize the shadow mask", "Cool it", "Fix pixels"], "a": 1, "w": "بيمغنط الـ shadow mask."}, {"q": "A CRT implosion risk is due to:", "o": ["Strong vacuum and high voltage", "Low voltage", "Plastic case", "Backlight"], "a": 0, "w": "فراغ قوي وجهد عالي."}, {"q": "Which is an advantage of CRT?", "o": ["Light weight", "Lower price than LCD/plasma", "Thin", "Wide angle 160°"], "a": 1, "w": "أرخص."}, {"q": "Plasma viewing angle is about:", "o": ["40°", "120°", "160°", "10°"], "a": 2, "w": "160 درجة."}, {"q": "Plasma disadvantage:", "o": ["Short life span", "Very wide viewing", "Flat", "Thin"], "a": 0, "w": "عمر قصير."}, {"q": "An LCD needs a backlight because:", "o": ["It is not self-illuminating", "It is hot", "It has no filter", "It uses vacuum"], "a": 0, "w": "مش بينور نفسه."}, {"q": "An LED display is:", "o": ["An LCD with LED backlight", "A plasma panel", "A CRT", "A vacuum tube"], "a": 0, "w": "LCD + LED backlight."}, {"q": "How many polarizing filters in an LCD?", "o": ["1", "2", "3", "0"], "a": 1, "w": "فلترين."}, {"q": "LCD disadvantage:", "o": ["Fixed resolution", "Superior contrast than all", "No cost", "Very wide viewing angle"], "a": 0, "w": "دقة ثابتة."}], "recall": [{"q": "Explain how a CRT forms an image.", "a": "Heated cathode emits electrons, anodes focus them into a beam, beam hits phosphor dots (RGB) that glow.", "w": "الـ CRT."}, {"q": "List CRT advantages and disadvantages.", "a": "Adv: brightness, colours, price, quality. Dis: bulky, EM fields, X-ray, headache, implosion.", "w": "مميزات وعيوب."}, {"q": "Compare plasma and LCD.", "a": "Plasma: 160°, thin, costly, short life. LCD: 40°, thin, light, low power, fixed resolution, slow response.", "w": "مقارنة."}, {"q": "Describe the layers of an LCD.", "a": "Backlight, polarizer 1, liquid crystal cells (twisted by electric field), polarizer 2.", "w": "طبقات LCD."}, {"q": "What is the difference between LCD and LED screens?", "a": "Same technology, LED uses an LED backlight; LCD cannot self-illuminate.", "w": "LCD وLED."}]}, "elec5": {"name": "Fundamentals of Electronics", "lec": "Lecture 5 - Number systems, logic gates and Boolean algebra", "short": "Elec", "sections": [{"id": "elec5_1", "title_en": "Number systems and base (radix)", "title_ar": "أنظمة الأعداد والأساس", "figs": [], "blocks": [{"en": "<p>The <b>decimal</b> system has 10 digits (0 to 9). A number is defined by its <b>base (radix)</b>: the number of unique digits, including zero, in a positional system. Each digit is multiplied by the base raised to the power of its position (0 for the unit place, increasing to the left). Example: (254)10 = 2x10^2 + 5x10^1 + 4x10^0 = 254.</p>", "ar": "<p>النظام <b>العشري</b> فيه 10 أرقام (0 لـ 9). والعدد بيتحدد بـ <b>الأساس (base/radix)</b>: عدد الأرقام الفريدة شاملة الصفر. كل رقم بيتضرب في الأساس مرفوع لأس موقعه (0 لخانة الآحاد وبيزيد ناحية الشمال). مثال: (254)10 = 2x10^2 + 5x10^1 + 4x10^0 = 254.</p>"}, {"en": "<table class='cmp'><tr><th>System</th><th>Base</th><th>Digits</th><th>Note</th></tr><tr><td>Decimal</td><td>10</td><td>0 to 9</td><td>User friendly; tedious for machines</td></tr><tr><td>Binary</td><td>2</td><td>0, 1</td><td>Machine understandable, fast; long bit streams</td></tr><tr><td>Octal</td><td>8</td><td>0 to 7</td><td>1 digit = 3 bits; not commonly used</td></tr><tr><td>Hexadecimal</td><td>16</td><td>0 to 9, A to F</td><td>1 digit = 4 bits; used for memory addressing</td></tr></table>", "ar": "<table class='cmp'><tr><th>النظام</th><th>الأساس</th><th>الأرقام</th><th>ملاحظة</th></tr><tr><td>عشري</td><td>10</td><td>0 لـ 9</td><td>سهل للإنسان وصعب للآلة</td></tr><tr><td>ثنائي</td><td>2</td><td>0, 1</td><td>الآلة بتفهمه وسريع؛ بيحتاج بتات كتير</td></tr><tr><td>ثماني</td><td>8</td><td>0 لـ 7</td><td>رقم = 3 بت؛ قليل الاستخدام</td></tr><tr><td>سداسي عشر</td><td>16</td><td>0 لـ 9 وA لـ F</td><td>رقم = 4 بت؛ بيستخدم في عنونة الذاكرة</td></tr></table>"}, {"en": "<p>General form for (ABCD) in base R: A x R^3 + B x R^2 + C x R^1 + D x R^0. Fractions use negative powers: (ABCD.EF)R adds E x R^-1 + F x R^-2.</p>", "ar": "<p>الصيغة العامة لـ (ABCD) أساس R: A x R^3 + B x R^2 + C x R^1 + D x R^0. والكسور بأسس سالبة: (ABCD.EF)R بيزود E x R^-1 + F x R^-2.</p>"}, {"en": "<p>Binary example: (1010)2 = 1x2^3 + 0x2^2 + 1x2^1 + 0x2^0 = 8 + 2 = <b>10</b>.</p>", "ar": "<p>مثال ثنائي: (1010)2 = 8 + 2 = <b>10</b>.</p>"}], "terms": [["radix", "Base of a number system: number of unique digits including zero.", "الأساس."], ["binary", "Base 2, digits 0 and 1.", "ثنائي."], ["octal", "Base 8, digits 0 to 7.", "ثماني."], ["hexadecimal", "Base 16, digits 0 to 9 and A to F.", "سداسي عشر."]]}, {"id": "elec5_2", "title_en": "Signed numbers and binary arithmetic", "title_ar": "الأعداد ذات الإشارة والحساب الثنائي", "figs": [], "blocks": [{"en": "<p>Representing negative numbers:</p><ul><li><b>Sign-magnitude</b>: the left bit is the sign (0 for +, 1 for -).</li><li><b>One's complement</b>: flip every bit. If m = 01001100, then its complement = 10110011. Most significant bit is the sign.</li><li><b>Two's complement</b> = one's complement + 1. This is the standard for signed fixed-point binary numbers in computer circuits.</li></ul>", "ar": "<p>تمثيل الأعداد السالبة:</p><ul><li><b>Sign-magnitude</b>: البت الشمال هي الإشارة (0 موجب و1 سالب).</li><li><b>المكمّل الأحادي</b>: اقلب كل البتات. لو m = 01001100 فمكمله = 10110011. والبت الأهم هي الإشارة.</li><li><b>المكمّل الثنائي</b> = المكمّل الأحادي + 1. وهو المعيار لتمثيل الأعداد الثنائية ذات الإشارة في الكمبيوتر.</li></ul>"}, {"en": "<p><b>Binary addition</b>: 0+0=0, 0+1=1, 1+0=1, 1+1=10 (carry 1). Example: 10101 (21) + 11001 (25) = 101110 (46). <b>Binary multiplication</b>: 1 only if both bits are 1. Example: 1110 x 1011 = 10011010.</p>", "ar": "<p><b>الجمع الثنائي</b>: 0+0=0 و0+1=1 و1+0=1 و1+1=10 (باقي 1). مثال: 10101 (21) + 11001 (25) = 101110 (46). <b>الضرب الثنائي</b>: 1 بس لو البتين 1. مثال: 1110 x 1011 = 10011010.</p>"}], "terms": [["two's complement", "One's complement plus 1; standard signed binary representation.", "المكمّل الثنائي."], ["one's complement", "Invert all bits of the number.", "المكمّل الأحادي."], ["MSB", "Most significant bit; the sign bit in signed numbers.", "البت الأهم."]]}, {"id": "elec5_3", "title_en": "Logic gates", "title_ar": "البوابات المنطقية", "figs": [], "blocks": [{"en": "<p><b>Logic gates</b> are the building blocks of digital circuits. They open or close to admit or reject a logical signal and are built from <b>transistors</b> (NOT = 1 transistor, AND = 3 transistors). Gates can be shown by symbols, <b>truth tables</b> or Boolean algebra. A truth table lists the output for every input combination. ON is 1 and OFF is 0.</p>", "ar": "<p><b>البوابات المنطقية</b> هي لبنات الدوائر الرقمية. بتفتح أو بتقفل لتمرير أو رفض إشارة منطقية وبتتبنى من <b>ترانزستورات</b> (NOT بترانزستور واحد وAND بتلاتة). بتتمثل برموز أو <b>جداول حقيقة</b> أو جبر بول. جدول الحقيقة بيسرد الخرج لكل تركيبة دخل. ON = 1 وOFF = 0.</p>"}, {"en": "<ul><li><b>AND</b>: output 1 only if both inputs are 1.</li><li><b>OR</b>: output 1 if at least one input is 1.</li><li><b>NOT</b>: inverts the input.</li><li><b>NAND</b> = AND + NOT; <b>NOR</b> = OR + NOT; <b>XOR</b> = exclusive OR.</li><li><b>NAND and NOR are universal gates</b>.</li></ul>", "ar": "<ul><li><b>AND</b>: الخرج 1 لو الدخلين 1 بس.</li><li><b>OR</b>: الخرج 1 لو واحد على الأقل 1.</li><li><b>NOT</b>: بيعكس الدخل.</li><li><b>NAND</b> = AND + NOT؛ <b>NOR</b> = OR + NOT؛ <b>XOR</b> = أو الحصرية.</li><li><b>NAND وNOR بوابات شاملة (universal)</b>.</li></ul>"}], "terms": [["logic gate", "Building block of digital circuits built from transistors.", "بوابة منطقية."], ["truth table", "Lists the output for every possible input combination.", "جدول الحقيقة."], ["AND gate", "Output 1 only if all inputs are 1.", "AND."], ["universal gate", "NAND or NOR: any logic function can be built from it.", "بوابة شاملة."]]}, {"id": "elec5_4", "title_en": "Boolean algebra", "title_ar": "جبر بول", "figs": [], "blocks": [{"en": "<p><b>Boolean algebra</b> is named after George Boole, who formulated an algebra of logical thought. Laws: <b>commutative</b> (A+B = B+A, AB = BA), <b>associative</b> (A+(B+C) = (A+B)+C, same for multiplication), <b>distributive</b> (A(B+C) = AB + AC).</p>", "ar": "<p><b>جبر بول</b> نسبة لجورج بول اللي صاغ جبر للتفكير المنطقي. القوانين: <b>الإبدال</b> (A+B = B+A وAB = BA) و<b>الدمج</b> (A+(B+C) = (A+B)+C وكذلك للضرب) و<b>التوزيع</b> (A(B+C) = AB + AC).</p>"}, {"en": "<p>Selected rules from the slides:</p><ul><li>Rule 10: <b>A + AB = A</b></li><li>Rule 11: <b>A + A'B = A + B</b> (slide shows A + AB = A + B with the bar on the first A)</li><li>Rule 12: <b>(A + B)(A + C) = A + BC</b></li></ul>", "ar": "<p>قواعد مختارة من الشرائح:</p><ul><li>قاعدة 10: <b>A + AB = A</b></li><li>قاعدة 11: <b>A + A'B = A + B</b> (في الشريحة الشرطة على A الأولى)</li><li>قاعدة 12: <b>(A + B)(A + C) = A + BC</b></li></ul>"}], "terms": [["Boolean algebra", "Algebra of logic variables (George Boole).", "جبر بول."], ["commutative law", "A+B = B+A and AB = BA.", "قانون الإبدال."], ["distributive law", "A(B+C) = AB + AC.", "قانون التوزيع."]]}], "flash": [{"f": "What is the base (radix)?", "b": "Number of unique digits including zero in a positional number system."}, {"f": "Expand (254)10.", "b": "2x10^2 + 5x10^1 + 4x10^0 = 254."}, {"f": "Digits of binary, octal, hex?", "b": "Binary 0-1; octal 0-7; hex 0-9 and A-F."}, {"f": "Advantage and disadvantage of binary?", "b": "Machine understandable and fast; long bit streams for big numbers."}, {"f": "Bits per octal digit and per hex digit?", "b": "3 bits per octal digit; 4 bits per hex digit."}, {"f": "Convert 1010 binary to decimal.", "b": "8 + 2 = 10."}, {"f": "Sign-magnitude rule?", "b": "Left bit is the sign: 0 for +, 1 for -."}, {"f": "One's complement of 01001100?", "b": "10110011."}, {"f": "Two's complement definition?", "b": "One's complement plus 1; standard for signed numbers."}, {"f": "1+1 in binary?", "b": "10 (0 with carry 1)."}, {"f": "10101 + 11001 in binary?", "b": "101110 (21 + 25 = 46)."}, {"f": "What are logic gates built from?", "b": "Transistors (NOT: 1, AND: 3)."}, {"f": "AND gate output rule?", "b": "1 only if both inputs are 1."}, {"f": "NAND, NOR, XOR meaning?", "b": "NAND = AND+NOT; NOR = OR+NOT; XOR = exclusive OR. NAND and NOR are universal."}, {"f": "Who is Boolean algebra named after?", "b": "George Boole."}, {"f": "Rule: A + AB = ?", "b": "A."}, {"f": "Distributive law?", "b": "A(B + C) = AB + AC."}], "quiz": [{"q": "The radix of the hexadecimal system is:", "o": ["8", "10", "16", "2"], "a": 2, "w": "16."}, {"q": "(1010)2 equals:", "o": ["8", "10", "12", "5"], "a": 1, "w": "8+2=10."}, {"q": "One octal digit needs how many bits?", "o": ["2", "3", "4", "8"], "a": 1, "w": "3 بتات."}, {"q": "One hex digit needs how many bits?", "o": ["2", "3", "4", "8"], "a": 2, "w": "4 بتات."}, {"q": "Hexadecimal is mostly used for:", "o": ["Memory addressing", "Counting fingers", "Audio", "Heat"], "a": 0, "w": "عنونة الذاكرة."}, {"q": "In sign-magnitude, a leading 1 means:", "o": ["Positive", "Negative", "Zero", "Overflow"], "a": 1, "w": "1 = سالب."}, {"q": "Two's complement is:", "o": ["One's complement + 1", "One's complement - 1", "Sign only", "Hex of the number"], "a": 0, "w": "المكمل الأحادي + 1."}, {"q": "1 + 1 in binary =", "o": ["2", "10", "11", "0"], "a": 1, "w": "10."}, {"q": "The AND gate output is 1 when:", "o": ["Any input is 1", "Both inputs are 1", "Both inputs are 0", "Inputs differ"], "a": 1, "w": "الاتنين 1."}, {"q": "Which are universal gates?", "o": ["AND, OR", "NAND, NOR", "XOR, NOT", "AND, NOT"], "a": 1, "w": "NAND وNOR."}, {"q": "NAND equals:", "o": ["AND + NOT", "OR + NOT", "XOR", "NOT only"], "a": 0, "w": "AND ثم NOT."}, {"q": "A truth table shows:", "o": ["Output for every input combination", "Only the power", "Voltage drop", "Frequency"], "a": 0, "w": "الخرج لكل تركيبة."}, {"q": "A + AB equals:", "o": ["B", "A", "AB", "A + B"], "a": 1, "w": "قاعدة 10."}, {"q": "A(B + C) equals:", "o": ["AB + AC", "A + BC", "AB + C", "ABC"], "a": 0, "w": "التوزيع."}, {"q": "(12)10 in binary is:", "o": ["1010", "1100", "1110", "1001"], "a": 1, "w": "8+4 = 1100."}], "recall": [{"q": "Explain base and expand (254)10.", "a": "Base = number of unique digits; 2x10^2+5x10^1+4x10^0.", "w": "الأساس."}, {"q": "Compare the four number systems.", "a": "Decimal 10, binary 2, octal 8, hex 16; binary for machines, hex for memory addressing.", "w": "مقارنة."}, {"q": "How are negative binary numbers represented?", "a": "Sign-magnitude, one's complement and the standard two's complement (one's + 1).", "w": "السالب."}, {"q": "Add 10101 and 11001.", "a": "101110 (21+25=46).", "w": "جمع."}, {"q": "Describe the basic gates and universal gates.", "a": "AND, OR, NOT; NAND = AND+NOT, NOR = OR+NOT, XOR; NAND and NOR are universal.", "w": "البوابات."}, {"q": "State the Boolean laws and rule 10.", "a": "Commutative, associative, distributive; A + AB = A.", "w": "جبر بول."}]}, "elec6": {"name": "Fundamentals of Electronics", "lec": "Lecture 6 - Digital electronics and logic design", "short": "Elec", "sections": [{"id": "elec6_1", "title_en": "Levels of digital development", "title_ar": "مستويات تطور الدوائر الرقمية", "figs": [], "blocks": [{"en": "<p>Increasing levels of complexity, bottom to top:</p><ul><li>Transistors are built from semiconductors.</li><li>Logic gates are built from transistors.</li><li>Logic functions are built from gates.</li><li>Flip-flops are built from logic.</li><li>Counters and sequencers are built from flip-flops.</li><li>Microprocessors are built from sequencers.</li><li>Computers are built from microprocessors.</li></ul>", "ar": "<p>مستويات التعقيد من الأسفل للأعلى:</p><ul><li>الترانزستورات من أشباه الموصلات.</li><li>البوابات المنطقية من الترانزستورات.</li><li>الدوال المنطقية من البوابات.</li><li>الفليب فلوب من المنطق.</li><li>العدادات والـ sequencers من الفليب فلوب.</li><li>المعالجات من الـ sequencers.</li><li>الكمبيوترات من المعالجات.</li></ul>"}, {"en": "<p><b>Digital logic</b> is the basis of computers and cell phones. It is rooted in <b>binary code</b> (zeros and ones with opposite values). Logic gate functions include AND, OR and NOT; they translate input signals into specific outputs. Digital logic designers build hardware such as circuit boards and microchip processors.</p>", "ar": "<p><b>المنطق الرقمي</b> هو أساس الكمبيوترات والموبايلات. بيقوم على <b>الكود الثنائي</b> (أصفار وآحاد قيمتهم متضادة). وظائف البوابات: AND وOR وNOT، بتترجم إشارات الدخل لخرج محدد. ومصممو المنطق الرقمي بيبنوا عتاد زي الدوائر المطبوعة والمعالجات الدقيقة.</p>"}], "terms": [["digital logic", "Basis of electronic systems; works on binary code.", "المنطق الرقمي."], ["flip-flop", "Two-state device giving basic memory for sequential logic; banks of them form registers.", "فليب فلوب: ذاكرة أساسية بحالتين."], ["register", "Bank of flip-flops storing binary data.", "مسجّل."], ["sequencer", "Device or program that orders and modifies stored digital data/sounds.", "Sequencer."]]}, {"id": "elec6_2", "title_en": "Counters and displays", "title_ar": "العدادات والشاشات", "figs": [], "blocks": [{"en": "<p>An <b>electronic counter</b> is durable, easy to use and compact. A <b>digital counter</b> has a digital readout; a <b>mechanical counter</b> shows results on mechanical wheels, while a digital counter uses a solid state LCD or LED display.</p>", "ar": "<p><b>العداد الإلكتروني</b> متين وسهل ومدمج. <b>العداد الرقمي</b> عنده قراءة رقمية؛ أما <b>العداد الميكانيكي</b> بيعرض على عجلات ميكانيكية والرقمي بيستخدم شاشة LCD أو LED صلبة.</p>"}, {"en": "<p>LCD and LED use the same basic display technology. LCDs are not self-illuminating and need a <b>backlight</b>; an LED display is an LCD with an <b>LED backlight</b> placed behind or around the panel to enhance luminosity.</p>", "ar": "<p>الـ LCD والـ LED نفس التقنية الأساسية. الـ LCD مش بينور نفسه ومحتاج <b>backlight</b>؛ وشاشة الـ LED هي LCD بإضاءة <b>LED</b> ورا أو حوالين اللوحة لتحسين السطوع.</p>"}], "terms": [["digital counter", "Electronic counter with a digital (LCD or LED) readout.", "عداد رقمي."], ["mechanical counter", "Counter displaying results on mechanical wheels.", "عداد ميكانيكي."]]}, {"id": "elec6_3", "title_en": "How digital systems record 1 and 0", "title_ar": "إزاي النظام الرقمي بيسجل 1 و0", "figs": [], "blocks": [{"en": "<ul><li><b>CD/DVD</b>: presence (1) or absence (0) of a pit in an aluminium layer on a plastic disk, read by a laser beam. Punch cards used the same principle.</li><li><b>Magnetic disks and tapes</b>: magnetised areas on iron oxide; a south pole sticking out could be 1 and a north pole 0 (or vice versa).</li><li><b>Mechanical switches</b>: two states, open and closed; either can represent truth.</li></ul>", "ar": "<ul><li><b>CD/DVD</b>: وجود (1) أو غياب (0) نقرة في طبقة ألومنيوم على قرص بلاستيك ويتقرأ بالليزر. والكروت المثقوبة بنفس المبدأ.</li><li><b>الأقراص والشرايط المغناطيسية</b>: مناطق ممغنطة على أكسيد الحديد؛ القطب الجنوبي ممكن يبقى 1 والشمالي 0 أو العكس.</li><li><b>المفاتيح الميكانيكية</b>: حالتين مفتوح ومقفول وأي واحدة ممكن تمثل الحقيقة.</li></ul>"}, {"en": "<p>A memory device must have <b>more than one state</b>. An electrical switch is a memory device: off = 0, on = 1. A row of <b>n switches</b> can be in <b>2^n</b> states (3 switches: 2^3 = 8 states).</p>", "ar": "<p>جهاز الذاكرة لازم يكون له <b>أكتر من حالة</b>. المفتاح الكهربي جهاز ذاكرة: off = 0 وon = 1. صف من <b>n مفاتيح</b> ليه <b>2^n</b> حالة (3 مفاتيح = 2^3 = 8 حالات).</p>"}], "terms": [["memory device", "Device that records information and recalls it later; needs more than 1 state.", "جهاز ذاكرة."], ["2^n states", "A row of n switches can be in 2^n states.", "2 أُس n حالة."]]}, {"id": "elec6_4", "title_en": "Binary system and computer memory", "title_ar": "النظام الثنائي وذاكرة الكمبيوتر", "figs": [], "blocks": [{"en": "<p>A binary number dn-1 ... d1 d0 has the value dn-1 x 2^(n-1) + ... + d1 x 2^1 + d0 x 2^0. Example: 1010 = 8 + 2 = 10.</p>", "ar": "<p>العدد الثنائي dn-1 ... d1 d0 قيمته dn-1 x 2^(n-1) + ... + d1 x 2^1 + d0 x 2^0. مثال: 1010 = 8 + 2 = 10.</p>"}, {"en": "<p><b>RAM</b> (random access memory) consists of many electronic switches organized in rows of <b>8 switches</b> (a byte), read/write. <b>ROM</b> is read only memory. To store text we need about 100 symbols (26 upper case, 26 lower case, 10 digits, about 20 special): 2^7 = 128 is enough, and an 8th switch is added.</p>", "ar": "<p><b>الـ RAM</b> (ذاكرة عشوائية) من مفاتيح إلكترونية كتير منظمة في صفوف كل صف <b>8 مفاتيح</b> (بايت) قراءة/كتابة. و<b>الـ ROM</b> ذاكرة للقراءة فقط. عشان نخزن نص محتاجين حوالي 100 رمز (26 كبير و26 صغير و10 أرقام وحوالي 20 رمز خاص): 2^7 = 128 كفاية، وبيتضاف مفتاح تامن.</p>"}, {"en": "<p>Memory <b>addresses</b> are also binary. A computer with 4 GB (over 4,000,000,000 bytes) needs a <b>32-bit</b> address. What the stored number means depends on the data type (the encoding scheme).</p>", "ar": "<p><b>العناوين</b> في الذاكرة برضو ثنائية. كمبيوتر بذاكرة 4 جيجا يحتاج عنوان <b>32 بت</b>. ومعنى الرقم المخزن بيعتمد على نوع البيانات (نظام الترميز).</p>"}], "terms": [["RAM", "Random access memory: read/write switches organized in 8-switch rows.", "ذاكرة عشوائية."], ["ROM", "Read only memory.", "ذاكرة للقراءة فقط."], ["byte", "A group of 8 bits.", "بايت = 8 بت."]]}], "flash": [{"f": "List the levels from transistor to computer.", "b": "Transistors, gates, logic functions, flip-flops, counters/sequencers, microprocessors, computers."}, {"f": "What is a flip-flop?", "b": "A two-state device offering basic memory for sequential logic; banks form registers."}, {"f": "Digital counter versus mechanical counter?", "b": "Digital uses LCD/LED readout; mechanical uses mechanical wheels."}, {"f": "LCD versus LED display?", "b": "Same basic technology; LED = LCD with LED backlight; LCDs need a backlight."}, {"f": "How does a CD record 1 and 0?", "b": "Presence or absence of a pit in the aluminium layer, read by laser reflection."}, {"f": "How do magnetic disks store bits?", "b": "Magnetised areas on iron oxide (south pole 1, north pole 0 or vice versa)."}, {"f": "What does a memory device need?", "b": "More than one state."}, {"f": "How many states can n switches have?", "b": "2^n states (3 switches: 8)."}, {"f": "Structure of RAM?", "b": "Many switches organized in rows of 8 (bytes), read/write."}, {"f": "How many bits to address 4 GB?", "b": "32 bits."}, {"f": "Why 8 bits for characters?", "b": "About 100 symbols need 7 bits (2^7 = 128); an 8th is added."}], "quiz": [{"q": "Logic gates are built from:", "o": ["Transistors", "Flip-flops", "Microprocessors", "Counters"], "a": 0, "w": "من ترانزستورات."}, {"q": "Flip-flops are used for:", "o": ["Data storage and transfer", "Lighting", "Cooling", "Printing"], "a": 0, "w": "تخزين ونقل البيانات."}, {"q": "A bank of flip-flops is called:", "o": ["Register", "Diode", "Resistor", "Sequencer only"], "a": 0, "w": "registers."}, {"q": "An LED display is an LCD with:", "o": ["LED backlight", "No light", "Plasma", "CRT"], "a": 0, "w": "backlight LED."}, {"q": "CD stores bits using:", "o": ["Pits read by a laser", "Magnetic poles", "Switches", "Heat"], "a": 0, "w": "نقر وليزر."}, {"q": "A row of 3 switches has how many states?", "o": ["3", "6", "8", "9"], "a": 2, "w": "2^3 = 8."}, {"q": "A memory device must have:", "o": ["Exactly 10 states", "More than 1 state", "No state", "Only light"], "a": 1, "w": "أكتر من حالة."}, {"q": "A byte is:", "o": ["4 bits", "8 bits", "16 bits", "2 bits"], "a": 1, "w": "8 بت."}, {"q": "RAM is:", "o": ["Read only", "Random access read/write memory", "A display", "A diode"], "a": 1, "w": "ذاكرة عشوائية."}, {"q": "To address 4 GB we need:", "o": ["8 bits", "16 bits", "32 bits", "4 bits"], "a": 2, "w": "32 بت."}], "recall": [{"q": "Describe the levels of digital development.", "a": "Semiconductors, transistors, gates, logic functions, flip-flops, counters, microprocessors, computers.", "w": "المستويات."}, {"q": "How do digital systems record 1 and 0?", "a": "Pits (CD/DVD), magnetised areas (disks/tapes), open/closed switches.", "w": "التسجيل."}, {"q": "Why can n switches represent 2^n values?", "a": "Each switch has two states.", "w": "2^n."}, {"q": "Explain RAM and addressing.", "a": "Rows of 8 switches (bytes), read/write; addresses are binary, 32 bits for 4 GB.", "w": "RAM."}]}, "elec7": {"name": "Fundamentals of Electronics", "lec": "Lecture 7 - Computer memory and conversions (1)", "short": "Elec", "sections": [{"id": "elec7_1", "title_en": "Bit, byte and memory units", "title_ar": "البت والبايت ووحدات الذاكرة", "figs": [], "blocks": [{"en": "<ul><li><b>Bit</b> (binary digit): the smallest memory device, a switch that remembers 0 or 1.</li><li><b>Byte</b> = 8 bits (one row of RAM).</li><li><b>KB</b> = 1024 (2^10) bytes.</li><li><b>MB</b> = 1,048,576 (2^20) bytes.</li><li><b>GB</b> = 1,073,741,824 (2^30) bytes.</li><li><b>TB</b> = tera byte.</li></ul>", "ar": "<ul><li><b>البت</b>: أصغر جهاز ذاكرة، مفتاح بيفتكر 0 أو 1.</li><li><b>البايت</b> = 8 بت (صف واحد في الـ RAM).</li><li><b>KB</b> = 1024 (2^10) بايت.</li><li><b>MB</b> = 1,048,576 (2^20) بايت.</li><li><b>GB</b> = 1,073,741,824 (2^30) بايت.</li><li><b>TB</b> = تيرا بايت.</li></ul>"}, {"en": "<p>A computer is a <b>bistable</b> device (2 states, easy to design and build). With 2 bits there are 4 states, with 3 bits 8 states, and with n bits 2^n states. A byte has 2^8 = <b>256</b> states. 32-bit memory addresses map to 2^32 bytes = 4 GB.</p>", "ar": "<p>الكمبيوتر جهاز <b>bistable</b> (حالتين، سهل التصميم). 2 بت = 4 حالات و3 بت = 8 حالات وn بت = 2^n حالة. البايت له 2^8 = <b>256</b> حالة. وعناوين 32 بت = 2^32 بايت = 4 جيجا.</p>"}, {"en": "<p><b>BCD</b> (binary coded decimal) uses 4 bits per decimal digit (0000 = 0, 0001 = 1, 0010 = 2, ...). It uses only <b>10 of the 16</b> possible combinations.</p>", "ar": "<p><b>BCD</b> (عشري مشفر ثنائياً) بيستخدم 4 بتات لكل رقم عشري (0000 = 0 و0001 = 1 ...). بيستخدم <b>10 من 16</b> تركيبة بس.</p>"}], "terms": [["bit", "Binary digit; smallest memory device.", "بت."], ["byte", "8 bits; 256 states.", "بايت."], ["bistable", "Having two stable states, 0 and 1.", "ثنائي الاستقرار."], ["BCD", "Binary coded decimal: 4 bits per decimal digit, uses 10 of 16 codes.", "BCD."]]}, {"id": "elec7_2", "title_en": "Counting table (0 to 23)", "title_ar": "جدول العد", "figs": [], "blocks": [{"en": "<table class='cmp'><tr><th>Dec</th><th>Bin</th><th>Oct</th><th>Hex</th></tr><tr><td>0-7</td><td>0 - 111</td><td>0-7</td><td>0-7</td></tr><tr><td>8</td><td>1000</td><td>10</td><td>8</td></tr><tr><td>9</td><td>1001</td><td>11</td><td>9</td></tr><tr><td>10</td><td>1010</td><td>12</td><td>A</td></tr><tr><td>11</td><td>1011</td><td>13</td><td>B</td></tr><tr><td>12</td><td>1100</td><td>14</td><td>C</td></tr><tr><td>13</td><td>1101</td><td>15</td><td>D</td></tr><tr><td>14</td><td>1110</td><td>16</td><td>E</td></tr><tr><td>15</td><td>1111</td><td>17</td><td>F</td></tr><tr><td>16</td><td>10000</td><td>20</td><td>10</td></tr></table>", "ar": "<table class='cmp'><tr><th>عشري</th><th>ثنائي</th><th>ثماني</th><th>سداسي عشر</th></tr><tr><td>0-7</td><td>0 - 111</td><td>0-7</td><td>0-7</td></tr><tr><td>8</td><td>1000</td><td>10</td><td>8</td></tr><tr><td>9</td><td>1001</td><td>11</td><td>9</td></tr><tr><td>10</td><td>1010</td><td>12</td><td>A</td></tr><tr><td>11</td><td>1011</td><td>13</td><td>B</td></tr><tr><td>12</td><td>1100</td><td>14</td><td>C</td></tr><tr><td>13</td><td>1101</td><td>15</td><td>D</td></tr><tr><td>14</td><td>1110</td><td>16</td><td>E</td></tr><tr><td>15</td><td>1111</td><td>17</td><td>F</td></tr><tr><td>16</td><td>10000</td><td>20</td><td>10</td></tr></table>"}, {"en": "<p>A subscript shows the base: is 100 decimal or binary? Without a subscript we do not know, but 14<sub>10</sub> = 1110<sub>2</sub> is clear.</p>", "ar": "<p>الرقم الصغير تحت بيوضح الأساس: هل 100 عشري ولا ثنائي؟ من غيره منعرفش، لكن 14 (عشري) = 1110 (ثنائي) واضحة.</p>"}], "terms": [["subscript base", "A subscript after a number shows its base, e.g. 14 base 10.", "الرقم الصغير يوضح الأساس."]]}, {"id": "elec7_3", "title_en": "Binary to octal / hex / decimal", "title_ar": "من الثنائي إلى الثماني والسداسي عشر والعشري", "figs": [], "blocks": [{"en": "<p><b>Binary to octal</b>: group bits in <b>threes</b> from the right and convert each. Example: 1011010111 = 1 011 010 111 = 1327 (octal).</p>", "ar": "<p><b>ثنائي لثماني</b>: جمّع البتات <b>كل 3</b> من اليمين وحوّل كل مجموعة. مثال: 1011010111 = 1 011 010 111 = 1327 (ثماني).</p>"}, {"en": "<p><b>Binary to hex</b>: group bits in <b>fours</b> from the right (pad with 0 on the left if needed). Example: 0101 0110 1011 0011 = 56B3 (hex). And 1010111011 = 10 1011 1011 = 2BB (hex).</p>", "ar": "<p><b>ثنائي لسداسي عشر</b>: جمّع <b>كل 4</b> من اليمين (واملا بأصفار من الشمال لو ناقص). مثال: 0101 0110 1011 0011 = 56B3. و1010111011 = 10 1011 1011 = 2BB.</p>"}, {"en": "<p><b>Binary to decimal</b>: multiply each bit by 2^n where n is its position (starting at 0 on the right), then add. Example: 10110 = 16 + 0 + 4 + 2 + 0 = <b>22</b>. 101011 = 1 + 2 + 0 + 8 + 0 + 32 = <b>43</b>.</p>", "ar": "<p><b>ثنائي لعشري</b>: اضرب كل بت في 2^n حيث n موقعها (من 0 عند اليمين) واجمع. مثال: 10110 = 16 + 0 + 4 + 2 + 0 = <b>22</b>. و101011 = 1 + 2 + 0 + 8 + 0 + 32 = <b>43</b>.</p>"}, {"en": "<p><b>Octal to decimal</b> (multiply by 8^n): 724 (octal) = 4x1 + 2x8 + 7x64 = 4 + 16 + 448 = <b>468</b>. <b>Octal to binary</b>: each digit becomes 3 bits: 705 (octal) = 111 000 101.</p>", "ar": "<p><b>ثماني لعشري</b> (اضرب في 8^n): 724 (ثماني) = 4 + 16 + 448 = <b>468</b>. <b>ثماني لثنائي</b>: كل رقم يبقى 3 بتات: 705 = 111 000 101.</p>"}], "terms": [["group in threes", "Binary to octal: groups of 3 bits from the right.", "تجميع كل 3 بت."], ["group in fours", "Binary to hex: groups of 4 bits from the right.", "تجميع كل 4 بت."], ["weight", "Position of a bit starting from 0 on the right (value 2^n).", "وزن الخانة."]]}], "flash": [{"f": "Define bit and byte.", "b": "Bit: smallest memory device, 0 or 1. Byte: 8 bits."}, {"f": "Value of KB, MB, GB?", "b": "1024 (2^10), 1,048,576 (2^20), 1,073,741,824 (2^30) bytes."}, {"f": "How many states with n bits? with a byte?", "b": "2^n; 256."}, {"f": "What is BCD?", "b": "4 bits per decimal digit; uses only 10 of the 16 combinations."}, {"f": "What is a bistable device?", "b": "A device with two stable states (0 and 1), easy to design and build."}, {"f": "Binary to octal technique?", "b": "Group bits in threes from the right and convert each to an octal digit."}, {"f": "Binary to hex technique?", "b": "Group bits in fours from the right (pad with 0s) and convert each to hex."}, {"f": "1011010111 in octal?", "b": "1327."}, {"f": "0101011010110011 in hex?", "b": "56B3."}, {"f": "10110 in decimal?", "b": "22."}, {"f": "724 octal in decimal?", "b": "468."}, {"f": "705 octal in binary?", "b": "111000101."}, {"f": "32-bit address maps how much memory?", "b": "2^32 bytes = 4 GB."}], "quiz": [{"q": "A byte equals:", "o": ["4 bits", "8 bits", "10 bits", "16 bits"], "a": 1, "w": "8 بت."}, {"q": "1 KB is:", "o": ["1000 bits", "1024 bytes", "1,000,000 bytes", "256 bytes"], "a": 1, "w": "1024 بايت."}, {"q": "A byte can represent:", "o": ["16 states", "64 states", "256 states", "1024 states"], "a": 2, "w": "2^8 = 256."}, {"q": "BCD uses how many of the 16 combinations?", "o": ["6", "8", "10", "16"], "a": 2, "w": "10 بس."}, {"q": "Binary to octal groups bits in:", "o": ["Twos", "Threes", "Fours", "Fives"], "a": 1, "w": "كل 3."}, {"q": "Binary to hex groups bits in:", "o": ["Twos", "Threes", "Fours", "Eights"], "a": 2, "w": "كل 4."}, {"q": "1011010111 in octal is:", "o": ["1327", "1237", "2317", "7231"], "a": 0, "w": "1 011 010 111 = 1 3 2 7."}, {"q": "1010111011 in hex is:", "o": ["2BB", "BB2", "AB3", "2AB"], "a": 0, "w": "10 1011 1011 = 2 B B."}, {"q": "10110 in decimal is:", "o": ["20", "22", "26", "18"], "a": 1, "w": "16+4+2 = 22."}, {"q": "101011 in decimal is:", "o": ["43", "41", "45", "47"], "a": 0, "w": "32+8+2+1 = 43."}, {"q": "724 octal in decimal is:", "o": ["468", "472", "512", "256"], "a": 0, "w": "448+16+4 = 468."}, {"q": "705 octal in binary is:", "o": ["111000101", "101000111", "111101000", "100111101"], "a": 0, "w": "7=111, 0=000, 5=101."}, {"q": "32-bit addressing gives:", "o": ["4 GB", "4 MB", "32 MB", "2 GB only"], "a": 0, "w": "2^32 = 4 GB."}], "recall": [{"q": "State the memory units.", "a": "Bit, byte = 8 bits, KB = 2^10, MB = 2^20, GB = 2^30 bytes.", "w": "الوحدات."}, {"q": "Convert 1011010111 to octal and 1010111011 to hex.", "a": "1327 and 2BB.", "w": "تحويل."}, {"q": "Convert 101011 to decimal.", "a": "32+8+2+1 = 43.", "w": "ثنائي لعشري."}, {"q": "Convert 724 octal to decimal and 705 octal to binary.", "a": "468; 111000101.", "w": "ثماني."}, {"q": "What is BCD and why is it wasteful?", "a": "4 bits per decimal digit, uses only 10 of 16 codes.", "w": "BCD."}]}, "elec8": {"name": "Fundamentals of Electronics", "lec": "Lecture 8 - Computer memory and conversions (2)", "short": "Elec", "sections": [{"id": "elec8_1", "title_en": "Octal, hex and decimal conversions", "title_ar": "التحويل بين الثماني والسداسي عشر والعشري", "figs": [], "blocks": [{"en": "<p><b>Octal and hexadecimal</b> group bits together because long strings of 0s and 1s are hard for humans. <b>Octal to hex</b>: use binary as the intermediary. Example: 1076 (octal) = 001 000 111 110 = 0010 0011 1110 = <b>23E</b> (hex).</p>", "ar": "<p><b>الثماني والسداسي عشر</b> بيجمعوا البتات لأن السلاسل الطويلة من 0 و1 صعبة على الإنسان. <b>ثماني لسداسي عشر</b>: استخدم الثنائي كوسيط. مثال: 1076 (ثماني) = 001 000 111 110 = 0010 0011 1110 = <b>23E</b>.</p>"}, {"en": "<p><b>Hex to octal</b> (also via binary): 1F0C (hex) = 0001 1111 0000 1100 = 1 111 100 001 100 = <b>17414</b> (octal).</p>", "ar": "<p><b>سداسي عشر لثماني</b> (برضو بالثنائي): 1F0C = 0001 1111 0000 1100 = <b>17414</b> (ثماني).</p>"}, {"en": "<p><b>Hex to binary</b>: each hex digit becomes 4 bits. F0E5 = 1111 0000 1110 0101. 10AF = 0001 0000 1010 1111.</p>", "ar": "<p><b>سداسي عشر لثنائي</b>: كل رقم يبقى 4 بتات. F0E5 = 1111 0000 1110 0101. و10AF = 0001 0000 1010 1111.</p>"}, {"en": "<p><b>Hex to decimal</b> (multiply by 16^n): ABC = 12x1 + 11x16 + 10x256 = 12 + 176 + 2560 = <b>2748</b>. And 16 (hex) = 1x16 + 6 = <b>22</b>. Hex symbols: A=10, B=11, C=12, D=13, E=14, F=15.</p>", "ar": "<p><b>سداسي عشر لعشري</b> (اضرب في 16^n): ABC = 12 + 176 + 2560 = <b>2748</b>. و16 (hex) = 16 + 6 = <b>22</b>. الرموز: A=10 وB=11 وC=12 وD=13 وE=14 وF=15.</p>"}], "terms": [["hex digit", "4 bits per digit; A=10 to F=15.", "رقم hex = 4 بت."], ["intermediary", "Binary is used as the middle step between octal and hex.", "الثنائي كوسيط."]]}, {"id": "elec8_2", "title_en": "Decimal to octal / hex / binary", "title_ar": "من العشري إلى الباقي", "figs": [], "blocks": [{"en": "<p><b>Decimal to any base</b>: divide by the base repeatedly and keep the <b>remainders</b>. The first remainder is bit 0 (the <b>LSB</b>, least significant bit); read the remainders from last to first.</p>", "ar": "<p><b>العشري لأي أساس</b>: اقسم على الأساس مرات متكررة واحتفظ بـ <b>الباقي</b>. أول باقي هو البت 0 (الـ <b>LSB</b> الأقل أهمية)؛ واقرا الباقي من الآخر للأول.</p>"}, {"en": "<p>Examples from the slides:</p><ul><li>1234 to octal: remainders 2, 2, 3, 2 so <b>2322</b> (octal).</li><li>1234 to hex: remainders 2, 13 (D), 4 so <b>4D2</b> (hex).</li><li>125 to binary: <b>1111101</b>.</li><li>35 to binary: 35/2 = 17 r1, 17/2 = 8 r1, 8/2 = 4 r0, 4/2 = 2 r0, 2/2 = 1 r0, 1/2 = 0 r1, so <b>100011</b>.</li></ul>", "ar": "<p>أمثلة من الشرائح:</p><ul><li>1234 لثماني: الباقي 2 و2 و3 و2 يعني <b>2322</b>.</li><li>1234 لسداسي عشر: الباقي 2 و13 (D) و4 يعني <b>4D2</b>.</li><li>125 لثنائي: <b>1111101</b>.</li><li>35 لثنائي: القسمة على 2 بالتتابع تدي <b>100011</b>.</li></ul>"}, {"en": "<p><b>Any base to decimal</b>: from right to left multiply each digit by its base position (weight) and sum all results.</p>", "ar": "<p><b>أي أساس لعشري</b>: من اليمين للشمال اضرب كل رقم في وزن خانته واجمع.</p>"}], "terms": [["remainder", "What is left after division; the digits of the new base read from last to first.", "الباقي."], ["LSB", "Least significant bit: bit 0, the first remainder.", "أقل بت أهمية."]]}], "flash": [{"f": "Octal to hex technique?", "b": "Use binary as an intermediary: octal to 3-bit groups, regroup in 4 bits, convert to hex."}, {"f": "1076 octal in hex?", "b": "23E."}, {"f": "1F0C hex in octal?", "b": "17414."}, {"f": "F0E5 hex in binary?", "b": "1111000011100101."}, {"f": "10AF hex in binary?", "b": "0001000010101111."}, {"f": "ABC hex in decimal?", "b": "2748 (12 + 176 + 2560)."}, {"f": "Hex symbols for 10 to 15?", "b": "A, B, C, D, E, F."}, {"f": "Decimal to other base technique?", "b": "Divide by the base, keep remainders; first remainder is the LSB; read last to first."}, {"f": "1234 decimal in octal and hex?", "b": "2322 octal; 4D2 hex."}, {"f": "125 decimal in binary?", "b": "1111101."}, {"f": "35 decimal in binary?", "b": "100011."}, {"f": "Any base to decimal?", "b": "Multiply each digit by its weight (base^position from 0 at the right) and sum."}], "quiz": [{"q": "1076 octal in hex is:", "o": ["23E", "E32", "3E2", "67A"], "a": 0, "w": "001 000 111 110 = 0010 0011 1110."}, {"q": "1F0C hex in octal is:", "o": ["17414", "14714", "41471", "10714"], "a": 0, "w": "0001 1111 0000 1100 → 1 111 100 001 100."}, {"q": "10AF hex in binary:", "o": ["0001000010101111", "0001000011110101", "1010111100010000", "0000111110101000"], "a": 0, "w": "1=0001 0=0000 A=1010 F=1111."}, {"q": "ABC hex in decimal:", "o": ["2748", "2560", "2700", "3000"], "a": 0, "w": "2560+176+12."}, {"q": "The hex symbol for 13 is:", "o": ["B", "C", "D", "E"], "a": 2, "w": "D = 13."}, {"q": "1234 decimal in octal is:", "o": ["2322", "4D2", "2432", "3222"], "a": 0, "w": "بالقسمة على 8."}, {"q": "1234 decimal in hex is:", "o": ["4D2", "2D4", "4C2", "D24"], "a": 0, "w": "الباقي 2 وD و4."}, {"q": "125 decimal in binary is:", "o": ["1111101", "1111011", "1110101", "1011111"], "a": 0, "w": "64+32+16+8+4+1."}, {"q": "35 decimal in binary is:", "o": ["100011", "110001", "100101", "101011"], "a": 0, "w": "32+2+1."}, {"q": "In repeated division, the first remainder is the:", "o": ["MSB", "LSB", "Sign", "Carry only"], "a": 1, "w": "أول باقي = LSB."}, {"q": "16 hex in decimal equals:", "o": ["16", "22", "6", "106"], "a": 1, "w": "16+6 = 22."}], "recall": [{"q": "Convert 1076 octal to hex.", "a": "23E, via binary.", "w": "ثماني لـ hex."}, {"q": "Convert ABC hex to decimal.", "a": "12 + 176 + 2560 = 2748.", "w": "hex لعشري."}, {"q": "Convert 1234 decimal to octal and to hex.", "a": "2322 and 4D2 by repeated division.", "w": "عشري."}, {"q": "Convert 35 decimal to binary.", "a": "100011.", "w": "عشري لثنائي."}, {"q": "State the any-base-to-decimal method.", "a": "Multiply each digit by its positional weight and add.", "w": "أي أساس لعشري."}]}};
+const SUBJECTS = {"elec": {"name": "Fundamentals of Electronics", "short": "Elec", "titles": ["Introduction and basic electricity", "Electricity, Ohm's law and semiconductors", "The pn junction, diodes and transistors", "Display units (CRT, plasma, LCD)", "Number systems, logic gates and Boolean algebra", "Digital electronics and logic design", "Computer memory and conversions (1)", "Computer memory and conversions (2)"]}, "anat": {"name": "Radiographic Anatomy", "short": "Anat", "titles": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6", "Lecture 7", "Lecture 8", "Lecture 9", "Lecture 10", "Lecture 11", "Lecture 12"]}, "path": {"name": "Pathology 1", "short": "Path", "titles": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6"]}, "physio": {"name": "Physiology", "short": "Physio", "titles": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6", "Lecture 7", "Lecture 8", "Lecture 9", "Lecture 10", "Lecture 11", "Lecture 12", "Lecture 13"]}, "physics": {"name": "Physics 1", "short": "Physics", "titles": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6", "Lecture 7", "Lecture 8", "Lecture 9", "Lecture 10", "Lecture 11", "Lecture 12", "Lecture 13", "Lecture 14", "Lecture 15", "Lecture 16", "Lecture 17"]}, "fund": {"name": "Fundamentals of Radiography", "short": "Fund", "titles": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6", "Lecture 7", "Lecture 8", "Lecture 9", "Lecture 10", "Lecture 11", "Lecture 12", "Lecture 13", "Lecture 14", "Lecture 15", "Lecture 16", "Lecture 17", "Lecture 18", "Lecture 19", "Lecture 20", "Lecture 21", "Lecture 22", "Lecture 23", "Lecture 24", "Lecture 25", "Lecture 26"]}, "care": {"name": "Patient Care", "short": "Care", "titles": ["Lecture 1", "Lecture 2", "Lecture 3", "Lecture 4", "Lecture 5", "Lecture 6", "Lecture 7", "Lecture 8", "Lecture 9", "Lecture 10", "Lecture 11", "Lecture 12", "Lecture 13", "Lecture 14"]}};
+const GLOS = {"tomography": ["تصوير مقطعي", "Imaging by slices or cross-sections."], "cross-section": ["مقطع عرضي", "A slice view through a structure."], "transverse": ["مستعرض", "Across the long axis of the body."], "axial": ["محوري", "Along or around an axis."], "computed tomography": ["التصوير المقطعي المحوسب", "CT: computer-made cross-sectional x-ray images."], "x-ray": ["أشعة سينية", "Ionizing radiation used for imaging."], "projection": ["إسقاط", "Transmission measurement from one direction."], "reconstruction": ["إعادة بناء", "Mathematical rebuilding of the image from projections."], "superimposition": ["تراكب", "Structures overlapping on the image."], "radiography": ["التصوير الإشعاعي", "Plain x-ray imaging."], "homogenous": ["متجانس", "Of the same composition throughout."], "thickness": ["سماكة", "How thick an object is."], "sensitivity": ["حساسية", "Ability to show small differences."], "contrast": ["تباين", "Difference in density or brightness between tissues."], "tomographic": ["مقطعي", "Related to tomography."], "fulcrum": ["نقطة ارتكاز", "Pivot point of the tomographic motion."], "pivot": ["محور ارتكاز", "The fixed turning point."], "objective plane": ["المستوى الهدفي", "The plane kept sharp in conventional tomography."], "image receptor": ["مستقبل الصورة", "The film or detector receiving the image."], "blurring": ["تطميس", "Spreading of image detail outside the focal plane."], "trajectory": ["مسار", "Path of tube movement."], "linear": ["خطي", "Straight-line movement."], "elliptical": ["إهليجي", "Oval path."], "circular": ["دائري", "Ring-shaped."], "spiral": ["حلزوني", "Spiral path."], "hypocycloidal": ["تحت دائري", "A complex curved tube path."], "gantry": ["الحامل / الجانتري", "The frame holding tube and detectors."], "detector": ["كاشف", "Device measuring the x-rays after the body."], "detector array": ["مجموعة الكواشف", "Row of detectors."], "data acquisition system": ["نظام تجميع البيانات", "DAS: collects and digitizes detector signals."], "filtration": ["فلترة", "Removing weak x-rays from the beam."], "fan beam": ["حزمة مروحية", "Fan-shaped x-ray beam."], "scanner": ["جهاز المسح", "The CT machine."], "modality": ["تقنية تصوير", "An imaging method."], "digital": ["رقمي", "Computer-processed."], "mri": ["رنين مغناطيسي", "Magnetic resonance imaging."], "soft tissue": ["نسيج رخو", "Non-bony tissue."], "contrast media": ["مادة تباين", "Dye given to improve image contrast."], "nobel prize": ["جائزة نوبل", "Awarded 1979 to Hounsfield and Cormack."], "engineer": ["مهندس", ""], "physicist": ["فيزيائي", ""], "cell": ["خلية", "Basic unit of the body."], "trillion": ["تريليون", "A million million."], "tissue": ["نسيج", "Group of similar cells with a common function."], "histology": ["علم الأنسجة", "The study of tissues."], "epithelial": ["ظهاري", "Tissue covering and lining surfaces."], "epithelium": ["ظهارة", "The epithelial tissue layer."], "connective tissue": ["نسيج ضام", "Supporting and connecting tissue."], "muscle tissue": ["نسيج عضلي", "Tissue for movement."], "nervous tissue": ["نسيج عصبي", "Tissue of brain, cord and nerves."], "cavity": ["تجويف", "A hollow space in the body."], "duct": ["قناة", "A tube carrying secretions."], "blood vessel": ["وعاء دموي", "Artery, vein or capillary."], "protection": ["حماية", ""], "microbial": ["ميكروبي", "Related to microbes."], "invasion": ["غزو", "Entry and spread of microbes."], "receptor": ["مستقبل", "Structure responding to stimuli."], "stimulus": ["مؤثر", "Something that triggers a response."], "secrete": ["يفرز", "To produce and release a substance."], "reabsorb": ["يعيد امتصاص", "To take back in."], "serous fluid": ["سائل مصلي", "Watery lubricating fluid."], "lubricate": ["يزلّق", "To reduce friction."], "simple": ["بسيط", "One cell layer."], "stratified": ["مطبق", "Many cell layers."], "layer": ["طبقة", ""], "abundant": ["وفير", "Present in large amounts."], "tendon": ["وتر", "Connects muscle to bone."], "ligament": ["رباط", "Connects bone to bone."], "cushion": ["يدعم ويحمي", "To protect from impact."], "insulate": ["يعزل", "To reduce heat loss."], "fat": ["دهون", "Adipose tissue."], "transport": ["نقل", "Moving substances around the body."], "areolar": ["هالي", "Loose connective tissue type."], "adipose": ["دهني", "Fat-storing loose connective tissue."], "reticular": ["شبكي", "Net-like loose connective tissue."], "dense": ["كثيف", "Tightly packed connective tissue."], "regular": ["منتظم", "Parallel-fiber dense tissue."], "irregular": ["غير منتظم", "Random-fiber dense tissue."], "elastic": ["مرن", "Stretchable tissue."], "cartilage": ["غضروف", "Firm supporting tissue."], "hyaline": ["زجاجي", "Glassy cartilage type."], "fibrocartilage": ["غضروف ليفي", "Tough cartilage type."], "bone": ["عظم", "Hard supporting tissue."], "compact bone": ["عظم متراص", "Dense bone."], "spongy bone": ["عظم إسفنجي", "Porous bone."], "blood": ["دم", "Fluid connective tissue."], "skeletal muscle": ["عضلة هيكلية", "Voluntary striated muscle of the skeleton."], "cardiac muscle": ["عضلة قلبية", "Heart muscle."], "smooth muscle": ["عضلة ملساء", "Involuntary nonstriated muscle."], "movement": ["حركة", ""], "locomotion": ["تنقل", "Moving from place to place."], "posture": ["وضعية الجسم", "Body position."], "facial expression": ["تعبير وجه", ""], "striated": ["مخطط", "Banded appearance."], "bifurcated": ["متفرع", "Split into branches."], "intercalated discs": ["أقراص مقحمة", "Junctions between cardiac cells."], "nucleus": ["نواة", "Cell control centre."], "nuclei": ["أنوية", "Plural of nucleus."], "myocardium": ["عضلة القلب / الميوكارديوم", "Heart wall muscle."], "fusiform": ["مغزلي", "Spindle-shaped."], "nonstriated": ["غير مخطط", "Without bands."], "hollow organ": ["عضو مجوف", "Organ with a cavity inside."], "bladder": ["مثانة", ""], "uterus": ["رحم", ""], "involuntary": ["لا إرادي", "Not under conscious control."], "voluntary": ["إرادي", "Under conscious control."], "neuron": ["عصبون", "Nerve cell conducting electrical activity."], "neuroglia": ["خلايا دبقية", "Support cells of nervous tissue."], "brain": ["مخ", ""], "spinal cord": ["حبل شوكي", ""], "nerve": ["عصب", ""], "nerve impulse": ["نبضة عصبية", "Electrical signal in nerves."], "dendrite": ["تفرع شجيري", "Neuron branch receiving signals."], "axon": ["محور عصبي", "Long fibre carrying impulses away."], "hypertrophy": ["تضخم", "Increase in cell size."], "hyperplasia": ["تزايد خلوي", "Increase in cell number."], "neoplasia": ["ورم / نمو ورمي", "Out-of-control growth forming a tumor."], "atrophy": ["ضمور", "Shrinkage of tissue."], "tumor": ["ورم", "Abnormal growth."], "aging": ["شيخوخة", ""], "eukaryotic": ["حقيقي النواة", "Cell with a nucleus."], "prokaryotic": ["أولي النواة", "Cell without a nucleus."], "unicellular": ["وحيد الخلية", "Made of one cell."], "multicellular": ["متعدد الخلايا", "Made of many cells."], "organelle": ["عضية", "A small structure inside the cell."], "membrane-bound": ["محاط بغشاء", "Surrounded by a membrane."], "dna": ["حمض نووي DNA", "Genetic material."], "rna": ["حمض نووي RNA", ""], "linear dna": ["DNA خطي", "Straight-strand DNA."], "chromatin": ["كروماتين", "DNA with proteins."], "ribosome": ["ريبوسوم", "Protein-making particle."], "cytoskeleton": ["هيكل خلوي", "Internal cell scaffold."], "binary fission": ["انشطار ثنائي", "Simple cell splitting."], "mitosis": ["انقسام ميتوزي", "Equal cell division."], "meiosis": ["انقسام ميوزي", "Sex-cell division."], "asexual": ["لا جنسي", "Without sexual reproduction."], "sexual": ["جنسي", "With sexual reproduction."], "capsule": ["محفظة", "Outer layer of a prokaryotic cell."], "cell wall": ["جدار خلوي", "Rigid layer outside the membrane."], "nucleoid": ["منطقة النواة", "DNA region in prokaryotes."], "cytoplasm": ["سيتوبلازم", "Fluid inside the cell."], "mitochondrion": ["ميتوكوندريا", "Energy organelle."], "golgi complex": ["جهاز جولجي", "Packaging organelle."], "endoplasmic reticulum": ["شبكة إندوبلازمية", "Membrane network in the cell."], "flagellum": ["سوط", "Tail for cell movement."], "peptidoglycan": ["ببتيدوجلايكان", "Cell wall material of bacteria."], "epidemiology": ["وبائيات", "Study of disease distribution."], "deterministic effect": ["تأثير حتمي", "Dose-threshold radiation effect."], "stochastic effect": ["تأثير احتمالي", "Chance-based radiation effect."], "irradiation": ["تشعيع", "Exposure to radiation."], "radiobiology": ["علم الأحياء الإشعاعي", "Biology of radiation effects."], "ionizing radiation": ["إشعاع مؤين", "Radiation that removes electrons."], "electricity": ["الكهرباء: تدفق منظم للإلكترونات في موصّل.", "The ordered flow of electrons in a conductor."], "electron": ["الإلكترون: جسيم سالب الشحنة حر الحركة في الموصّل.", "Negatively charged particle that is free to move in a conductor."], "conductor": ["موصّل: مادة بتسمح بمرور الإلكترونات.", "Material that lets electrons flow (gold, silver, copper)."], "insulator": ["عازل: مادة بتمنع مرور الإلكترونات.", "Material that blocks electron flow (rubber, glass, Teflon, mica)."], "semiconductor": ["شبه موصّل: توصيله بين الموصّل والعازل وممكن يتحكم فيه.", "Material between conductor and insulator whose conductivity can be controlled."], "coulomb": ["كولوم: وحدة الشحنة.", "Unit of electric charge; 1 C = 6.25 x 10^18 electrons."], "ampere": ["أمبير: وحدة التيار.", "Unit of current; 1 A = 1 C/s."], "potential difference": ["فرق الجهد: طاقة لكل وحدة شحنة بين نقطتين.", "Voltage: energy per unit charge between two points."], "emf": ["القوة الدافعة الكهربية: القوة اللي بتحرك الإلكترونات.", "Electromotive force: the driving force that moves electrons along a conductor, also in volts."], "power": ["القدرة: الطاقة في الثانية؛ P = V x I.", "Energy per unit time; P = V x I; unit watt (J/s)."], "watt": ["واط: وحدة القدرة.", "Unit of power: one joule per second."], "resistance": ["المقاومة: ميل الموصّل لتقليل التدفق.", "Tendency of a conductor to limit electron flow; unit ohm."], "series circuit": ["توالي: نفس التيار في كل الأحمال.", "Loads connected in one string; same current through each."], "parallel circuit": ["توازي: الأحمال على نفس النقطتين.", "Loads connected across the same two points; 1/Rt = 1/R1 + 1/R2."], "ohmmeter": ["أوم ميتر: بيقيس المقاومة.", "Measures resistance; the component must be removed from powered circuit."], "dielectric": ["ديالكتريك: عازل بيخزن شحنة.", "Insulating material that can store charge; used in capacitors."], "valence electron": ["إلكترون التكافؤ في المدار الخارجي.", "Electron in the outer orbit; conductors 1, semiconductors 4, insulators 8."], "electronics": ["علم التحكم في الطاقة الكهربية.", "Science of controlling electric energy via electrons."], "i = q/t": ["التيار = الشحنة / الزمن.", "Current equals charge divided by time."], "resistor": ["المقاوم: مكون مصنوع لتوفير مقاومة.", "Component designed to provide resistance."], "ohm's law": ["قانون أوم.", "I = E/R; V = IR; R = E/I."], "open circuit": ["دايرة مفتوحة: مفيش تيار.", "Circuit with a break, so no current (I = 0)."], "load": ["الحمل: مكونات الدايرة اللي بتسحب تيار.", "The circuit components that draw current from the source."], "ammeter": ["أميتر: يقيس التيار على التوالي.", "Measures current; connected in series; very low input impedance."], "voltmeter": ["فولتميتر: على التوازي.", "Measures potential difference; connected in parallel; very high input impedance."], "multimeter": ["ملتيميتر.", "Instrument combining ammeter, voltmeter and ohmmeter."], "dc": ["تيار مستمر.", "Direct current: one direction, fixed polarity."], "ac": ["تيار متردد.", "Alternating current: polarity and direction reverse periodically."], "frequency": ["التردد بالهرتز.", "Cycles per second, unit hertz (Hz)."], "impedance": ["الممانعة.", "Resistance to current in AC circuits, measured in ohms."], "grounding": ["التأريض للأمان.", "Connecting one side of a source to ground for safety."], "silicon": ["السيليكون.", "Most common semiconductor material, 4 valence electrons."], "doping": ["التطعيم.", "Adding impurities (P or B) to silicon to change its conductivity."], "n-type": ["نوع N: الحاملات إلكترونات.", "Doped with pentavalent donor; free electrons are carriers."], "p-type": ["نوع P: الحاملات فجوات.", "Doped with trivalent acceptor; holes are carriers."], "hole": ["الفجوة.", "Vacant spot in a covalent bond acting as a positive carrier."], "covalent bond": ["رابطة تساهمية.", "Sharing of valence electrons between neighbouring atoms."], "pn junction": ["الوصلة pn.", "Junction of n-type and p-type semiconductor."], "anode": ["الأنود: الطرف الموجب.", "Positive terminal of a diode."], "cathode": ["الكاثود: الطرف السالب.", "Negative terminal of a diode."], "depletion region": ["منطقة النضوب.", "Zone near the junction empty of free carriers, with uncompensated space charge."], "diffusion": ["الانتشار.", "Majority carriers crossing the junction interface."], "forward bias": ["انحياز أمامي: التيار يمر.", "Battery pushes carriers to the junction; current flows."], "reverse bias": ["انحياز عكسي: مفيش تيار.", "Carriers pulled away, depletion region widens; no current."], "rectifier": ["مقوّم: بيحول AC لـ DC.", "Device that converts AC to DC (diode)."], "bridge rectifier": ["قنطرة التقويم.", "Full wave rectifier using four diodes."], "filter capacitor": ["مكثف التمهيد.", "Smooths pulsed DC into steady DC."], "pulsed dc": ["DC نابض.", "Output of a rectifier before filtering."], "transistor": ["ترانزستور: بيكبّر وبيفتح ويقفل.", "Three-terminal device (base, collector, emitter) that amplifies and switches."], "base": ["القاعدة: طرف التحكم.", "Control terminal of a transistor."], "collector": ["المجمّع.", "Terminal that collects electrons from the emitter."], "emitter": ["الباعث.", "Terminal that emits electrons."], "thyristor": ["ثايرستور.", "Silicon controlled rectifier with 3 junctions (N-P-N-P)."], "led": ["LED: دايود مضيء.", "Light emitting diode: lights when forward biased; needs a series resistor."], "photodiode": ["فوتوداييود: يحول الضوء لتيار.", "Converts light energy to electric current."], "optoelectronics": ["إلكترونيات ضوئية.", "Devices that emit or respond to light (LED, photodiode)."], "crt": ["أنبوب أشعة الكاثود.", "Cathode ray tube: electron beam hits phosphor screen to form an image."], "cathode rays": ["أشعة الكاثود: إلكترونات.", "High energy electrons from the heated cathode in a vacuum tube."], "electron gun": ["مدفع الإلكترونات.", "Weak particle accelerator aiming electrons at the phosphor screen."], "phosphor": ["الفوسفور.", "Material that glows when struck by electrons."], "shadow mask": ["شبكة الظل.", "Metal screen with holes behind the phosphor layer."], "aperture grill": ["الشبكة الخطية.", "Strip-line grill version of the CRT mask."], "plasma display": ["شاشة بلازما.", "Display lighting RGB phosphor dots with an electron beam; 160° viewing angle."], "lcd": ["شاشة كريستال سائل.", "Liquid crystal display: backlight, two polarizing filters and liquid crystal cells."], "backlight": ["الإضاءة الخلفية.", "Light source behind an LCD panel."], "polarizing filter": ["فلتر استقطاب.", "Filter that passes light of one orientation; an LCD uses two."], "pixel": ["بكسل.", "Smallest picture element on a screen."], "radix": ["الأساس.", "Base of a number system: number of unique digits including zero."], "binary": ["ثنائي.", "Base 2, digits 0 and 1."], "octal": ["ثماني.", "Base 8, digits 0 to 7."], "hexadecimal": ["سداسي عشر.", "Base 16, digits 0 to 9 and A to F."], "two's complement": ["المكمّل الثنائي.", "One's complement plus 1; standard signed binary representation."], "one's complement": ["المكمّل الأحادي.", "Invert all bits of the number."], "msb": ["البت الأهم.", "Most significant bit; the sign bit in signed numbers."], "logic gate": ["بوابة منطقية.", "Building block of digital circuits built from transistors."], "truth table": ["جدول الحقيقة.", "Lists the output for every possible input combination."], "and gate": ["AND.", "Output 1 only if all inputs are 1."], "universal gate": ["بوابة شاملة.", "NAND or NOR: any logic function can be built from it."], "boolean algebra": ["جبر بول.", "Algebra of logic variables (George Boole)."], "commutative law": ["قانون الإبدال.", "A+B = B+A and AB = BA."], "distributive law": ["قانون التوزيع.", "A(B+C) = AB + AC."], "digital logic": ["المنطق الرقمي.", "Basis of electronic systems; works on binary code."], "flip-flop": ["فليب فلوب: ذاكرة أساسية بحالتين.", "Two-state device giving basic memory for sequential logic; banks of them form registers."], "register": ["مسجّل.", "Bank of flip-flops storing binary data."], "sequencer": ["Sequencer.", "Device or program that orders and modifies stored digital data/sounds."], "digital counter": ["عداد رقمي.", "Electronic counter with a digital (LCD or LED) readout."], "mechanical counter": ["عداد ميكانيكي.", "Counter displaying results on mechanical wheels."], "memory device": ["جهاز ذاكرة.", "Device that records information and recalls it later; needs more than 1 state."], "2^n states": ["2 أُس n حالة.", "A row of n switches can be in 2^n states."], "ram": ["ذاكرة عشوائية.", "Random access memory: read/write switches organized in 8-switch rows."], "rom": ["ذاكرة للقراءة فقط.", "Read only memory."], "byte": ["بايت.", "8 bits; 256 states."], "bit": ["بت.", "Binary digit; smallest memory device."], "bistable": ["ثنائي الاستقرار.", "Having two stable states, 0 and 1."], "bcd": ["BCD.", "Binary coded decimal: 4 bits per decimal digit, uses 10 of 16 codes."], "subscript base": ["الرقم الصغير يوضح الأساس.", "A subscript after a number shows its base, e.g. 14 base 10."], "group in threes": ["تجميع كل 3 بت.", "Binary to octal: groups of 3 bits from the right."], "group in fours": ["تجميع كل 4 بت.", "Binary to hex: groups of 4 bits from the right."], "weight": ["وزن الخانة.", "Position of a bit starting from 0 on the right (value 2^n)."], "hex digit": ["رقم hex = 4 بت.", "4 bits per digit; A=10 to F=15."], "intermediary": ["الثنائي كوسيط.", "Binary is used as the middle step between octal and hex."], "remainder": ["الباقي.", "What is left after division; the digits of the new base read from last to first."], "lsb": ["أقل بت أهمية.", "Least significant bit: bit 0, the first remainder."]};
+const SVGS = {};
+const SVG_CAPS = {};
+const FIG_META = {};
+const SCENES = {};
+
+const STORE_KEY="ayatStudyV1";
+let S={};
+try{S=JSON.parse(localStorage.getItem(STORE_KEY)||"{}")}catch(e){S={}}
+if(S.planNew){if(!S.plan){S.plan=S.planNew.plan;S.planV=S.planNew.planV;S.planStart=S.planNew.planStart}delete S.planNew}
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(S))}catch(e){}}
+function st(sid){ if(!S[sid])S[sid]={read:[],flash:{},quizBest:0,quizAtt:0,recall:{}}; return S[sid]; }
+// migrate pilot single-lecture progress to per-lecture keys
+if(S.ct&&!S.ct1){S.ct1=S.ct;delete S.ct}
+if(S.bio&&!S.bio1){S.bio1=S.bio;delete S.bio}
+if(!S.lang)S.lang={};
+
+let cur=null, tab="learn", qi=0, qscore=0, qmiss=[], qlock=false;
+let fi=0, flipped=false, deck=null, deckMode="all";
+let ri=0, rshown=false, rdeck=null;
+
+const $=s=>document.querySelector(s);
+const hdr=$("#hdr"), app=$("#app");
+function pct(n,d){return d?Math.round(n/d*100):0}
+
+function lecProgress(lid){
+ const d=DATA[lid], s=st(lid);
+ const parts=[
+  pct(s.read.length, d.sections.length),
+  pct(Object.keys(s.flash).filter(k=>s.flash[k]).length, d.flash.length),
+  s.quizAtt? s.quizBest : 0,
+  pct(Object.keys(s.recall).filter(k=>s.recall[k]).length, d.recall.length),
+ ];
+ return Math.round(parts.reduce((a,b)=>a+b,0)/parts.length);
+}
+function builtLecs(subj){ const r=[]; SUBJECTS[subj].titles.forEach((t,i)=>{const lid=subj+(i+1); if(DATA[lid])r.push(lid)}); return r; }
+function subjProgress(subj){
+ const ls=builtLecs(subj);
+ if(!ls.length)return 0;
+ return Math.round(ls.reduce((a,l)=>a+lecProgress(l),0)/ls.length);
+}
+function headerHome(){ hdr.innerHTML=`<div class="hrow"><h1>Ayat Study · آيات ستدي</h1><button class="tourbtn" onclick="tourStart()">؟ جولة</button></div><p>Semester 1 · offline</p>`; }
+function headerSubj(sid){ const d=DATA[sid]; const subj=sid.replace(/\d+$/,''); hdr.innerHTML=`<button class="back" onclick="goSubj('${subj}')">&#8592; Lectures</button><div class="hrow"><h1>${d.name}</h1><button class="tourbtn" onclick="tourStart()">؟ جولة</button></div><p>${d.lec}</p>`; }
+
+function goHome(){cur=null;render()}
+window.goHome=goHome;
+function goSubj(subj){cur="subj:"+subj;render();window.scrollTo(0,0)}
+window.goSubj=goSubj;
+function goLec(lid,t){cur=lid;tab=t||"learn";qi=0;qscore=0;qmiss=[];fi=0;flipped=false;deck=null;ri=0;rshown=false;rdeck=null;render();window.scrollTo(0,0)}
+window.goLec=goLec;
+function setTab(t){tab=t;qi=0;qscore=0;qmiss=[];qlock=false;fi=0;flipped=false;deck=null;deckMode="all";ri=0;rshown=false;rdeck=null;render()}
+window.setTab=setTab;
+
+function home(){
+ headerHome();
+ let h="";
+ for(const subj of ["elec", "anat", "path", "physio", "physics", "fund", "care"]){
+  const d=SUBJECTS[subj], p=subjProgress(subj);
+  const nB=builtLecs(subj).length, nT=d.titles.length;
+  h+=`<button class="card subj" onclick="goSubj('${subj}')">
+    <h2>${d.name}</h2><div class="lec">${nB===nT?nT+" lectures":nB+" of "+nT+" lectures in the app"}</div>
+    <div class="bar"><div style="width:${p}%"></div></div>
+    <div class="pct">${p}% complete</div>
+  </button>`;
+ }
+ const pl=planStats();
+ h+=`<button class="card subj" onclick="goPlan()">
+   <h2>Study plan - جدول المذاكرة</h2><div class="lec">${pl.state==="before"?"Plan starts Sat "+fmtD(pl.start):(pl.state==="after"?"Plan finished · ":"")+(pl.state==="in"||pl.state==="after"?(pl.today>0?pl.today+(pl.today===1?" session today":" sessions today"):'No sessions today')+" · week "+pl.week+" of "+PLAN_WEEKS:"")}</div>
+   <div class="bar"><div style="width:${pl.pct}%"></div></div>
+   <div class="pct">${pl.done}/${pl.total} sessions done (${pl.pct}%)</div>
+ </button>`;
+ h+=`<div class="footer-note">Content from your lecture slides only. Built from Semester 1 lectures.<br>Tap any English word for its Arabic translation · select a sentence for a paragraph translation.<br>Progress is saved on this device.</div>`;
+ app.innerHTML=h;
+}
+
+function picker(subj){
+ const d=SUBJECTS[subj];
+ hdr.innerHTML=`<button class="back" onclick="goHome()">&#8592; All subjects</button><div class="hrow"><h1>${d.name}</h1><button class="tourbtn" onclick="tourStart()">؟ جولة</button></div><p>اختاري المحاضرة · pick a lecture</p>`;
+ let h="";
+ d.titles.forEach((t,i)=>{
+  const lid=subj+(i+1), built=!!DATA[lid];
+  if(built){
+   const dd=DATA[lid], p=lecProgress(lid);
+   h+=`<button class="card subj" onclick="goLec('${lid}')">
+     <h2>Lecture ${i+1}</h2><div class="lec">${t}</div>
+     <div class="bar"><div style="width:${p}%"></div></div>
+     <div class="pct">${p}% complete - ${dd.sections.length} sections · ${dd.flash.length} cards · ${dd.quiz.length} quiz Qs · ${dd.recall.length} recall Qs</div>
+   </button>`;
+  }else{
+   h+=`<div class="card subj" style="opacity:.55;cursor:default">
+     <h2>Lecture ${i+1}</h2><div class="lec">${t}</div>
+     <div class="pct">not in the app yet</div>
+   </div>`;
+  }
+ });
+ app.innerHTML=h;
+}
+
+function tabsHtml(sid){
+ const t=[["learn","Learn"],["cards","Cards"],["notes","Notes"],["quiz","Quiz"],["recall","Recall"],["prog","Progress"]];
+ return `<div class="tabs">`+t.map(([k,l])=>`<button class="${tab===k?'on':''}" onclick="setTab('${k}')">${l}</button>`).join("")+`</div>`;
+}
+
+function figHtml(fid){
+ if(SVGS[fid])return `<div class="svgfig" data-svg="${fid}" onclick="openSvg(this.dataset.svg)"><button class="vexp" type="button">⤢ تكبير</button>${SVGS[fid]}</div><div class="figcap">${SVG_CAPS[fid]||""}</div>`;
+ if(SCENES[fid])return `<div class="viewer" data-scene="${fid}"><div class="vtitle">${SCENES[fid].title}</div><div class="vhint">اسحب للف · إصبعين للتكبير · اضغط تكبير للشاشة الكاملة · drag to rotate, pinch to zoom, tap to enlarge</div></div><div class="figcap">${FIG_META[fid]||""}</div>`;
+ return "";
+}
+
+function toggleLang(btn,secid){
+ S.lang[secid]=!S.lang[secid];save();
+ const card=btn.closest(".sec");
+ card.classList.toggle("show-ar",S.lang[secid]);
+ btn.classList.toggle("on",S.lang[secid]);
+ btn.setAttribute("aria-checked",S.lang[secid]?"true":"false");
+ btn.querySelector(".knob").textContent=S.lang[secid]?"ع":"EN";
+}
+window.toggleLang=toggleLang;
+
+function toggleTerm(el){ const n=el.nextElementSibling; n.style.display=n.style.display==="block"?"none":"block"; }
+window.toggleTerm=toggleTerm;
+
+function markRead(sid,id){
+ const s=st(sid); const i=s.read.indexOf(id);
+ if(i<0)s.read.push(id);else s.read.splice(i,1);
+ save();render();
+}
+window.markRead=markRead;
+
+function learn(sid){
+ const d=DATA[sid], s=st(sid);
+ let h="";
+ for(const sec of d.sections){
+  const done=s.read.includes(sec.id);
+  const arOn=!!S.lang[sec.id];
+  h+=`<div class="card sec ${arOn?'show-ar':''}" data-sec="${sec.id}">
+   <div class="sechead"><h3>${sec.title_en}</h3><button class="langbtn ${arOn?'on':''}" role="switch" aria-checked="${arOn?'true':'false'}" aria-label="Arabic translation" onclick="toggleLang(this,'${sec.id}')"><span class="knob">${arOn?'ع':'EN'}</span></button></div>
+   <div class="sec-ar-title">${sec.title_ar||""}</div>`;
+  sec.blocks.forEach((b,i)=>{
+   h+=`<div class="blk" data-bid="${sec.id}-${i}">${b.en}<div class="arb">${b.ar}</div></div>`;
+  });
+  for(const f of sec.figs||[])h+=figHtml(f);
+  if(sec.terms&&sec.terms.length){
+   h+=`<div class="chips">`+sec.terms.map(t=>`<button class="chip" onclick="toggleTerm(this)">${t[0]}</button><div class="termdef" style="display:none">${t[1]}<span class="ar">${t[2]||""}</span></div>`).join("")+`</div>`;
+  }
+  h+=`<button class="readbtn ${done?'done':''}" onclick="markRead('${sid}','${sec.id}')">${done?'✓ Read':'Mark as read'}</button></div>`;
+ }
+ return h;
+}
+
+/* ---------- flashcards ---------- */
+function getDeck(sid){
+ if(!deck){
+  const d=DATA[sid], s=st(sid);
+  deck=d.flash.map((c,i)=>i);
+  if(deckMode==="todo")deck=deck.filter(i=>!s.flash[i]);
+  for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}
+ }
+ return deck;
+}
+function cards(sid){
+ const d=DATA[sid], s=st(sid);
+ const mastered=Object.keys(s.flash).filter(k=>s.flash[k]).length;
+ const dk=getDeck(sid);
+ if(fi>=dk.length){
+  deck=null;
+  return `<div class="card center"><div class="score-big">Done</div>
+   <p>You finished this deck. Mastered ${mastered}/${d.flash.length} cards.</p>
+   <button class="btn" onclick="restartDeck('${sid}','all')">Review all again</button>
+   <button class="btn ghost" onclick="restartDeck('${sid}','todo')">Only cards not mastered (${d.flash.length-mastered})</button></div>`;
+ }
+ const c=d.flash[dk[fi]];
+ return `<div class="card">
+  <div class="prog">Card ${fi+1}/${dk.length} · mastered ${mastered}/${d.flash.length}</div>
+  <div class="flash card" style="margin:0;box-shadow:none;border:2px dashed #fbcfe8" onclick="flip()">
+   <div class="inner ${flipped?'backface':''}">${flipped?c.b:c.f}</div>
+   <div class="hint">${flipped?'':'tap to flip'}</div>
+  </div>
+  ${flipped?`<div class="fnav"><button class="no" onclick="flashAns('${sid}',false)">مش عرفتها</button><button class="yes" onclick="flashAns('${sid}',true)">عرفتها ✓</button></div>`:""}
+ </div>`;
+}
+function flip(){flipped=true;render()}
+window.flip=flip;
+function flashAns(sid,ok){ const s=st(sid);const dk=getDeck(sid); s.flash[dk[fi]]=ok;save(); fi++;flipped=false;render(); }
+window.flashAns=flashAns;
+function restartDeck(sid,mode){deck=null;deckMode=mode;fi=0;flipped=false;render()}
+window.restartDeck=restartDeck;
+
+/* ---------- quiz ---------- */
+function quiz(sid){
+ const d=DATA[sid], s=st(sid);
+ const Q=d.quiz;
+ if(qi>=Q.length){
+  const p=pct(qscore,Q.length);
+  if(p>s.quizBest)s.quizBest=p;
+  s.quizAtt++;save();
+  const msg=p>=90?"جامد جداً يا آيات 🔥":p>=70?"كويس، راجعي الغلطات 👌":"محتاجة مراجعة تانية، بس هتظبط 💪";
+  let h=`<div class="card center"><div class="score-big">${qscore}/${Q.length}</div>
+   <p><b>${p}%</b> · ${msg}</p>
+   <p class="small">Best score: ${s.quizBest}% · attempts: ${s.quizAtt}</p>
+   <button class="btn" onclick="restartQuiz()">حاول تاني · Retry</button></div>`;
+  if(qmiss.length){
+   h+=`<div class="card"><b>راجعي الأسئلة دي:</b>`+qmiss.map(m=>`<div class="missed"><b>${m.q}</b><br>Correct: ${m.o[m.a]}<span class="ar" style="display:block;direction:rtl;text-align:right;color:#57534e">${m.w}</span></div>`).join("")+`</div>`;
+  }
+  return h;
+ }
+ const q=Q[qi];
+ let h=`<div class="card"><div class="prog">Question ${qi+1}/${Q.length} · score ${qscore}</div>
+  <div class="q">${q.q}</div>`;
+ q.o.forEach((op,i)=>{
+  let cls="opt";
+  if(qlock){if(i===q.a)cls+=" ok";else if(i===q.sel)cls+=" bad";}
+  h+=`<button class="${cls}" ${qlock?"disabled":""} onclick="ans('${sid}',${i})">${op}</button>`;
+ });
+ if(qlock){
+  const right=q.sel===q.a;
+  h+=`<div class="fb ${right?'ok':'bad'}">${right?'✅ Correct':'❌ Not quite'}<span class="ar">${q.w}</span></div>
+   <button class="btn" onclick="nextQ()">${qi+1===Q.length?'See result':'Next'}</button>`;
+ }
+ return h+`</div>`;
+}
+function ans(sid,i){ if(qlock)return; const q=DATA[sid].quiz[qi]; q.sel=i;qlock=true; if(i===q.a)qscore++;else qmiss.push(q); render(); }
+window.ans=ans;
+function nextQ(){qi++;qlock=false;render()}
+window.nextQ=nextQ;
+function restartQuiz(){qi=0;qscore=0;qmiss=[];qlock=false;DATA[cur].quiz.forEach(q=>delete q.sel);render()}
+window.restartQuiz=restartQuiz;
+
+/* ---------- recall ---------- */
+function getRdeck(sid){ if(!rdeck){rdeck=DATA[sid].recall.map((c,i)=>i)} return rdeck; }
+function recall(sid){
+ const d=DATA[sid], s=st(sid);
+ const dk=getRdeck(sid);
+ const done=Object.keys(s.recall).filter(k=>s.recall[k]).length;
+ if(ri>=dk.length){
+  rdeck=null;
+  return `<div class="card center"><div class="score-big">Done</div>
+  <p>You marked yourself right on ${done}/${d.recall.length} recall questions.</p>
+  <button class="btn" onclick="restartRecall()">Start over</button></div>`;
+ }
+ const c=d.recall[dk[ri]];
+ let h=`<div class="card"><div class="prog">Recall ${ri+1}/${dk.length} · answered right ${done}/${d.recall.length}</div>
+  <div class="q">${c.q}</div>
+  <p class="small">Answer out loud or in your head, then show the model answer and grade yourself honestly.</p>`;
+ if(rshown){
+  h+=`<div class="model">${c.a}<span class="ar" style="display:block;direction:rtl;text-align:right;margin-top:6px;color:#57534e">${c.w}</span></div>
+   <div class="fnav"><button class="no" onclick="recallAns('${sid}',false)">غلط / مش متأكد</button><button class="yes" onclick="recallAns('${sid}',true)">صح ✓</button></div>`;
+ }else{
+  h+=`<button class="btn ghost" onclick="showRecall()">Show model answer</button>`;
+ }
+ return h+`</div>`;
+}
+function showRecall(){rshown=true;render()}
+window.showRecall=showRecall;
+function recallAns(sid,ok){ const s=st(sid);const dk=getRdeck(sid); s.recall[dk[ri]]=ok;save(); ri++;rshown=false;render(); }
+window.recallAns=recallAns;
+function restartRecall(){ri=0;rshown=false;rdeck=null;render()}
+window.restartRecall=restartRecall;
+
+
+/* ---------- notes (auto key points, ranked) ---------- */
+let notesTop=false;
+const N_STOP=new Set("that this with from have which their there these those about into than then them they were been being also each such when what where while will would could should only more most some other over under between within through using used uses used called name list give state main know mean means does doesn have has are for and the not can may per its it's his her our out all any one two three first second".split(" "));
+function nToks(s){return Array.from(new Set((String(s||"").replace(/<[^>]*>/g," ").toLowerCase().match(/[a-z][a-z-]{3,}/g)||[]).filter(w=>!N_STOP.has(w))))}
+const NCACHE={};
+function noteData(sid){
+ if(NCACHE[sid])return NCACHE[sid];
+ const d=DATA[sid];
+ const units=[];
+ d.sections.forEach(sc=>{units.push(nToks(sc.blocks.map(b=>b.en).join(" ")))});
+ const tested=[];
+ d.quiz.forEach(q=>{tested.push(nToks(q.q+" "+(q.o&&q.o[q.a]!=null?q.o[q.a]:"")))});
+ d.recall.forEach(q=>{tested.push(nToks(q.q+" "+q.a))});
+ const df={};units.concat(tested).forEach(u=>u.forEach(w=>{df[w]=(df[w]||0)+1}));
+ const cards=d.flash.map((c,i)=>{
+  const tk=nToks(c.f+" "+c.b);
+  let sc=0;tk.forEach(w=>{sc+=Math.log(1+(df[w]||0))});
+  sc=sc/Math.sqrt(Math.max(4,tk.length))*3;
+  let hits=0;
+  tested.forEach(u=>{let m=0;for(const w of tk){if(u.indexOf(w)>=0)m++;if(m>=3)break}if(m>=3)hits++});
+  return {i:i,f:c.f,b:c.b,score:sc+Math.min(hits,6)*1.5,hits:hits};
+ });
+ cards.sort((a,b)=>b.score-a.score||a.i-b.i);
+ const n=cards.length,c1=Math.max(1,Math.round(n*0.34)),c2=Math.max(c1+1,Math.round(n*0.7));
+ cards.forEach((c,r)=>{c.tier=r<c1?1:(r<c2?2:3)});
+ const terms=[];
+ d.sections.forEach(sc=>(sc.terms||[]).forEach(tm=>{
+  const w=nToks(tm[0]).concat(nToks(tm[1]).slice(0,2));let s=0;w.forEach(x=>{s+=(df[x]||0)});
+  terms.push({t:tm[0],e:tm[1],a:tm[2],s:s/Math.max(1,w.length)});
+ }));
+ terms.sort((a,b)=>b.s-a.s);
+ return NCACHE[sid]={cards:cards,terms:terms.slice(0,8)};
+}
+function notes(sid){
+ const nd=noteData(sid);
+ const tiers=[[1,"★ الأهم · Must know"],[2,"مهم · Important"],[3,"تفاصيل · Extra"]];
+ let h=`<div class="card"><div class="nhead"><div dir="rtl" style="text-align:right"><b>Notes · نقاط المحاضرة</b><div class="small">نقاط مجمّعة تلقائياً من المحاضرة ومترتبة حسب الأهمية (الأكتر ظهوراً في الشرح والكويز والتسميع فوق).</div></div><button class="btn ghost" onclick="toggleNotesTop()">${notesTop?"عرض الكل":"الأهم بس"}</button></div></div><div class="nlist">`;
+ let k=0;
+ for(const [tr,lab] of tiers){
+  if(notesTop&&tr>1)break;
+  const L=nd.cards.filter(c=>c.tier===tr);
+  if(!L.length)continue;
+  h+=`<div class="ntier">${lab}</div>`;
+  L.forEach(c=>{k++;h+=`<div class="note t${tr}"><div class="nq"><span class="nn">${k}</span>${c.f}</div><div class="na">${c.b}</div>${c.hits?`<span class="ntag">بيظهر في الكويز/التسميع × ${c.hits}</span>`:""}</div>`});
+ }
+ h+=`</div>`;
+ if(!notesTop&&nd.terms.length){
+  h+=`<div class="card"><div class="ntier" style="margin-top:0">مصطلحات أساسية · Key terms</div>`+nd.terms.map(x=>`<div class="nterm"><b>${x.t}</b> - ${x.e}<span class="ar">${x.a||""}</span></div>`).join("")+`</div>`;
+ }
+ return h;
+}
+function toggleNotesTop(){notesTop=!notesTop;render()}
+window.toggleNotesTop=toggleNotesTop;
+
+/* ---------- progress ---------- */
+function prog(sid){
+ const d=DATA[sid], s=st(sid);
+ const fm=Object.keys(s.flash).filter(k=>s.flash[k]).length;
+ const rd=Object.keys(s.recall).filter(k=>s.recall[k]).length;
+ const rows=[["Sections read", s.read.length, d.sections.length],["Cards mastered", fm, d.flash.length],["Recall answered right", rd, d.recall.length]];
+ let h=`<div class="card"><h3 style="margin-top:0">Your progress</h3>`;
+ for(const [l,n,m] of rows){
+  h+=`<div class="prow"><div class="lbl">${l}</div><div class="bar"><div style="width:${pct(n,m)}%"></div></div><div class="val">${n}/${m}</div></div>`;
+ }
+ h+=`<div class="prow"><div class="lbl">Quiz best</div><div class="bar"><div style="width:${s.quizBest}%"></div></div><div class="val">${s.quizBest}%</div></div>`;
+ h+=`<div class="stat-grid"><div class="s"><b>${s.quizAtt}</b><span>quiz attempts</span></div><div class="s"><b>${lecProgress(sid)}%</b><span>overall</span></div></div>`;
+ h+=`<button class="btn ghost" onclick="resetProg('${sid}')">Reset progress for this lecture</button></div>`;
+ return h;
+}
+function resetProg(sid){ if(confirm("Reset all progress for this lecture?")){S[sid]={read:[],flash:{},quizBest:0,quizAtt:0,recall:{}};save();render()} }
+window.resetProg=resetProg;
+
+/* ---------- translation popup ---------- */
+const pop=$("#pop");
+function showPop(x,y,html){
+ pop.innerHTML=html; pop.style.display="block";
+ const pw=Math.min(320,window.innerWidth-24);
+ pop.style.maxWidth=pw+"px";
+ let lx=Math.max(12,Math.min(x-40,window.innerWidth-pw-12));
+ let ly=y+18;
+ pop.style.left=lx+"px"; pop.style.top="0px";
+ pop.style.top=Math.min(ly,window.innerHeight-pop.offsetHeight-14)+"px";
+}
+function hidePop(){pop.style.display="none"}
+window.hidePop=hidePop;
+document.addEventListener("click",function(e){
+ if(pop.style.display==="block"&&!pop.contains(e.target)&&!e.target.classList.contains("chip"))hidePop();
+});
+
+function cleanWord(w){return (w||"").toLowerCase().replace(/^[^a-z]+|[^a-z%]+$/g,"")}
+function lookupWord(w){
+ w=cleanWord(w);
+ if(!w)return null;
+ if(GLOS[w])return {term:w,ar:GLOS[w][0],en:GLOS[w][1]};
+ if(w.endsWith("s")&&GLOS[w.slice(0,-1)]){const g=GLOS[w.slice(0,-1)];return{term:w.slice(0,-1),ar:g[0],en:g[1]}}
+ return null;
+}
+function wordAtPoint(x,y){
+ let node,off;
+ if(document.caretRangeFromPoint){const r=document.caretRangeFromPoint(x,y);if(!r)return null;node=r.startContainer;off=r.startOffset;}
+ else return null;
+ if(!node||node.nodeType!==3)return null;
+ const t=node.textContent;
+ const isL=c=>/[a-zA-Z\-']/.test(c);
+ let a=off,b=off;
+ while(a>0&&isL(t[a-1]))a--;
+ while(b<t.length&&isL(t[b]))b++;
+ const word=t.slice(a,b);
+ const rest=t.slice(b).trimStart();
+ const nw=(rest.match(/^[a-zA-Z\-']+/)||[""])[0];
+ return {word:word,next:nw};
+}
+app.addEventListener("click",function(e){
+ const sec=e.target.closest(".sec,.flash,.q,.missed,.model,.opt");
+ if(!sec)return;
+ if(e.target.closest("button,a,canvas,.langbtn,.chip,.readbtn,.fnav"))return;
+ if(window.getSelection&&String(window.getSelection()).length>0)return;
+ const w=wordAtPoint(e.clientX,e.clientY);
+ if(!w||!w.word||w.word.length<2)return;
+ let hit=lookupWord(w.word+" "+w.next)||lookupWord(w.word);
+ if(hit){
+  showPop(e.clientX,e.clientY,`<div class="par">${hit.ar}</div>${hit.en?`<div class="pen">${hit.term} - ${hit.en}</div>`:`<div class="pen">${hit.term}</div>`}<div class="prow2"><button onclick="speak('${hit.term.replace(/'/g,"")}')">🔊 نطق</button><button onclick="hidePop()">قفل</button></div>`);
+ }else{
+  showPop(e.clientX,e.clientY,`<div class="par none">"${w.word}" مفيش ترجمة جاهزة ليها</div><div class="pen">القاموس بيغطي المصطلحات العلمية المهمة بس.</div><div class="prow2"><button onclick="speak('${w.word.replace(/'/g,"")}')">🔊 نطق</button><button onclick="hidePop()">قفل</button></div>`);
+ }
+});
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";speechSynthesis.speak(u)}catch(e){}}
+window.speak=speak;
+
+function onSelectEnd(e){
+ const sec=e.target.closest&&e.target.closest(".sec");
+ if(!sec)return;
+ setTimeout(()=>{
+  const sel=window.getSelection();
+  const txt=sel?String(sel).trim():"";
+  if(txt.length<3)return;
+  const node=sel.anchorNode&&(sel.anchorNode.nodeType===3?sel.anchorNode.parentElement:sel.anchorNode);
+  const blk=node&&node.closest?node.closest(".blk"):null;
+  const r=sel.getRangeAt(0).getBoundingClientRect();
+  if(blk){
+   const arb=blk.querySelector(".arb");
+   if(arb){
+    showPop(r.left+r.width/2,r.bottom,`<div class="par">${arb.textContent}</div><div class="pen">ترجمة الفقرة (معدّة مسبقاً من المحاضرة)</div><div class="prow2"><button onclick="hidePop()">قفل</button></div>`);
+    return;
+   }
+  }
+  showPop(r.left+r.width/2,r.bottom,`<div class="par none">مفيش ترجمة جاهزة للتحديد ده</div><div class="pen">الترجمة متاحة لكلمات القاموس وفقرات الشرح الرئيسية بس.</div><div class="prow2"><button onclick="hidePop()">قفل</button></div>`);
+ },60);
+}
+app.addEventListener("mouseup",onSelectEnd);
+app.addEventListener("touchend",onSelectEnd);
+
+/* ---------- 3D viewers ---------- */
+const viewers=[];
+function mkViewer(cont,sid,full){
+ const def=SCENES[sid];if(!def)return null;
+ const W=cont.clientWidth,H=cont.clientHeight||270;
+ const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+ renderer.setSize(W,H);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+ cont.appendChild(renderer.domElement);
+ const scene=new THREE.Scene();
+ const cam=new THREE.PerspectiveCamera(45,W/H,0.1,100);
+ scene.add(new THREE.AmbientLight(0xffffff,0.75));
+ const dl=new THREE.DirectionalLight(0xffffff,0.8);dl.position.set(4,6,6);scene.add(dl);
+ const dl2=new THREE.DirectionalLight(0xa5b4fc,0.35);dl2.position.set(-5,-3,-4);scene.add(dl2);
+ const pivot=new THREE.Group();scene.add(pivot);
+ const g=new THREE.Group();pivot.add(g);
+ const labs=[];
+ def.build(g,THREE,function(t,x,y,z){labs.push({t:t,p:[x,y,z]})});
+ const box=new THREE.Box3().setFromObject(g);
+ const c=box.getCenter(new THREE.Vector3()),sz=box.getSize(new THREE.Vector3()).length();
+ g.position.sub(c);
+ labs.forEach(l=>{const o=new THREE.Object3D();o.position.set(l.p[0],l.p[1],l.p[2]);g.add(o);l.o=o});
+ const cands=[];g.updateMatrixWorld(true);
+ g.traverse(o=>{if(o.isMesh){const bb=new THREE.Box3().setFromObject(o);const dg=bb.getSize(new THREE.Vector3()).length();if(dg<sz*0.55&&dg>0.25){const cc=bb.getCenter(new THREE.Vector3());g.worldToLocal(cc);cands.push({o:o,c:cc})}}});
+ labs.forEach(l=>{let best=null,bd=1e9;const lp=new THREE.Vector3(l.p[0],l.p[1],l.p[2]);cands.forEach(k=>{const d=k.c.distanceTo(lp);if(d<bd){bd=d;best=k}});
+  if(best&&bd<sz*0.28){const t=new THREE.Object3D();t.position.copy(best.c);g.add(t);l.tg=t}});
+ const ov=document.createElement("div");ov.className="vpins";cont.appendChild(ov);
+ const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("class","vlines");ov.appendChild(svg);
+ labs.forEach(l=>{if(l.tg){const ln=document.createElementNS("http://www.w3.org/2000/svg","line");ln.setAttribute("stroke","#fbbf24");ln.setAttribute("stroke-width","1.6");ln.setAttribute("stroke-opacity","0.9");svg.appendChild(ln);const dt=document.createElementNS("http://www.w3.org/2000/svg","circle");dt.setAttribute("r","3.5");dt.setAttribute("fill","#fbbf24");dt.setAttribute("stroke","#fff");dt.setAttribute("stroke-width","1");svg.appendChild(dt);l.ln=ln;l.dt=dt}});
+ labs.forEach((l,i)=>{const e=document.createElement("span");e.className="pin";e.textContent=i+1;ov.appendChild(e);l.e=e});
+ let ry=0.4,rx=0.15,dist=(function(){const vf=22.5*Math.PI/180,hf=Math.atan(Math.tan(vf)*(W/H));return (sz/2)/Math.sin(Math.min(vf,hf))*1.08})(),auto=true,idleT=null,dead=false,t0=0,p0=null,moved=0;
+ const dmin=dist*0.35,dmax=dist*2.0;
+ cam.position.set(0,0,dist);
+ const ptrs=new Map();let lastD=0;
+ const cv=renderer.domElement;cv.style.touchAction="none";
+ cv.addEventListener("pointerdown",e=>{cv.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});auto=false;if(idleT)clearTimeout(idleT);if(ptrs.size===1){t0=Date.now();p0={x:e.clientX,y:e.clientY};moved=0}else moved=99;});
+ cv.addEventListener("pointermove",e=>{
+  if(!ptrs.has(e.pointerId))return;
+  const p=ptrs.get(e.pointerId);
+  if(ptrs.size===1){ry+=(e.clientX-p.x)*0.012;rx+=(e.clientY-p.y)*0.012;rx=Math.max(-1.4,Math.min(1.4,rx));if(p0)moved=Math.max(moved,Math.hypot(e.clientX-p0.x,e.clientY-p0.y));}
+  p.x=e.clientX;p.y=e.clientY;
+  if(ptrs.size===2){const a=[...ptrs.values()];const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);if(lastD>0)dist=Math.max(dmin,Math.min(dmax,dist*lastD/d));lastD=d;}
+ });
+ function up(e){const single=ptrs.size===1;ptrs.delete(e.pointerId);if(ptrs.size<2)lastD=0;idleT=setTimeout(()=>auto=true,2600);
+  if(!full&&e.type==="pointerup"&&single&&moved<8&&Date.now()-t0<450)openFull(sid)}
+ cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up);
+ cv.addEventListener("wheel",e=>{e.preventDefault();dist=Math.max(dmin,Math.min(dmax,dist+e.deltaY*0.01*sz/6));auto=false;},{passive:false});
+ let visible=full;
+ const io=full?null:new IntersectionObserver(en=>{visible=en[0].isIntersecting},{threshold:0.05});
+ if(io)io.observe(cont);
+ const v=new THREE.Vector3(),q=new THREE.Vector3();
+ function loop(){
+  if(dead)return;
+  requestAnimationFrame(loop);
+  if(!visible||(!full&&window.__vfull))return;
+  if(auto)ry+=0.004;
+  pivot.rotation.y=ry;pivot.rotation.x=rx;
+  cam.position.z+=(dist-cam.position.z)*0.18;
+  pivot.updateMatrixWorld(true);cam.updateMatrixWorld(true);
+  renderer.render(scene,cam);
+  const w=cont.clientWidth,h=cont.clientHeight;
+  labs.forEach(l=>{l.o.getWorldPosition(v);const dz=cam.position.distanceTo(v);q.copy(v).project(cam);
+   l.e.style.left=((q.x+1)/2*w)+"px";l.e.style.top=((1-q.y)/2*h)+"px";
+   const back=dz>cam.position.z+sz*0.05;l.e.classList.toggle("back",back);
+   if(l.ln){l.tg.getWorldPosition(v);q.copy(v).project(cam);const x2=(q.x+1)/2*w,y2=(1-q.y)/2*h;l.ln.setAttribute("x1",l.e.style.left.replace("px",""));l.ln.setAttribute("y1",l.e.style.top.replace("px",""));l.ln.setAttribute("x2",x2);l.ln.setAttribute("y2",y2);l.dt.setAttribute("cx",x2);l.dt.setAttribute("cy",y2);const op=back?0.3:1;l.ln.style.opacity=op;l.dt.style.opacity=op}});
+ }
+ loop();
+ function resize(){const w=cont.clientWidth,h=cont.clientHeight;if(!w||!h)return;renderer.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix()}
+ window.addEventListener("resize",resize);
+ return {labs:labs,destroy(){dead=true;window.removeEventListener("resize",resize);if(io)io.disconnect();renderer.dispose();try{renderer.forceContextLoss()}catch(e){}cv.remove();ov.remove()},hot(i){const e=labs[i].e;e.classList.add("hot");setTimeout(()=>e.classList.remove("hot"),1800)}};
+}
+function legendHTML(labs){return labs.map((l,i)=>`<button class="lchip" data-i="${i}"><b>${i+1}</b>${l.t}</button>`).join("")}
+function initViewer(el){
+ const sid=el.dataset.scene;
+ if(!SCENES[sid])return;
+ const cv=document.createElement("div");cv.className="vcv";el.appendChild(cv);
+ const lg=document.createElement("div");lg.className="vleg";el.appendChild(lg);
+ const eb=document.createElement("button");eb.className="vexp";eb.textContent="⤢ تكبير";eb.onclick=()=>openFull(sid);el.appendChild(eb);
+ const V=mkViewer(cv,sid,false);if(!V)return;
+ lg.innerHTML=legendHTML(V.labs);
+ lg.addEventListener("click",e=>{const b=e.target.closest(".lchip");if(b)V.hot(+b.dataset.i)});
+}
+let fullV=null;
+function openFull(sid){
+ if(fullV)return;
+ const d=SCENES[sid];
+ const o=document.createElement("div");o.id="vfull";
+ o.innerHTML=`<div class="vfh"><div class="vft">${d.title}</div><button class="vfx" onclick="closeFull()">✕ إغلاق · Close</button></div><div class="vcv"></div><div class="vfl"></div><div class="vfhint">اسحب للف · إصبعين للتكبير · drag to rotate, pinch to zoom · اضغط على رقم في القايمة تلاقيه على الموديل</div>`;
+ document.body.appendChild(o);window.__vfull=1;
+ history.pushState({vfull:1},"");
+ const V=mkViewer(o.querySelector(".vcv"),sid,true);
+ const lg=o.querySelector(".vfl");lg.innerHTML=legendHTML(V.labs);
+ lg.addEventListener("click",e=>{const b=e.target.closest(".lchip");if(b)V.hot(+b.dataset.i)});
+ fullV={V:V,o:o};
+}
+function closeFull(){if(!fullV)return;if(history.state&&history.state.vfull){history.back();return}killFull()}
+function openSvg(fid){
+ if(fullV)return;
+ const o=document.createElement("div");o.id="vfull";
+ o.innerHTML=`<div class="vfh"><div class="vft">Diagram</div><button class="vfx" onclick="closeFull()">✕ إغلاق · Close</button></div><div class="svgsc"><div class="svgin">${SVGS[fid]}</div></div><div class="svgz"><button onclick="svgZ(-1)">−</button><button onclick="svgZ(1)">+</button></div><div class="vfhint">${SVG_CAPS[fid]||""}<br>اسحب للتحريك · زرار + و − للتكبير · drag to pan, use + / − to zoom</div>`;
+ document.body.appendChild(o);window.__vfull=1;history.pushState({vfull:1},"");
+ fullV={V:null,o:o,z:1};svgZ(0);
+}
+function svgZ(d){if(!fullV)return;fullV.z=Math.max(1,Math.min(3,fullV.z+d*0.5));const i=fullV.o.querySelector(".svgin");i.style.width=(fullV.z*620)+"px"}
+function killFull(){if(!fullV)return;if(fullV.V)fullV.V.destroy();fullV.o.remove();fullV=null;window.__vfull=0}
+window.addEventListener("popstate",killFull);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeFull()});
+window.openFull=openFull;window.closeFull=closeFull;
+function initViewers(){
+ document.querySelectorAll(".viewer:not([data-init])").forEach(el=>{el.dataset.init="1";initViewer(el)});
+}
+
+
+/* ---------- study plan ---------- */
+const PLAN_WEEKS=7;
+const DAYS=[[6,"السبت","Sat"],[0,"الأحد","Sun"],[1,"الاتنين","Mon"],[2,"التلات","Tue"],[3,"الأربع","Wed"],[4,"الخميس","Thu"],[5,"الجمعة","Fri"]];
+let planWeek=1, planFormDay=null, planEdit=null;
+function planState(){
+ if(!S.plan||S.planV!==2){
+  // plan v2: all subjects, interleaved so every subject finishes by week 7; Friday = weekly review
+  const keys=Object.keys(SUBJECTS), tot={}, ptr={};
+  let N=0; keys.forEach(k=>{tot[k]=LECTURES[k].length;ptr[k]=0;N+=tot[k]});
+  const queue=[];
+  for(let n=0;n<N;n++){
+   let best=null,bv=-1;
+   keys.forEach(k=>{ if(ptr[k]<tot[k]){const v=(tot[k]-ptr[k])/tot[k]; if(v>bv+1e-9){bv=v;best=k}} });
+   queue.push({s:best,l:ptr[best]});ptr[best]++;
+  }
+  const order=[6,0,1,2,3,4];
+  S.plan={};
+  for(let w=1;w<=PLAN_WEEKS;w++){
+   S.plan[w]={6:[],0:[],1:[],2:[],3:[],4:[],5:[]};
+   const items=queue.slice(Math.floor(N*(w-1)/PLAN_WEEKS),Math.floor(N*w/PLAN_WEEKS));
+   {let at=0;order.forEach((dd,di)=>{const c=Math.floor(items.length/6)+(di<items.length%6?1:0);for(let z=0;z<c;z++){const it=items[at++];S.plan[w][dd].push({s:it.s,l:it.l,done:false})}})}
+   const by={};items.forEach(it=>{(by[it.s]=by[it.s]||[]).push(it.l+1)});
+   const parts=keys.filter(k=>by[k]).map(k=>{const a=by[k];return SUBJECTS[k].short+" "+(a.length>1?a[0]+"-"+a[a.length-1]:a[0])});
+   if(parts.length)S.plan[w][5].push({s:"rev",l:-1,done:false,label:"مراجعة الأسبوع: "+parts.join(" + ")+" (كروت + كويز + تسميع)"});
+  }
+  S.planV=2;
+  save();
+ }
+ // migration (no reset): start date, auto-built Friday reviews
+ if(!S.planStartFix){S.planStartFix=1;if(S.planStart==="2026-11-28")S.planStart="2026-11-21";save()}
+ if(!S.planStart){const t=new Date();const add=-((t.getDay()+1)%7);const d=new Date(t.getFullYear(),t.getMonth(),t.getDate()+add);S.planStart=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");save()}
+ for(let w=1;w<=PLAN_WEEKS;w++){(S.plan[w][5]||[]).forEach(it=>{if(it.s==="rev"&&!it.lecs&&!it.custom&&typeof it.label==="string"&&it.label.indexOf("مراجعة الأسبوع")===0&&!it.auto)it.auto=true})}
+ return S.plan;
+}
+function pad2(n){return String(n).padStart(2,"0")}
+function planStartDate(){const a=(S.planStart||"").split("-").map(Number);return new Date(a[0],a[1]-1,a[2])}
+function dayDate(w,jsd){const o=DAYS.findIndex(d=>d[0]===jsd);const b=planStartDate();return new Date(b.getFullYear(),b.getMonth(),b.getDate()+(w-1)*7+o)}
+function fmtD(d){return pad2(d.getDate())+"/"+pad2(d.getMonth()+1)}
+function dateInfo(){
+ planState();
+ const t=new Date(),td=new Date(t.getFullYear(),t.getMonth(),t.getDate()),b=planStartDate();
+ const days=Math.round((td-b)/86400000);
+ if(days<0)return {state:"before",week:1,jsd:td.getDay(),days};
+ const wk=Math.floor(days/7)+1;
+ if(wk>PLAN_WEEKS)return {state:"after",week:PLAN_WEEKS,jsd:td.getDay(),days};
+ return {state:"in",week:wk,jsd:td.getDay(),days};
+}
+function revLecs(w,it){
+ if(it.lecs&&it.lecs.length)return it.lecs;
+ const out=[];const p=S.plan[w];
+ DAYS.forEach(([d])=>{if(d===5)return;(p[d]||[]).forEach(x=>{if(x.s!=="rev"&&x.done&&!out.some(o=>o.s===x.s&&o.l===x.l))out.push({s:x.s,l:x.l})})});
+ return out;
+}
+function revText(lecs){
+ const keys=Object.keys(SUBJECTS),by={};
+ lecs.forEach(x=>{(by[x.s]=by[x.s]||[]).push(x.l+1)});
+ return keys.filter(k=>by[k]).map(k=>SUBJECTS[k].short+" "+by[k].sort((a,b)=>a-b).join(","));
+}
+function revLabel(w,it){
+ if(it.label&&!it.auto&&!it.lecs)return it.label;
+ const l=revLecs(w,it);
+ if(!l.length)return "مراجعة الأسبوع: لسه مفيش محاضرات متعلّم عليها «تم» (أو اختاري المحاضرات من تعديل اليوم)";
+ return "مراجعة الأسبوع: "+revText(l).join(" + ")+" · "+l.length+(l.length===1?" lecture":" lectures")+" (كروت + كويز + تسميع)";
+}
+function planStats(){
+ const p=planState();
+ let done=0,total=0;
+ for(const w of Object.values(p))for(const d of Object.values(w))for(const s of d){total++;if(s.done)done++}
+ const di=dateInfo();
+ const wk=di.week;
+ let today=(di.state==="in"&&p[wk]&&p[wk][di.jsd])?p[wk][di.jsd].filter(s=>!s.done).length:0;
+ if(di.state==="in"){const L=lateInfo().at[wk+"|"+di.jsd];if(L)today+=L.length}
+ return {done,total,pct:pct(done,total),week:wk,today,state:di.state,start:planStartDate()};
+}
+function goPlan(){cur="plan";planWeek=planStats().week;planFormDay=null;planEdit=null;render();window.scrollTo(0,0)}
+window.goPlan=goPlan;
+function setWeek(w){planWeek=w;planFormDay=null;planEdit=null;render()}
+window.setWeek=setWeek;
+
+/* ---------- late lectures carry over (computed live, plan data untouched) ---------- */
+function lateInfo(){
+ const p=planState(),di=dateInfo(),at={},from={};
+ if(di.state==="before")return {at:at,from:from};
+ const curW=di.state==="after"?PLAN_WEEKS+1:di.week;
+ const todayI=di.state==="after"?9999:(di.days%7);
+ const slots=[];
+ for(let w=1;w<=PLAN_WEEKS;w++)DAYS.forEach(([jd],o)=>{if(jd!==5)slots.push({w:w,jd:jd,o:o,idx:(w-1)*7+o})});
+ const nowIdx=di.state==="after"?9999:di.days;
+ for(let w0=1;w0<curW&&w0<=PLAN_WEEKS;w0++){
+  DAYS.forEach(([jd0])=>{(p[w0][jd0]||[]).forEach((it,i)=>{
+   if(it.s==="rev"||it.done)return;
+   const rest=slots.filter(x=>x.w>w0&&x.idx>=nowIdx);
+   let tg=rest.find(x=>(p[x.w][x.jd]||[]).some(y=>y.s===it.s));
+   if(!tg)tg=rest[0];
+   if(!tg)tg=slots[slots.length-1];
+   const k=tg.w+"|"+tg.jd;
+   (at[k]=at[k]||[]).push({w:w0,jd:jd0,i:i,it:it});
+   from[w0+"|"+jd0+"|"+i]=tg;
+  })});
+ }
+ return {at:at,from:from};
+}
+function planToggleLate(w,jsd,i){const p=planState();p[w][jsd][i].done=!p[w][jsd][i].done;save();render()}
+window.planToggleLate=planToggleLate;
+function planView(){
+ const p=planState();
+ const di=dateInfo();
+ const stats=planStats();
+ const jsDay=di.jsd;
+ let h=`<div class="card"><h3 style="margin-top:0">جدول المذاكرة · Study plan</h3>
+  <p class="small" dir="rtl" style="margin-top:0;text-align:right">خطة مقترحة لكل المواد السبعة: حوالي 14 محاضرة في الأسبوع من السبت للخميس (بتتوزع على المواد مع بعض)، والجمعة مراجعة الأسبوع. عدّليها زي ما يناسبك: زرار «تعديل اليوم» تحت كل يوم تغيّر بيه عدد المحاضرات وتختاري أنهي محاضرات، ومراجعة الجمعة بتتبني من المحاضرات اللي علّمتي عليها «تم» (وتقدري تعدّليها). الأسبوع 1 بيبدأ يوم السبت ${fmtD(planStartDate())}، وعلامة «اليوم» بتتحرك لوحدها حسب تاريخ النهارده. والمحاضرة اللي الأسبوع يخلص وانتي لسه مذاكرتهاش بتظهر في الأسبوع اللي بعده جنب محاضرة نفس المادة وعليها علامة «متأخرة» لحد ما تعلّمها «تم».</p>
+  <div class="bar" style="margin:8px 0"><div style="width:${stats.pct}%"></div></div>
+  <div class="pct">${stats.done}/${stats.total} sessions done</div></div>
+  <div class="card" style="padding:12px"><div class="weekrow">`;
+ for(let w=1;w<=PLAN_WEEKS;w++)h+=`<button class="${w===planWeek?'on':''}" onclick="setWeek(${w})">أسبوع ${w}</button>`;
+ h+=`</div>`;
+ const wp=p[planWeek];
+ const LI=lateInfo();
+ for(const [jsd,arName,enName] of DAYS){
+  const list=wp[jsd]||[];
+  const isToday=(di.state==="in"&&planWeek===di.week&&jsd===jsDay);
+  h+=`<div class="daycol"><div class="dh"><b>${arName} · ${enName} <small style="font-weight:600;color:#6b7280">${fmtD(dayDate(planWeek,jsd))}</small></b>${isToday?'<span class="today">اليوم</span>':''}<span style="display:flex;gap:6px"><button class="chk editday" style="background:#fef3c7;color:#92400e;border:0;border-radius:8px;padding:5px 10px;font-weight:800;cursor:pointer" onclick="planEditOpen(${jsd})">تعديل اليوم</button><button class="chk" style="background:#fdf2f8;color:#9d174d;border:0;border-radius:8px;padding:5px 10px;font-weight:800;cursor:pointer" onclick="planForm(${jsd})">+ إضافة</button></span></div>`;
+  if(planEdit&&planEdit.jsd===jsd)h+=planEditorHTML(jsd);
+  if(planFormDay===jsd){
+   h+=`<div class="addbox"><select id="pf-subj" onchange="planLecOpts()"><option value="elec">Fundamentals of Electronics</option><option value="anat">Radiographic Anatomy</option><option value="path">Pathology 1</option><option value="physio">Physiology</option><option value="physics">Physics 1</option><option value="fund">Fundamentals of Radiography</option><option value="care">Patient Care</option><option value="rev">مراجعة / Review</option></select>
+    <select id="pf-lec"></select>
+    <button class="btn" style="margin-top:6px;padding:10px" onclick="planAdd(${jsd})">أضف لليوم ده</button></div>`;
+  }
+  const lateL=LI.at[planWeek+"|"+jsd]||[];
+  lateL.forEach(x=>{
+   const s=x.it,lid=s.s+(s.l+1),inApp=!!DATA[lid];
+   h+=`<div class="sess late"><div class="dot" style="background:#dc2626"></div><div class="si"><span class="ltag">متأخرة</span>${SUBJECTS[s.s].name} - Lec ${s.l+1}: ${LECTURES[s.s][s.l]}<small>من أسبوع ${x.w} · ${DAYS.find(d=>d[0]===x.jd)[1]}</small></div>
+    ${inApp?`<button class="chk" style="background:var(--grad);color:#fff;border:0" onclick="goLec('${lid}')">افتحي</button>`:''}
+    <button class="chk" onclick="planToggleLate(${x.w},${x.jd},${x.i})">تم</button></div>`;
+  });
+  if(!list.length&&!lateL.length)h+=`<div class="small" style="margin:8px 0">مفيش جلسات - راحة 😌</div>`;
+  list.forEach((s,i)=>{
+   const label=s.s==="rev"?revLabel(planWeek,s):(SUBJECTS[s.s].name+" - Lec "+(s.l+1)+": "+LECTURES[s.s][s.l]);
+   const lid=s.s+(s.l+1);
+   const inApp=(s.s!=="rev"&&DATA[lid]);
+   h+=`<div class="sess ${s.done?'done':''}"><div class="dot"></div><div class="si">${label}<small>${s.s==="rev"?"مراجعة أسبوعية":(inApp?"موجودة في التطبيق ✅":"")}</small>${(LI.from[planWeek+"|"+jsd+"|"+i]&&!s.done)?`<small class="lnote">متأخرة ← ظاهرة في أسبوع ${LI.from[planWeek+"|"+jsd+"|"+i].w} يوم ${DAYS.find(d=>d[0]===LI.from[planWeek+"|"+jsd+"|"+i].jd)[1]}</small>`:""}</div>
+    ${inApp?`<button class="chk" style="background:var(--grad);color:#fff;border:0" onclick="goLec('${lid}')">افتحي</button>`:''}
+    <button class="chk" onclick="planToggle(${jsd},${i})">${s.done?'✓':'تم'}</button>
+    <button class="del" onclick="planDel(${jsd},${i})">حذف</button></div>`;
+  });
+  h+=`</div>`;
+ }
+ h+=`</div>`;
+ return h;
+}
+function planForm(jsd){planEdit=null;planFormDay=(planFormDay===jsd?null:jsd);render();if(planFormDay!==null)planLecOpts()}
+window.planForm=planForm;
+function planLecOpts(){
+ const subj=document.getElementById("pf-subj").value;
+ const sel=document.getElementById("pf-lec");
+ let o="";
+ if(subj==="rev")o=`<option value="-1">مراجعة عامة</option>`;
+ else LECTURES[subj].forEach((l,i)=>{o+=`<option value="${i}">Lec ${i+1}: ${l}</option>`});
+ sel.innerHTML=o;
+}
+window.planLecOpts=planLecOpts;
+function planAdd(jsd){
+ const subj=document.getElementById("pf-subj").value;
+ const lec=parseInt(document.getElementById("pf-lec").value,10);
+ const p=planState();
+ p[planWeek][jsd].push(subj==="rev"?{s:"rev",l:-1,done:false,label:"مراجعة عامة"}:{s:subj,l:lec,done:false});
+ save();planFormDay=null;render();
+}
+window.planAdd=planAdd;
+function subjOpts(sel){return Object.keys(SUBJECTS).map(k=>`<option value="${k}"${k===sel?' selected':''}>${SUBJECTS[k].name}</option>`).join("")}
+function planEditorHTML(jsd){
+ const e=planEdit,fri=(jsd===5);
+ let h=`<div class="addbox" style="border:2px solid #fbbf24"><div class="small" dir="rtl" style="text-align:right;margin-bottom:6px">${fri?"مراجعة الجمعة: اختاري المحاضرات اللي عايز تراجعها (الافتراضي: اللي علّمتي عليها «تم» الأسبوع ده).":"اختاري عدد المحاضرات واللي هتذاكرها اليوم ده. احذف صف أو ضيف صف."}</div>`;
+ e.rows.forEach((r,i)=>{
+  h+=`<div style="display:flex;gap:6px;margin:6px 0;align-items:center"><select style="flex:1;min-width:0" onchange="planEditSet(${i},'s',this.value)">${subjOpts(r.s)}</select><select style="flex:1.4;min-width:0" onchange="planEditSet(${i},'l',this.value)">${LECTURES[r.s].map((l,j)=>`<option value="${j}"${j===r.l?' selected':''}>Lec ${j+1}: ${l}</option>`).join("")}</select><button class="del" onclick="planEditDel(${i})">حذف</button></div>`;
+ });
+ if(!e.rows.length)h+=`<div class="small" style="margin:6px 0">${fri?"مفيش محاضرات مختارة، هتتبني تلقائي من اللي علّمتي عليه «تم».":"اليوم ده هيبقى راحة."}</div>`;
+ h+=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px"><button class="chk" onclick="planEditAdd()">+ محاضرة</button>${fri?`<button class="chk" onclick="planEditAuto()">رجّع تلقائي</button>`:''}<button class="btn" style="flex:1;padding:8px" onclick="planEditSave()">حفظ</button><button class="chk" onclick="planEditCancel()">إلغاء</button></div></div>`;
+ return h;
+}
+function planEditOpen(jsd){
+ if(planEdit&&planEdit.jsd===jsd){planEdit=null;render();return}
+ const p=planState(),list=p[planWeek][jsd]||[];planFormDay=null;
+ let rows;
+ if(jsd===5){const it=list.find(x=>x.s==="rev");rows=it?revLecs(planWeek,it).map(x=>({s:x.s,l:x.l})):[]}
+ else rows=list.filter(x=>x.s!=="rev").map(x=>({s:x.s,l:x.l}));
+ planEdit={jsd,rows};render();
+}
+window.planEditOpen=planEditOpen;
+function planEditSet(i,k,v){const r=planEdit.rows[i];if(k==="s"){r.s=v;r.l=0}else r.l=parseInt(v,10);render()}
+function planEditDel(i){planEdit.rows.splice(i,1);render()}
+function planEditAdd(){const r=planEdit.rows,last=r[r.length-1];r.push(last?{s:last.s,l:Math.min(last.l+1,LECTURES[last.s].length-1)}:{s:"elec",l:0});render()}
+function planEditAuto(){planEdit.rows=[];planEditSave()}
+function planEditCancel(){planEdit=null;render()}
+function planEditSave(){
+ const p=planState(),j=planEdit.jsd,old=p[planWeek][j]||[];
+ if(j===5){
+  const it=old.find(x=>x.s==="rev");
+  const lecs=planEdit.rows.map(r=>({s:r.s,l:r.l}));
+  if(it){if(lecs.length){it.lecs=lecs;it.auto=false}else{delete it.lecs;it.auto=true;delete it.custom}}
+  else p[planWeek][5].push({s:"rev",l:-1,done:false,auto:!lecs.length,lecs:lecs.length?lecs:undefined});
+ }else{
+  const nl=planEdit.rows.map(r=>{const o=old.find(x=>x.s===r.s&&x.l===r.l);return {s:r.s,l:r.l,done:o?!!o.done:false}});
+  p[planWeek][j]=nl.concat(old.filter(x=>x.s==="rev"));
+ }
+ planEdit=null;save();render();
+}
+window.planEditSet=planEditSet;window.planEditDel=planEditDel;window.planEditAdd=planEditAdd;window.planEditAuto=planEditAuto;window.planEditCancel=planEditCancel;window.planEditSave=planEditSave;
+function planToggle(jsd,i){const p=planState();p[planWeek][jsd][i].done=!p[planWeek][jsd][i].done;save();render()}
+window.planToggle=planToggle;
+function planDel(jsd,i){const p=planState();p[planWeek][jsd].splice(i,1);save();render()}
+window.planDel=planDel;
+
+/* ---------- guided tour ---------- */
+const TOUR=[
+ {go:null,sel:null,text:"أهلاً بيكي في Ayat Study! دي جولة سريعة على كل المميزات. دقيقة واحدة بس."},
+ {go:"home",sel:".subj",text:"كل بطاقة مادة فيها محاضرات كاملة: شرح وكروت وكويز وتسميع ونوتس وتقدم. دوسي على المادة تفتح قائمة المحاضرات."},
+ {go:"subj:elec",sel:".subj",text:"صفحة المحاضرات: كل محاضرة متضافة بتظهر بنسبة تقدمها ومحتواها. دوسي على المحاضرة تفتحها."},
+ {go:["elec1","learn"],sel:".tabs",text:"التبويبات الستة جوه كل محاضرة: Learn للشرح، Cards للحفظ، Notes لمراجعة سريعة قبل الكويز، Quiz للاختبار، Recall للتسميع، Progress لمتابعة مستواك."},
+ {go:["elec1","learn"],sel:".langbtn",text:"سويتش اللغة: حرّكيه لناحية ع يظهر الترجمة العربية تحت كل فقرة إنجليزي في السكشن ده بس، وارجعه EN يرجع إنجليزي بس."},
+ {go:["elec1","learn"],sel:".sec .blk p",text:"دوسي على أي كلمة إنجليزية في الشرح تطلعلك ترجمتها العلمية بالعربي ومعناها ونطقها. ولو حددتي جملة، تظهر ترجمة الفقرة كلها. الكلمات اللي مش في القاموس هتقولك بصراحة إن مفيش ترجمة."},
+ {go:["elec1","learn"],sel:".chip",text:"المصطلحات المهمة آخر كل سكشن: دوسي على المصطلح يظهر تعريفه إنجليزي وعربي."},
+ {go:["elec1","learn"],sel:".readbtn",text:"لما تخلص سكشن، علّميه كمقروء عشان يتحسب في تقدمك."},
+ {go:["elec1","cards"],sel:".flash",text:"كروت الحفظ: دوسي على الكارت يتقلب، وبعدين قيّمي نفسك بصراحة: عرفتها ولا مش عرفتها."},
+ {go:["elec1","notes"],sel:".nlist",text:"تبويب Notes (قبل الكويز): مراجعة سريعة، بيطلّعلك لوحده أهم نقاط المحاضرة مترتبة بالأهمية (★ الأهم الأول)، من غير ما تكتب حاجة. زرار «الأهم بس» يعرضلك أهم النقاط بس، ولو دوستي «عرض الكل» تشوفي الباقي والمصطلحات الأساسية."},
+ {go:["elec1","quiz"],sel:".card",text:"الكويز: اختر إجابة وشوف التصحيح والشرح بالعربي فوراً. درجتك بتتسجل وأفضل نتيجة بتتحفظ لكل محاضرة لوحدها."},
+ {go:["elec1","recall"],sel:".card",text:"التسميع: جاوبي من دماغك الأول، وبعدين اعرضي الإجابة النموذجية وقارن وقيّم نفسك."},
+ {go:["elec1","prog"],sel:".card",text:"صفحة التقدم: نسبتك في كل جزء من المحاضرة دي، وأفضل درجة كويز، وعدد المحاولات. التقدم بيتسجل على جهازك ده بس."},
+ {go:"plan",sel:".card",text:"جدول المذاكرة: خطة مقترحة جاهزة لكل المواد السبعة (حوالي 14 محاضرة في الأسبوع من السبت للخميس والجمعة مراجعة)، علامة «اليوم» بتتحرك لوحدها حسب التاريخ، وتقدري تضيفي وتمسحي وتعلّمي الجلسة لما تخلصها. والمحاضرات الموجودة في التطبيق ليها زرار (افتحي) يوديك عليها على طول."},
+ {go:"plan",sel:".sess.late",text:"المحاضرات المتأخرة: لو أسبوع خلص وفي محاضرة مش متعلّم عليها «تم»، بتظهر الأسبوع اللي بعده في نفس يوم محاضرة نفس المادة، بعلامة حمرا «متأخرة» ومكتوب منين جت. علّميها «تم» وتختفي. ولو المادة مفيهاش محاضرات تانية، بتظهر في أقرب يوم باقي."},
+ {go:"plan",sel:".editday",text:"زرار «تعديل اليوم»: غيّري عدد محاضرات اليوم ده وإختار أنهي محاضرات بالظبط. وفي يوم الجمعة، المراجعة بتتبني من المحاضرات اللي علّمتي عليها «تم» الأسبوع ده، وتقدري تعدّليها بإيدك."},
+ {go:"home",sel:null,text:"خلصت الجولة! تقدري تعيدها في أي وقت من زرار (؟ جولة) فوق. بالتوفيق في المذاكرة يا آيات 💪"},
+];
+let tourI=0;
+function tourStart(){tourI=0;showTourStep()}
+window.tourStart=tourStart;
+function showTourStep(){
+ const s=TOUR[tourI];
+ if(s.go){if(s.go==="home"){if(cur)goHome()}else if(s.go==="plan"){if(cur!=="plan")goPlan()}else if(typeof s.go==="string"){if(cur!==s.go)goSubj(s.go.slice(5))}else if(cur!==s.go[0]||tab!==s.go[1])goLec(s.go[0],s.go[1]);}
+ setTimeout(()=>{
+  $("#tourbg").style.display="block";
+  const card=$("#tourcard");
+  $("#tourtext").textContent=s.text;
+  $("#tourcount").textContent=(tourI+1)+" / "+TOUR.length;
+  $("#tournext").textContent=tourI===TOUR.length-1?"خلاص":"التالي";
+  card.style.display="block";
+  const hl=$("#tourhl");
+  const el=s.sel?document.querySelector(s.sel):null;
+  if(el){
+   el.scrollIntoView({block:"center"});
+   setTimeout(()=>{
+    const r=el.getBoundingClientRect();
+    hl.style.display="block";
+    hl.style.left=(r.left-6)+"px";hl.style.top=(r.top-6)+"px";
+    hl.style.width=(r.width+12)+"px";hl.style.height=(r.height+12)+"px";
+    const ch=card.offsetHeight;
+    let top=r.bottom+14;
+    if(top+ch>window.innerHeight-10)top=Math.max(10,r.top-ch-14);
+    card.style.top=top+"px";
+   },420);
+  }else{
+   hl.style.display="none";
+   card.style.top="30%";
+  }
+ },s.go?380:60);
+}
+function tourNext(){tourI++;if(tourI>=TOUR.length){tourEnd();return}showTourStep()}
+window.tourNext=tourNext;
+function tourEnd(){$("#tourbg").style.display="none";$("#tourhl").style.display="none";$("#tourcard").style.display="none";S.tourDone=true;save();goHome()}
+window.tourEnd=tourEnd;
+
+function render(){
+ if(!cur){home();return}
+ if(cur.startsWith("subj:")){picker(cur.slice(5));return}
+ if(cur==="plan"){
+  hdr.innerHTML=`<button class="back" onclick="goHome()">&#8592; All subjects</button><div class="hrow"><h1>Study plan</h1><button class="tourbtn" onclick="tourStart()">؟ جولة</button></div><p>جدول المذاكرة الأسبوعي</p>`;
+  app.innerHTML=planView();
+  return;
+ }
+ headerSubj(cur);
+ let body="";
+ if(tab==="learn")body=learn(cur);
+ else if(tab==="cards")body=cards(cur);
+ else if(tab==="quiz")body=quiz(cur);
+ else if(tab==="recall")body=recall(cur);
+ else if(tab==="notes")body=notes(cur);
+ else body=prog(cur);
+ app.innerHTML=tabsHtml(cur)+body;
+ initViewers();
+}
+render();
+if(!S.tourDone){setTimeout(tourStart,700)}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&!planEdit&&(cur==="plan"||!cur))render()});
+if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+</script>
+</body>
+</html>
