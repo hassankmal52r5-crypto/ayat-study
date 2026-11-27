@@ -1,4 +1,4 @@
-const CACHE = "ayatstudy-v23";
+const CACHE = "ayatstudy-v24";
 const ASSETS = ["./", "index.html", "manifest.webmanifest", "figs.js", "icon-192.svg", "icon-512.svg", "icon-maskable-512.svg"];
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));
