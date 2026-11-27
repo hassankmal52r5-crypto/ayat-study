@@ -92,6 +92,7 @@ header p{margin:4px 0 0;opacity:.85;font-size:13px}
 .svgfig{position:relative;cursor:pointer;padding-top:36px}
 .svgfig .vexp{background:#ede9fe;border-color:#c4b5fd;color:#6d28d9}
 #vfull .vfhint{color:#a79bc4;font-size:11px;text-align:center;padding:0 10px 12px;direction:rtl}
+.pic{position:relative;margin:10px 0;cursor:zoom-in}.pic img{width:100%;border-radius:10px;border:1px solid #e5e0f5;display:block;background:#fff}
 .figcap{font-size:12px;color:var(--muted);margin:6px 2px 0;text-align:center;line-height:1.5}
 /* flashcards */
 .flash{min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;position:relative}
@@ -193,6 +194,7 @@ const SVG_CAPS = {};
 const FIG_META = {};
 const SCENES = {};
 
+const PICS = {"anat1": [["anat1_12.webp", 12], ["anat1_8.webp", 8]], "anat2": [["anat2_30.webp", 30], ["anat2_31.webp", 31]], "anat3": [["anat3_16.webp", 16], ["anat3_10.webp", 10]], "anat4": [["anat4_20.webp", 20], ["anat4_32.webp", 32]], "anat5": [["anat5_18.webp", 18], ["anat5_27.webp", 27]], "anat6": [["anat6_26.webp", 26], ["anat6_18.webp", 18]], "anat7": [["anat7_9.webp", 9], ["anat7_8.webp", 8]], "anat8": [["anat8_11.webp", 11], ["anat8_27.webp", 27]], "anat9": [["anat9_8.webp", 8], ["anat9_7.webp", 7]], "anat10": [["anat10_6.webp", 6], ["anat10_4.webp", 4]], "anat11": [["anat11_7.webp", 7], ["anat11_6.webp", 6]], "anat12": [["anat12_20.webp", 20], ["anat12_18.webp", 18]], "physics1": [["physics1_15.webp", 15], ["physics1_14.webp", 14]], "physics2": [["physics2_4.webp", 4], ["physics2_3.webp", 3]], "physics3": [["physics3_6.webp", 6], ["physics3_7.webp", 7]], "physics4": [["physics4_15.webp", 15], ["physics4_5.webp", 5]], "physics5": [["physics5_10.webp", 10], ["physics5_15.webp", 15]], "physics6": [["physics6_4.webp", 4], ["physics6_25.webp", 25]], "physics7": [["physics7_6.webp", 6], ["physics7_5.webp", 5]], "physics8": [["physics8_10.webp", 10], ["physics8_7.webp", 7]], "physics9": [["physics9_12.webp", 12], ["physics9_8.webp", 8]], "physics10": [["physics10_9.webp", 9], ["physics10_14.webp", 14]], "physics11": [["physics11_5.webp", 5], ["physics11_7.webp", 7]], "physics12": [["physics12_10.webp", 10], ["physics12_11.webp", 11]], "physics13": [["physics13_8.webp", 8], ["physics13_10.webp", 10]], "physics14": [["physics14_5.webp", 5], ["physics14_3.webp", 3]], "physics15": [["physics15_14.webp", 14], ["physics15_7.webp", 7]], "physics16": [["physics16_4.webp", 4], ["physics16_9.webp", 9]], "physics17": [["physics17_3.webp", 3], ["physics17_4.webp", 4]], "path1": [["path1_12.webp", 12], ["path1_7.webp", 7]], "path2": [["path2_17.webp", 17], ["path2_12.webp", 12]], "path3": [["path3_21.webp", 21], ["path3_12.webp", 12]], "path4": [["path4_12.webp", 12], ["path4_20.webp", 20]], "path5": [["path5_8.webp", 8], ["path5_11.webp", 11]], "path6": [["path6_9.webp", 9], ["path6_7.webp", 7]]};
 const STORE_KEY="ayatStudyV1";
 let S={};
 try{S=JSON.parse(localStorage.getItem(STORE_KEY)||"{}")}catch(e){S={}}
@@ -322,9 +324,25 @@ function markRead(sid,id){
 }
 window.markRead=markRead;
 
+function picsFor(sid,i){
+ const ps=PICS[sid]||[],n=DATA[sid].sections.length;let h="";
+ ps.forEach((p,j)=>{if(Math.min(n-1,Math.floor((j+0.5)*n/ps.length))===i)h+=`<div class="pic" onclick="openPic('${p[0]}')"><button class="vexp" type="button">⤢ تكبير</button><img alt="slide ${p[1]}" data-f="${p[0]}"><div class="figcap">صورة من سلايدات المحاضرة · slide ${p[1]} · اضغط للتكبير</div></div>`});
+ return h}
+function openPic(src){
+ if(fullV)return;
+ const o=document.createElement("div");o.id="vfull";
+ o.innerHTML=`<div class="vfh"><div class="vft">Slide</div><button class="vfx" onclick="closeFull()">✕ إغلاق · Close</button></div><div class="svgsc"><div class="svgin"><img src="${(window.FIGDATA||{})[src]||''}" style="width:100%;display:block;border-radius:8px;background:#fff"></div></div><div class="svgz"><button onclick="picZ(-1)">−</button><button onclick="picZ(1)">+</button></div><div class="vfhint">اسحب للتحريك · زرار + و − للتكبير · drag to pan, use + / − to zoom</div>`;
+ document.body.appendChild(o);window.__vfull=1;history.pushState({vfull:1},"");
+ fullV={V:null,o:o,z:1};picZ(0);
+}
+function picZ(d){if(!fullV)return;fullV.z=Math.max(1,Math.min(3,fullV.z+d*0.5));fullV.o.querySelector(".svgin").style.width=(fullV.z*92)+"vw"}
+window.openPic=openPic;
+function hydrate(){document.querySelectorAll('img[data-f]:not([src])').forEach(i=>{const v=window.FIGDATA&&FIGDATA[i.dataset.f];if(v)i.src=v})}
+window.hydrate=hydrate;
+new MutationObserver(hydrate).observe(document.documentElement,{childList:true,subtree:true});
 function learn(sid){
  const d=DATA[sid], s=st(sid);
- let h="";
+ let h="";let secIdx=0;
  for(const sec of d.sections){
   const done=s.read.includes(sec.id);
   const arOn=!!S.lang[sec.id];
@@ -335,6 +353,7 @@ function learn(sid){
    h+=`<div class="blk" data-bid="${sec.id}-${i}">${b.en}<div class="arb">${b.ar}</div></div>`;
   });
   for(const f of sec.figs||[])h+=figHtml(f);
+  h+=picsFor(sid,secIdx++);
   if(sec.terms&&sec.terms.length){
    h+=`<div class="chips">`+sec.terms.map(t=>`<button class="chip" onclick="toggleTerm(this)">${t[0]}</button><div class="termdef" style="display:none">${t[1]}<span class="ar">${t[2]||""}</span></div>`).join("")+`</div>`;
   }
@@ -948,6 +967,7 @@ const TOUR=[
  {go:["elec1","notes"],sel:".nlist",text:"تبويب Notes (قبل الكويز): مراجعة سريعة، بيطلّعلك لوحده أهم نقاط المحاضرة مترتبة بالأهمية (★ الأهم الأول)، من غير ما تكتب حاجة. زرار «الأهم بس» يعرضلك أهم النقاط بس، ولو دوستي «عرض الكل» تشوفي الباقي والمصطلحات الأساسية."},
  {go:["elec1","quiz"],sel:".card",text:"الكويز: اختر إجابة وشوف التصحيح والشرح بالعربي فوراً. درجتك بتتسجل وأفضل نتيجة بتتحفظ لكل محاضرة لوحدها."},
  {go:["elec1","recall"],sel:".card",text:"التسميع: جاوبي من دماغك الأول، وبعدين اعرضي الإجابة النموذجية وقارن وقيّم نفسك."},
+ {go:["anat1","learn"],sel:".pic",text:"صور من سلايدات المحاضرة: في أغلب المحاضرات هتلاقي صورتين من السلايدات نفسها (أشعة، رسومات، جداول) وسط السكاشن. دوسي على الصورة تفتح بالحجم الكبير وتقدري تكبّري بزرار + و −. الصور محفوظة أوفلاين."},
  {go:["elec1","prog"],sel:".card",text:"صفحة التقدم: نسبتك في كل جزء من المحاضرة دي، وأفضل درجة كويز، وعدد المحاولات. التقدم بيتسجل على جهازك ده بس."},
  {go:["elec1","prog"],sel:".seclist",text:"قايمة السكاشن: كل سكشن ليه علامة ○. دوس عليها تبقى ✓ لما تخلصه، ودوس على اسم السكشن يفتحهولك. نسبة المحاضرة بتزيد سكشن بسكشن (السكاشن أهم جزء في النسبة)، والكويز والتسميع والكروت بيكمّلوها. وعلى كارت المحاضرة هتلاقي عدد الشرايح وعدد السكاشن اللي خلصتها."},
  {go:"plan",sel:".card",text:"جدول المذاكرة: خطة مقترحة جاهزة لكل المواد السبعة (حوالي 14 محاضرة في الأسبوع من السبت للخميس والجمعة مراجعة)، علامة «اليوم» بتتحرك لوحدها حسب التاريخ، وتقدري تضيفي وتمسحي وتعلّمي الجلسة لما تخلصها. والمحاضرات الموجودة في التطبيق ليها زرار (افتحي) يوديك عليها على طول."},
@@ -1017,5 +1037,6 @@ if(!S.tourDone){setTimeout(tourStart,700)}
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&!planEdit&&(cur==="plan"||!cur))render()});
 if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("sw.js").catch(()=>{})}
 </script>
+<script src="figs.js" defer></script>
 </body>
 </html>
