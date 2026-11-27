@@ -1,0 +1,31 @@
+{
+ "name": "Ayat Study",
+ "short_name": "Ayat Study",
+ "description": "Offline study app for Semester 1 lectures with flashcards, quizzes, recall and a study plan.",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#fdf2f8",
+ "theme_color": "#e11d48",
+ "icons": [
+  {
+   "src": "icon-192.svg",
+   "sizes": "any",
+   "type": "image/svg+xml",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-512.svg",
+   "sizes": "any",
+   "type": "image/svg+xml",
+   "purpose": "any"
+  },
+  {
+   "src": "icon-maskable-512.svg",
+   "sizes": "any",
+   "type": "image/svg+xml",
+   "purpose": "maskable"
+  }
+ ]
+}
